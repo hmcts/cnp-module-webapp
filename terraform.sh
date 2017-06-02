@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 
 state_store_resource_group="contino-moj-tf-state"
 state_store_storage_acccount="continomojtfstate"
