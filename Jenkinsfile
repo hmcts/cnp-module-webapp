@@ -18,6 +18,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 				docker.image('dsanabria/aztf:latest').inside {
 
 					stage('Plan'){
+
 						sh 'git clone "https://$TOKEN@github.com/contino/moj-appservice-environment.git"'
 						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan -out=plan.out -detailed-exitcode; echo \$? &gt; status"
             	def exitCode = readFile('status').trim()
@@ -32,9 +33,13 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
             	if (exitCode == "2") {
               	  stash name: "plan", includes: "plan.out"
   	              try {
-    	                input message: 'Apply Plan?', ok: 'Apply'
-      	              apply = true
-        	        }
+                    timeout(time: 5, unit: 'MINUTES') {
+                      apply = input(
+                      id: 'Proceed', message: 'Do you want to apply?', parameters: [
+                      [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
+                      ])
+        	          }
+                  }
                   catch (err) {
             	        apply = false
               	      currentBuild.result = 'UNSTABLE'
