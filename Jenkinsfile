@@ -17,10 +17,10 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 			stage('Terraform'){
 				docker.image('dsanabria/aztf:latest').inside {
 
-					stage('Plan'){
+					stage('Plan and Apply'){
 
 						sh 'git clone "https://$TOKEN@github.com/contino/moj-appservice-environment.git"'
-						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan"
+						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan && ./terraform.sh apply"
 /*						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan -out=plan.out -detailed-exitcode; echo \$? > status"
             def exitCode = readFile('status').trim()
             def apply = false
