@@ -34,7 +34,8 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
   	              try {
     	                input message: 'Apply Plan?', ok: 'Apply'
       	              apply = true
-        	        } catch (err) {
+        	        }
+                  catch (err) {
             	        apply = false
               	      currentBuild.result = 'UNSTABLE'
               	  }
@@ -43,6 +44,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 				}
 			}
 		}
+  }
 	catch (err) {
 		slackSend(
 	            channel: "#${product}",
