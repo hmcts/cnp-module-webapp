@@ -28,21 +28,24 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
   	            currentBuild.result = 'SUCCESS'
     	      }
       	    if (exitCode == "1") {
-          	    currentBuild.result = 'FAILURE'
+  	            try {
+                  input id: 'Tfapply', message: 'Do you want to apply your changes?', ok: 'apply'
+                  apply = true
+        	      }
+                catch (err) {
+                  apply = false
+                  currentBuild.result = 'FAILURE'
+            	  }
             }
             if (exitCode == "2") {
              	  stash name: "plan", includes: "plan.out"
   	            try {
-                  timeout(time: 5, unit: 'MINUTES') {
-                    apply = input(
-                    id: 'Proceed', message: 'Do you want to apply?', parameters: [
-                    [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
-                    ])
-        	        }
-                }
+                  input id: 'Tfapply', message: 'Do you want to apply your changes?', ok: 'apply'
+                  apply = true
+        	      }
                 catch (err) {
-                   apply = false
-                   currentBuild.result = 'UNSTABLE'
+                  apply = false
+                  currentBuild.result = 'UNSTABLE'
             	  }
 							}
 					}
