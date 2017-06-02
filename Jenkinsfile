@@ -20,30 +20,30 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 					stage('Plan'){
 
 						sh 'git clone "https://$TOKEN@github.com/contino/moj-appservice-environment.git"'
-						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan -out=plan.out -detailed-exitcode; echo \$? &gt; status"
-            	def exitCode = readFile('status').trim()
-            	def apply = false
-            	echo "Terraform Plan Exit Code: ${exitCode}"
-	            if (exitCode == "0") {
-  	              currentBuild.result = 'SUCCESS'
-    	        }
-      	      if (exitCode == "1") {
-          	      currentBuild.result = 'FAILURE'
-            	}
-            	if (exitCode == "2") {
-              	  stash name: "plan", includes: "plan.out"
-  	              try {
-                    timeout(time: 5, unit: 'MINUTES') {
-                      apply = input(
-                      id: 'Proceed', message: 'Do you want to apply?', parameters: [
-                      [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
-                      ])
-        	          }
-                  }
-                  catch (err) {
-            	        apply = false
-              	      currentBuild.result = 'UNSTABLE'
-              	  }
+						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan -out=plan.out -detailed-exitcode; echo \$? > status"
+            def exitCode = readFile('status').trim()
+            def apply = false
+            echo "Terraform Plan Exit Code: ${exitCode}"
+	          if (exitCode == "0") {
+  	            currentBuild.result = 'SUCCESS'
+    	      }
+      	    if (exitCode == "1") {
+          	    currentBuild.result = 'FAILURE'
+            }
+            if (exitCode == "2") {
+             	  stash name: "plan", includes: "plan.out"
+  	            try {
+                  timeout(time: 5, unit: 'MINUTES') {
+                    apply = input(
+                    id: 'Proceed', message: 'Do you want to apply?', parameters: [
+                    [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
+                    ])
+        	        }
+                }
+                catch (err) {
+                   apply = false
+                   currentBuild.result = 'UNSTABLE'
+            	  }
 							}
 					}
 				}
