@@ -3,10 +3,10 @@ properties(
         [[$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/contino/moj-appservice-environment'],
          pipelineTriggers([[$class: 'GitHubPushTrigger']])]
 )
-withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECRET'), 
-				string(credentialsId: 'tenant_id', variable: 'ARM_TENANT_ID'), 
-				string(credentialsId: 'contino_github', variable: 'TOKEN'), 
-				string(credentialsId: 'subscription_id', variable: 'ARM_SUBSCRIPTION_ID'), 
+withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECRET'),
+				string(credentialsId: 'tenant_id', variable: 'ARM_TENANT_ID'),
+				string(credentialsId: 'contino_github', variable: 'TOKEN'),
+				string(credentialsId: 'subscription_id', variable: 'ARM_SUBSCRIPTION_ID'),
 				string(credentialsId: 'object_id', variable: 'ARM_CLIENT_ID')]) {
 	try {
 		node {
@@ -19,13 +19,30 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 
 					stage('Plan'){
 						sh 'git clone "https://$TOKEN@github.com/contino/moj-appservice-environment.git"'
-						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan"
+						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan -out=plan.out -detailed-exitcode; echo \$? &gt; status"
+            	def exitCode = readFile('status').trim()
+            	def apply = false
+            	echo "Terraform Plan Exit Code: ${exitCode}"
+	            if (exitCode == "0") {
+  	              currentBuild.result = 'SUCCESS'
+    	        }
+      	      if (exitCode == "1") {
+          	      currentBuild.result = 'FAILURE'
+            	}
+            	if (exitCode == "2") {
+              	  stash name: "plan", includes: "plan.out"
+  	              try {
+    	                input message: 'Apply Plan?', ok: 'Apply'
+      	              apply = true
+        	        } catch (err) {
+            	        apply = false
+              	      currentBuild.result = 'UNSTABLE'
+              	  }
+							}
 					}
 				}
 			}
-
 		}
-	}
 	catch (err) {
 		slackSend(
 	            channel: "#${product}",
