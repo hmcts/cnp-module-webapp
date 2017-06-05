@@ -1,6 +1,6 @@
 variable "name" {
   type    = "string"
-  default = "probate-westeurope"
+  default = "contino-moj-appservice"
 }
 
 variable "location" {
@@ -16,7 +16,7 @@ variable "address_space" {
 
 variable "instance_count" {
   type    = "string"
-  default = 5
+  default = 4
 }
 
 variable "address_prefixes" {
