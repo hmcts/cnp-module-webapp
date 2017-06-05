@@ -16,12 +16,12 @@ variable "address_space" {
 
 variable "instance_count" {
   type    = "string"
-  default = 4
+  default = 5
 }
 
 variable "address_prefixes" {
   type    = "list"
-  default = [ "192.168.0.0/24" , "192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]
+  default = [ "192.168.0.0/24" , "192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24", "192.168.4.0/24"]
 }
 
 variable "frontend_size" {
