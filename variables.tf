@@ -23,3 +23,23 @@ variable "address_prefixes" {
   type    = "list"
   default = [ "192.168.0.0/24" , "192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]
 }
+
+variable "frontend_size" {
+  type    = "string"
+  default = "Medium"  
+}
+
+variable "workerpoolone_instancesize" {
+  type    = "string"
+  default = "Small"
+}
+
+variable "workerpooltwo_instancesize" {
+  type    = "string"
+  default = "Small"
+}
+
+variable "workerpoolthree_instancesize" {
+  type    = "string"
+  default = "Small"
+}
