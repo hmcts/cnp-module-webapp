@@ -1,42 +1,25 @@
-resource "azurerm_resource_group" "rg" {
-    name     = "${var.name}"
-    location = "${var.location}"
+module "vnet" {
+  source               = "git@github.com:contino/moj-module-vnet.git"
+  name                 = "${var.name}"
+  location             = "${var.location}"
+  address_space        = "${var.address_space}"
+  address_prefixes     = "${var.address_prefixes}"
+  subnetinstance_count = "${var.subnetinstance_count}"
+  tag                  = "${var.tag}"
 }
 
-resource "azurerm_virtual_network" "vnet" {
-  name                = "${var.name}-network"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  address_space       = "${var.address_space}"
-  location            = "${var.location}"
-}
-
-resource "azurerm_subnet" "sb"  { 
-  count 					     = "${var.instance_count}" 
-  name  					     = "${var.name}-subnet-${count.index}"
-  resource_group_name  = "${azurerm_resource_group.rg.name}"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-  address_prefix 			 = "${element(var.address_prefixes,count.index)}"
-}
-
-resource "template_file" "asetemplate" {
-  template = "${file("./templates/ase-asp-app.json")}"
-  vars     = {}
-}
-
-resource "azurerm_template_deployment" "app_service_environment_1" {
-    template_body       = "${template_file.asetemplate.rendered}"
-    name                = "${var.name}"
-    deployment_mode     = "Incremental"
-    resource_group_name = "${azurerm_resource_group.rg.name}"
-
-    parameters = {
-      aseName                      = "${var.name}-0"
-      aseLocation                  = "${var.location}"
-      existingVnetResourceId       = "${azurerm_virtual_network.vnet.id}"
-      subnetName                   = "${var.name}-subnet-0"
-      frontEndSize                 = "${var.frontend_size}"
-      workerPoolOneInstanceSize    = "${var.workerpoolone_instancesize}"
-      workerPoolTwoInstanceSize    = "${var.workerpooltwo_instancesize}"
-      workerPoolThreeInstanceSize  = "${var.workerpoolthree_instancesize}"
-  }
+module "azurerm_app_service_environment_ilb" {
+  source                       = "git@github.com:contino/moj-module-ase.git"
+  tag                          = "${var.tag}"
+  name                         = "${var.name}"
+  stagingslotname              = "${var.stagingslotname}"
+  lastknowngoodslotname        = "${var.lastknowngoodslotname}"
+  location                     = "${var.location}"
+  vnetresourceid               = "${module.vnet.id}"
+  subnetname                   = "${module.vnet.subnet_names[1]}"
+  frontend_size                = "${var.frontend_size}"
+  workerpoolone_instancesize   = "${var.workerpoolone_instancesize}"
+  workerpooltwo_instancesize   = "${var.workerpooltwo_instancesize}"
+  workerpoolthree_instancesize = "${var.workerpoolthree_instancesize}"
+  resourcegroupname            = "${module.vnet.resourcegroup_name}"
 }

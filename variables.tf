@@ -1,6 +1,16 @@
 variable "name" {
   type    = "string"
-  default = "contino-moj-appservice"
+  default = "probate"
+}
+
+variable "stagingslotname" {
+  default     = "staging"
+  description = "Name of the staging slot"
+}
+
+variable "lastknowngoodslotname" {
+  default     = "lastknowngood"
+  description = "Name of the last known good slot"
 }
 
 variable "location" {
@@ -10,23 +20,23 @@ variable "location" {
 
 variable "address_space" {
   type        = "list"
-  default     = [ "192.168.0.0/16" ]
+  default     = ["192.168.0.0/16"]
   description = "Address space for the virtual network"
 }
 
-variable "instance_count" {
+variable "subnetinstance_count" {
   type    = "string"
   default = 4
 }
 
 variable "address_prefixes" {
   type    = "list"
-  default = [ "192.168.0.0/24" , "192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24", "192.168.4.0/24"]
+  default = ["192.168.0.0/24", "192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24", "192.168.4.0/24"]
 }
 
 variable "frontend_size" {
   type    = "string"
-  default = "Medium"  
+  default = "Medium"
 }
 
 variable "workerpoolone_instancesize" {
@@ -42,4 +52,9 @@ variable "workerpooltwo_instancesize" {
 variable "workerpoolthree_instancesize" {
   type    = "string"
   default = "Small"
+}
+
+variable "tag" {
+  type    = "string"
+  default = "local"
 }

@@ -1,6 +1,6 @@
 #!groovy
 properties(
-        [[$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/contino/moj-appservice-environment'],
+        [[$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/contino/moj-demo-environment'],
          pipelineTriggers([[$class: 'GitHubPushTrigger']])]
 )
 withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECRET'),
@@ -19,8 +19,8 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 
 					stage('Plan and Apply'){
 
-						sh 'git clone "https://$TOKEN@github.com/contino/moj-appservice-environment.git"'
-						sh "cd moj-appservice-environment && chmod 755 ./terraform.sh && ./terraform.sh plan && ./terraform.sh apply"
+						sh 'git clone "https://$TOKEN@github.com/contino/moj-demo-environment.git"'
+						sh "cd moj-demo-environment && chmod 755 ./terraform.sh && ./terraform.sh plan && ./terraform.sh apply"
 					}
 				}
 			}
