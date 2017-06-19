@@ -5,12 +5,12 @@ variable "name" {
 
 variable "stagingslotname" {
   default     = "staging"
-  description = "Name of the staging slot"
+  description = "Name of staging slot"
 }
 
 variable "lastknowngoodslotname" {
   default     = "lastknowngood"
-  description = "Name of the last known good slot"
+  description = "Name of last known good slot"
 }
 
 variable "location" {
@@ -21,7 +21,7 @@ variable "location" {
 variable "address_space" {
   type        = "list"
   default     = ["192.168.0.0/16"]
-  description = "Address space for the virtual network"
+  description = "Address space for virtual network"
 }
 
 variable "subnetinstance_count" {
