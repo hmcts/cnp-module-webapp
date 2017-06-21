@@ -1,5 +1,5 @@
 terraform {
   backend "azure" {
-    key = "moj.demo.environment.terrarform.tfstate"
+    key = "${var.name}/${var.env}/terrarform.tfstate"
   }
 }

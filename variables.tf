@@ -1,6 +1,6 @@
 variable "name" {
   type    = "string"
-  default = "probate"
+  default = "demo"
 }
 
 variable "stagingslotname" {
