@@ -1,5 +1,5 @@
 module "vnet" {
-  source               = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-vnet/"
+  source               = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-vnet?ref=master"
   name                 = "${var.name}"
   location             = "${var.location}"
   address_space        = "${var.address_space}"
@@ -9,7 +9,7 @@ module "vnet" {
 }
 
 module "azurerm_app_service_environment" {
-  source                = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-ase/releases/tag/0.0.14"
+  source                = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-ase?ref=releases/tag/0.0.14"
   name                  = "${var.name}"
   stagingslotname       = "${var.stagingslotname}"
   lastknowngoodslotname = "${var.lastknowngoodslotname}"
