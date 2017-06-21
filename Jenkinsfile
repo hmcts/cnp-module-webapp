@@ -11,23 +11,24 @@ def bootstrap_state_storage_container = "contino-moj-tfstate-container"
  def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
  env.PATH = "${tfHome}:${env.PATH}"
 
-withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECRET'),
-				string(credentialsId: 'tenant_id', variable: 'ARM_TENANT_ID'),
-				string(credentialsId: 'contino_github', variable: 'TOKEN'),
-				string(credentialsId: 'subscription_id', variable: 'ARM_SUBSCRIPTION_ID'),
-				string(credentialsId: 'object_id', variable: 'ARM_CLIENT_ID')]) {
-	try {
+try {
 		node {
 			stage('Checkout') {
 				deleteDir()
 				checkout scm
 			}
-			stage('Terraform Plan & Apply'){
-				sh "terraform init -backend-config \"storage_account_name=${state_store_storage_acccount}\" -backend-config \"container_name=${bootstrap_state_storage_container}\" -backend-config \"resource_group_name=${state_store_resource_group}\""
-				sh "terraform get"
-				sh "terraforn plan"
-				sh "terraform apply"
+			stage('Terraform Plan & Apply') {
+				withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECRET'),
+				string(credentialsId: 'tenant_id', variable: 'ARM_TENANT_ID'),
+				string(credentialsId: 'contino_github', variable: 'TOKEN'),
+				string(credentialsId: 'subscription_id', variable: 'ARM_SUBSCRIPTION_ID'),
+				string(credentialsId: 'object_id', variable: 'ARM_CLIENT_ID')]) {
 				
+					sh "terraform init -backend-config \"storage_account_name=${state_store_storage_acccount}\" -backend-config \"container_name=${bootstrap_state_storage_container}\" -backend-config \"resource_group_name=${state_store_resource_group}\""
+					sh "terraform get"
+					sh "terraforn plan"
+					sh "terraform apply"
+				}
 			}
 		}
   }
@@ -38,4 +39,4 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 	            message: "${env.JOB_NAME}:  <${env.BUILD_URL}console|Build ${env.BUILD_DISPLAY_NAME}> has FAILED")
 	    throw err
 	}
-}
+
