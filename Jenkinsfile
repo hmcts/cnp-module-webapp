@@ -26,8 +26,8 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 				env.PATH = "${tfHome}:${env.PATH}"
 
 				sh "terraform init -backend-config \"storage_account_name=${state_store_storage_acccount}\" -backend-config \"container_name=${bootstrap_state_storage_container}\" -backend-config \"resource_group_name=${state_store_resource_group}\""
-				sh "terraform get"
-				sh "terraforn plan"
+				sh "terraform get -update=true"
+				sh "terraform plan"
 				sh "terraform apply"
 				
 			}
