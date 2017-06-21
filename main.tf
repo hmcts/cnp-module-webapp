@@ -9,7 +9,7 @@ module "vnet" {
 }
 
 module "azurerm_app_service_environment" {
-  source                = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-ase?ref=releases/tag/0.0.14"
+  source                = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-ase?ref=0.0.14"
   name                  = "${var.name}"
   stagingslotname       = "${var.stagingslotname}"
   lastknowngoodslotname = "${var.lastknowngoodslotname}"
