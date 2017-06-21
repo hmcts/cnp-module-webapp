@@ -35,7 +35,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 	}
 	catch (err) {
 		slackSend(
-				channel: "#${product}",
+				channel: "#${uk-moj-pipeline}",
 				color: 'danger',
 				message: "${env.JOB_NAME}:  <${env.BUILD_URL}console|Build ${env.BUILD_DISPLAY_NAME}> has FAILED")
 		throw err
