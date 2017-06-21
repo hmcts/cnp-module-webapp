@@ -15,12 +15,11 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 				checkout scm
 			}
 			stage('Terraform'){
-				docker.image('dsanabria/aztf:latest').inside {
+				docker.image('hashicorp/terraform:light').inside {
 
 					stage('Plan and Apply'){
-
-						sh 'git clone "https://$TOKEN@github.com/contino/moj-demo-environment.git"'
-						sh "cd moj-demo-environment && chmod 755 ./terraform.sh && ./terraform.sh plan && ./terraform.sh apply"
+						sh './terraform.sh plan'
+						sh './terraform.sh apply'
 					}
 				}
 			}
