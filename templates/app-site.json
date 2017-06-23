@@ -1,0 +1,96 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aseName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the App Service Environment"
+            }
+        },
+        "stagingSlotName": {
+            "type": "string",
+            "defaultValue": "staging",
+            "metadata": {
+                "description": "Name of the staging slot"
+            }
+        },
+        "lastKnownGoodSlotName": {
+            "type": "string",
+            "defaultValue": "lastknowngood",
+            "metadata": {
+                "description": "Name of the last known good slot"
+            }
+        },
+        "aseLocation": { 
+            "type": "string", 
+            "allowedValues": [ 
+                "UK South", 
+                "UK West",
+                "West Europe"
+            ], 
+            "metadata": { 
+                "description": "Location of the App Service Environment" 
+            } 
+         }, 
+        "env": {
+            "type": "string",
+            "metadata": {
+                "description": "The tag"
+            }
+        }
+    },
+    "resources": [
+      {
+        "name": "[parameters('aseName')]",
+        "type": "Microsoft.Web/sites",
+        "location": "[parameters('aseLocation')]",
+        "apiVersion": "2015-08-01",
+
+        "tags": {
+            "displayName": "Web App",
+            "environment": "[parameters('env')]"
+        },
+        "properties": {
+          "name": "[parameters('aseName')]",
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('aseName'))]",
+          "hostingEnvironment": "[parameters('aseName')]",
+          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
+        },
+        "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "[parameters('stagingSlotName')]",
+          "type": "slots",
+          "tags": {
+            "displayName": "StagingSlot",
+            "environment": "[parameters('env')]"
+          },
+          "location": "[parameters('aseLocation')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('aseName'))]"
+          ],
+          "properties": {
+          },
+          "resources": []
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "[parameters('lastKnownGoodSlotName')]",
+          "type": "slots",
+          "tags": {
+            "displayName": "LastKnownGoodSlot",
+            "environment": "[parameters('env')]"
+          },
+          "location": "[parameters('aseLocation')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('aseName'))]"
+          ],
+          "properties": {
+          },
+          "resources": []
+        }
+        ]
+      }
+    ]
+}
