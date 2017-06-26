@@ -15,7 +15,7 @@ resource "azurerm_template_deployment" "app_service_plan" {
 
   parameters = {
     name                   = "${var.env}-${var.name}"
-    aseName                = "${data.terraform_remote_state.moj_core_infrastructure.app_service_environment_name}"
+    aseName                = "${data.terraform_remote_state.moj_core_infrastructure.ase_name}"
     location               = "${var.location}"
     env                    = "${var.env}"
     existingVnetResourceId = "${data.terraform_remote_state.moj_core_infrastructure.id}"
@@ -32,7 +32,7 @@ resource "azurerm_template_deployment" "app_service_site" {
 
   parameters = {
     name                  = "${var.env}-${var.name}"
-    aseName               = "${data.terraform_remote_state.moj_core_infrastructure.app_service_environment_name}"
+    aseName               = "${data.terraform_remote_state.moj_core_infrastructure.ase_name}"
     location              = "${var.location}"
     env                   = "${var.env}"
     lastKnownGoodSlotName = "${var.env}-${var.name}-${var.lastknowngoodslotname}"
