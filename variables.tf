@@ -20,5 +20,5 @@ variable "location" {
 
 variable "env" {
   type    = "string"
-  default = "local"
+  default = "example"
 }

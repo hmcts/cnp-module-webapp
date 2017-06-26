@@ -2,6 +2,12 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the App"
+            }
+        },
         "aseName": {
             "type": "string",
             "metadata": {
@@ -22,7 +28,7 @@
                 "description": "Name of the last known good slot"
             }
         },
-        "aseLocation": { 
+        "location": { 
             "type": "string", 
             "allowedValues": [ 
                 "UK South", 
@@ -42,9 +48,9 @@
     },
     "resources": [
       {
-        "name": "[parameters('aseName')]",
+        "name": "[parameters('name')]",
         "type": "Microsoft.Web/sites",
-        "location": "[parameters('aseLocation')]",
+        "location": "[parameters('location')]",
         "apiVersion": "2015-08-01",
 
         "tags": {
@@ -52,8 +58,8 @@
             "environment": "[parameters('env')]"
         },
         "properties": {
-          "name": "[parameters('aseName')]",
-          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('aseName'))]",
+          "name": "[parameters('name')]",
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]",
           "hostingEnvironment": "[parameters('aseName')]",
           "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
         },
@@ -66,9 +72,9 @@
             "displayName": "StagingSlot",
             "environment": "[parameters('env')]"
           },
-          "location": "[parameters('aseLocation')]",
+          "location": "[parameters('location')]",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('aseName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
           ],
           "properties": {
           },
@@ -82,9 +88,9 @@
             "displayName": "LastKnownGoodSlot",
             "environment": "[parameters('env')]"
           },
-          "location": "[parameters('aseLocation')]",
+          "location": "[parameters('location')]",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('aseName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
           ],
           "properties": {
           },
