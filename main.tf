@@ -3,49 +3,9 @@ resource "azurerm_resource_group" "rg" {
   location = "${var.location}"
 }
 
-/*data "template_file" "plantemplate" {
-  template = "${file("${path.module}/templates/app-plan.json")}"
-}
-
-data "template_file" "sitetemplate" {
-  template = "${file("${path.module}/templates/app-site.json")}"
-}*/
-
 data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"
 }
-
-/*# Create Application Service plan
-resource "azurerm_template_deployment" "app_service_plan" {
-  template_body       = "${data.template_file.plantemplate.rendered}"
-  name                = "${var.env}-${var.name}"
-  resource_group_name = "${data.terraform_remote_state.moj_core_infrastructure.resourcegroup_name}"
-  deployment_mode     = "Incremental"
-
-  parameters = {
-    name     = "${var.env}-${var.name}"
-    aseName  = "${data.terraform_remote_state.moj_core_infrastructure.ase_name[0]}"
-    location = "${var.location}"
-    env      = "${var.env}"
-  }
-}
-
-# Create Application Service site
-resource "azurerm_template_deployment" "app_service_site" {
-  template_body       = "${data.template_file.sitetemplate.rendered}"
-  name                = "${var.env}-${var.name}"
-  resource_group_name = "${data.terraform_remote_state.moj_core_infrastructure.resourcegroup_name}"
-  deployment_mode     = "Incremental"
-
-  parameters = {
-    name                  = "${var.env}-${var.name}"
-    aseName               = "${data.terraform_remote_state.moj_core_infrastructure.ase_name[0]}"
-    location              = "${var.location}"
-    env                   = "${var.env}"
-    lastKnownGoodSlotName = "${var.env}-${var.name}-${var.lastknowngoodslotname}"
-    stagingSlotName       = "${var.env}-${var.name}-${var.stagingslotname}"
-  }
-}*/
 
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
