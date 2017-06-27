@@ -16,7 +16,7 @@ resource "azurerm_template_deployment" "app_service_plan" {
   parameters = {
     name     = "${var.env}-${var.name}"
     aseName  = "${data.terraform_remote_state.moj_core_infrastructure.ase_name[0]}"
-    location = "${data.terraform_remote_state.moj_core_infrastructure.ase_location[0]}"
+    location = "${var.location}"
     env      = "${var.env}"
   }
 }
@@ -31,7 +31,7 @@ resource "azurerm_template_deployment" "app_service_site" {
   parameters = {
     name                  = "${var.env}-${var.name}"
     aseName               = "${data.terraform_remote_state.moj_core_infrastructure.ase_name[0]}"
-    location              = "${data.terraform_remote_state.moj_core_infrastructure.ase_location[0]}"
+    location              = "${var.location}"
     env                   = "${var.env}"
     lastKnownGoodSlotName = "${var.env}-${var.name}-${var.lastknowngoodslotname}"
     stagingSlotName       = "${var.env}-${var.name}-${var.stagingslotname}"
