@@ -15,7 +15,7 @@ variable "lastknowngoodslotname" {
 
 variable "location" {
   type    = "string"
-  default = "West Europe"
+  default = "UK South"
 }
 
 variable "env" {
