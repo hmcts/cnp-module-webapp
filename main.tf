@@ -14,12 +14,10 @@ resource "azurerm_template_deployment" "app_service_plan" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    name                   = "${var.env}-${var.name}"
-    aseName                = "${data.terraform_remote_state.moj_core_infrastructure.ase_name[0]}"
-    location               = "${var.location}"
-    env                    = "${var.env}"
-    existingVnetResourceId = "${data.terraform_remote_state.moj_core_infrastructure.id}"
-    subnetName             = "${data.terraform_remote_state.moj_core_infrastructure.subnet_names[0]}"
+    name     = "${var.env}-${var.name}"
+    aseName  = "${data.terraform_remote_state.moj_core_infrastructure.ase_name[0]}"
+    location = "${var.location}"
+    env      = "${var.env}"
   }
 }
 
