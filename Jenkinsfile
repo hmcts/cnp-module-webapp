@@ -30,12 +30,12 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                 sh "terraform plan -var 'env=${productEnv}'"
             }
             stage('Terraform Apply - Dev') {
-/*                def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
+                def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
                 env.PATH = "${tfHome}:${env.PATH}"
 
                 if (env.BRANCH_NAME == 'master' && currentBuild.result == null || currentBuild.result == 'SUCCESS') {
                     sh "terraform apply -var 'env=${productEnv}'"
-                }*/
+                }
             }
         }
     }
