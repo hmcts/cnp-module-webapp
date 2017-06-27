@@ -1,0 +1,144 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the App Service Environment"
+            }
+        },
+        "aseName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the App Service Environment"
+            }
+        },
+        "stagingSlotName": {
+            "type": "string",
+            "defaultValue": "staging",
+            "metadata": {
+                "description": "Name of the staging slot"
+            }
+        },
+        "lastKnownGoodSlotName": {
+            "type": "string",
+            "defaultValue": "lastknowngood",
+            "metadata": {
+                "description": "Name of the last known good slot"
+            }
+        },
+        "location": { 
+            "type": "string", 
+            "allowedValues": [ 
+                "UK South", 
+                "UK West",
+                "West Europe"
+            ], 
+            "metadata": { 
+                "description": "Location of the App Service Environment" 
+            } 
+         },
+        "aseAppServiceWorkerPool": {
+          "type": "string",
+          "allowedValues": [
+            "1",
+            "2",
+            "3"
+          ],
+          "defaultValue": "1",
+          "metadata": {
+            "description": "Defines which worker pool's (WP1, WP2 or WP3) resources will be used for the app service plan."
+          }
+        },
+        "aseAppServiceNumberOfWorkers": {
+          "type": "int",
+          "defaultValue": 1,
+          "metadata": {
+            "description": "Defines the number of workers from the worker pool that will be used by the app service plan."
+          }
+        },
+        "env": {
+            "type": "string",
+            "metadata": {
+                "description": "The tag"
+            }
+        }
+    },
+    "resources": [
+      {
+          "name": "[parameters('name')]",
+          "type": "Microsoft.Web/serverfarms",
+          "location": "[parameters('location')]",
+          "apiVersion": "2014-06-01",
+          "tags": {
+            "displayName": "Application Service Plan",
+            "environment": "[parameters('env')]"
+          },
+          "properties": {
+            "name": "[parameters('name')]",
+            "hostingEnvironment": "[parameters('aseName')]",
+            "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
+          },
+          "sku": {
+            "name": "[concat('P', parameters('aseAppServiceWorkerPool'))]",
+            "tier": "Premium",
+            "size": "[concat('P', parameters('aseAppServiceWorkerPool'))]",
+            "family": "P",
+            "capacity": "[parameters('aseAppServiceNumberOfWorkers')]"
+          }
+      },
+      {
+        "name": "[parameters('name')]",
+        "type": "Microsoft.Web/sites",
+        "location": "[parameters('location')]",
+        "apiVersion": "2015-08-01",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]"
+        ],
+        "tags": {
+          "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('name')))]": "Resource",
+          "displayName": "ASE-WEB-APP",
+          "environment": "[parameters('env')]"
+        },
+        "properties": {
+          "name": "[parameters('name')]",
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]",
+          "hostingEnvironment": "[parameters('aseName')]",
+          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
+        },
+        "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "[parameters('stagingSlotName')]",
+          "type": "slots",
+          "tags": {
+            "displayName": "staging"
+          },
+          "location": "[parameters('location')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+          ],
+          "properties": {
+          },
+          "resources": []
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "[parameters('lastKnownGoodSlotName')]",
+          "type": "slots",
+          "tags": {
+            "displayName": "lastknowngood"
+          },
+          "location": "[parameters('location')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+          ],
+          "properties": {
+          },
+          "resources": []
+        }
+        ]
+      }
+    ]
+}

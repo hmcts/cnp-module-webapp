@@ -18,6 +18,11 @@ variable "location" {
   default = "UK South"
 }
 
+variable "resourcegroup" {
+  type    = "string"
+  default = "probate-environment"
+}
+
 variable "env" {
   type    = "string"
   default = "example"
