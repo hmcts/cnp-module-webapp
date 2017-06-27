@@ -27,7 +27,7 @@ resource "azurerm_template_deployment" "app_service_plan" {
 resource "azurerm_template_deployment" "app_service_site" {
   template_body       = "${data.template_file.sitetemplate.rendered}"
   name                = "${var.env}-${var.name}"
-  resource_group_name = "${azurerm_template_deployment.app_service_plan.resource_group_name}"
+  resource_group_name = "${data.terraform_remote_state.moj_core_infrastructure.resourcegroup_name}"
   deployment_mode     = "Incremental"
 
   parameters = {
