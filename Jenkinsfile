@@ -1,50 +1,45 @@
 #!groovy
 properties(
-        [[$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/contino/moj-demo-environment'],
+        [[$class: 'GithubProjectProperty', projectUrlStr: 'https://www.github.com/contino/moj-module-webapp/'],
          pipelineTriggers([[$class: 'GitHubPushTrigger']])]
 )
-
-def state_store_resource_group = "contino-moj-tf-state"
-def state_store_storage_acccount = "continomojtfstate"
-def bootstrap_state_storage_container = "contino-moj-tfstate-container"
-def product = "moj-example-environment"
-def productEnv = "example"
-
-withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECRET'),
-            string(credentialsId: 'tenant_id', variable: 'ARM_TENANT_ID'),
-            string(credentialsId: 'contino_github', variable: 'TOKEN'),
-            string(credentialsId: 'subscription_id', variable: 'ARM_SUBSCRIPTION_ID'),
-            string(credentialsId: 'object_id', variable: 'ARM_CLIENT_ID')]) {
+withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECRET'), 
+                string(credentialsId: 'tenant_id', variable: 'ARM_TENANT_ID'), 
+                string(credentialsId: 'subscription_id', variable: 'ARM_SUBSCRIPTION_ID'), 
+                string(credentialsId: 'object_id', variable: 'ARM_CLIENT_ID'),
+                string(credentialsId: 'kitchen_github', variable: 'TOKEN'),
+                string(credentialsId: 'kitchen_github', variable: 'TF_VAR_token'),
+                string(credentialsId: 'kitchen_client_secret', variable: 'AZURE_CLIENT_SECRET'), 
+                string(credentialsId: 'kitchen_tenant_id', variable: 'AZURE_TENANT_ID'), 
+                string(credentialsId: 'kitchen_subscription_id', variable: 'AZURE_SUBSCRIPTION_ID'), 
+                string(credentialsId: 'kitchen_client_id', variable: 'AZURE_CLIENT_ID')]) {
     try {
         node {
-            stage('Checkout') {
-                deleteDir()
-                checkout scm
-            }
-            stage('Terraform Plan - Dev ') {
-                def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
-                env.PATH = "${tfHome}:${env.PATH}"
+            withEnv(["GIT_COMMITTER_NAME=jenkinsmoj", 
+               "GIT_COMMITTER_EMAIL=jenkinsmoj@contino.io"]) {
+                stage('Checkout') {
+                    deleteDir()
+                    checkout scm
+                }
 
-                sh "terraform init -backend-config \"storage_account_name=${state_store_storage_acccount}\" -backend-config \"container_name=${bootstrap_state_storage_container}\" -backend-config \"resource_group_name=${state_store_resource_group}\" -backend-config \"key=${product}/${productEnv}/terraform.tfstate\"" 
-                sh "terraform get -update=true"
-                sh "terraform plan -var 'env=${productEnv}'"
-            }
-            stage('Terraform Apply - Dev') {
-                def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
-                env.PATH = "${tfHome}:${env.PATH}"
+                stage('Terraform Unit Testing'){
+                    def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
+                    env.PATH = "${tfHome}:${env.PATH}"
+                    sh 'terraform fmt --diff=true > diff.out'
+                    sh 'if [ ! -s diff.out ]; then echo "Initial Linting OK ..."; else echo "Linting errors found ..." && cat diff.out && exit 1; fi'
+                    sh 'terraform validate'
+                }
 
-                if (env.BRANCH_NAME == 'master' && currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                    sh "terraform apply -var 'env=${productEnv}'"
+                stage('Tagging'){
+                  if (env.BRANCH_NAME == 'master' && currentBuild.result == null || currentBuild.result == 'SUCCESS') {
+                    sh 'git tag -a 0.0.$BUILD_NUMBER -m "Jenkins"'
+                    sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
+                  }
                 }
             }
         }
     }
     catch (err) {
-        slackSend(
-                channel: "#${uk-moj-pipeline}",
-                color: 'danger',
-                message: "${env.JOB_NAME}:  <${env.BUILD_URL}console|Build ${env.BUILD_DISPLAY_NAME}> has FAILED")
         throw err
     }
-
 }

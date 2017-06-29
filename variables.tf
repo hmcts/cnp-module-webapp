@@ -27,3 +27,8 @@ variable "env" {
   type    = "string"
   default = "example"
 }
+
+variable "asename" {
+  type    = "string"
+  default = "examplease"
+}
