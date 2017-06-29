@@ -1,8 +1,10 @@
+# Create a resource group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.env}-${var.name}"
   location = "${var.location}"
 }
 
+# The ARM template that creates a web app and app service plan
 data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"
 }
