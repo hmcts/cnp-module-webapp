@@ -19,7 +19,8 @@ resource "azurerm_template_deployment" "app_service_site" {
   parameters = {
     name                  = "${var.env}-${var.name}"
     aseName               = "${var.asename}"
-    stagingSlotName       = "${var.env}-${var.name}-${var.stagingslotname}"
+    qaSlotName            = "${var.env}-${var.name}-${var.qaslotname}"
+    devSlotName           = "${var.env}-${var.name}-${var.devslotname}"
     lastKnownGoodSlotName = "${var.env}-${var.name}-${var.lastknowngoodslotname}"
     location              = "${var.location}"
     env                   = "${var.env}"

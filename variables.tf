@@ -3,9 +3,14 @@ variable "name" {
   default = "demo"
 }
 
-variable "stagingslotname" {
-  default     = "staging"
-  description = "Name of staging slot"
+variable "qaslotname" {
+  default     = "qa"
+  description = "Name of qa slot"
+}
+
+variable "devslotname" {
+  default     = "dev"
+  description = "Name of dev slot"
 }
 
 variable "lastknowngoodslotname" {
@@ -16,11 +21,6 @@ variable "lastknowngoodslotname" {
 variable "location" {
   type    = "string"
   default = "UK South"
-}
-
-variable "resourcegroup" {
-  type    = "string"
-  default = "probate-environment"
 }
 
 variable "env" {
