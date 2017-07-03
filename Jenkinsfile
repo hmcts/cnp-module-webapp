@@ -32,7 +32,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                 
                 stage('Terraform Unit Testing') {
                   docker.image('dsanabria/terraform_validate:latest').inside {
-                    sh 'cd tests/unit && terraform_validate'
+                    sh 'cd tests/unit && python tests.py'
                   }
                 }
 
