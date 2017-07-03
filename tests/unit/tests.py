@@ -1,6 +1,7 @@
 import terraform_validate
 import unittest
 import os
+import sys
 
 
 class TestWebAppResources(unittest.TestCase):
@@ -39,4 +40,5 @@ class TestWebAppResources(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestWebAppResources)
-    unittest.TextTestRunner(verbosity=0).run(suite)
+    result = unittest.TextTestRunner(verbosity=0).run(suite)
+    sys.exit(not result.wasSuccessful())
