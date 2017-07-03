@@ -11,14 +11,12 @@ class TestWebAppResources(unittest.TestCase):
                                  "../../")
         self.v = terraform_validate.Validator(self.path)
 
-    def resourceGroup(self, arg1):
-        """TODO: Docstring for resourceGroup.
-
-        :arg1: TODO
-        :returns: TODO
-
+    def resourceGroup(self):
+        """Assert that resource group have the right properties
+        and values.
         """
-        pass
+        self.v.error_if_property_missing()
+        self.v.resources('azurerm_resource_group').property('name').should_match_regex('^[a-zA-Z]*-\w*$')
 
     def template(self, arg1):
         """TODO: Docstring for function.
