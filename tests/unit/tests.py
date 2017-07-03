@@ -16,9 +16,9 @@ class TestWebAppResources(unittest.TestCase):
         and values.
         """
         self.v.error_if_property_missing()
-        self.v.resources('azurerm_resource_group').property('name').should_match_regex('^[a-zA-Z]*-\w*$')
+        self.v.resources('azurerm_resource_group').should_have_properties('["name","location"]')
 
-    def test_template(self, arg1):
+    def test_template(self):
         """TODO: Docstring for function.
 
         :arg1: TODO
@@ -27,7 +27,7 @@ class TestWebAppResources(unittest.TestCase):
         """
         pass
 
-    def test_templateDeployment(self, arg1):
+    def test_templateDeployment(self):
         """TODO: Docstring for templateDeployment.
 
         :arg1: TODO
