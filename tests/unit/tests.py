@@ -17,7 +17,7 @@ class TestWebAppResources(unittest.TestCase):
         and values.
         """
         self.v.error_if_property_missing()
-        self.v.resources('azurerm_resource_group').should_have_properties(['name','location'])
+        self.v.resources('azurerm_resource_group').should_have_properties(['names','location'])
 
     def test_template(self):
         """TODO: Docstring for function.
