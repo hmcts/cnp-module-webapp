@@ -22,12 +22,18 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                     checkout scm
                 }
 
-                stage('Terraform Unit Testing'){
+                stage('Terraform Linting Checks'){
                     def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
                     env.PATH = "${tfHome}:${env.PATH}"
                     sh 'terraform fmt --diff=true > diff.out'
                     sh 'if [ ! -s diff.out ]; then echo "Initial Linting OK ..."; else echo "Linting errors found ..." && cat diff.out && exit 1; fi'
                     sh 'terraform validate'
+                }
+                
+                stage('Terraform Unit Testing') {
+                  docker.image('dsanabria/terraform_validate:latest').inside {
+                    sh 'cd tests/unit && terraform_validate'
+                  }
                 }
 
                 stage('Tagging'){
