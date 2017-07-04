@@ -7,38 +7,46 @@ import sys
 class TestWebAppResources(unittest.TestCase):
 
     def setUp(self):
-        # Tell the module where to find your terraform configuration folder
+        """Tell the module where to find your terraform
+        configuration folder
+        """
         self.path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                  "../../")
         self.v = terraform_validate.Validator(self.path)
 
-    def test_resource_group(self):
-        """Assert that resource group have the right properties
-        and values.
+    def test_resource_group_properties(self):
+        """Assert that resource group have the right properties.
+        """
+        self.v.resources('azurerm_resource_group').should_have_properties(['name', 'location'])
+
+    def test_resource_group_properties_values(self):
+        """Assert that resource group have the right values.
         """
         self.v.error_if_property_missing()
-        self.v.resources('azurerm_resource_group').should_have_properties(['names','location'])
+        self.v.enable_variable_expansion()
+        self.v.resources('azurerm_resource_group').property('name').should_match_regex('[a-zA-Z]*-[a-zA-Z]*')
+        self.v.resources('azurerm_resource_group').property('location').should_equal('UK South')
 
-    def test_template(self):
-        """TODO: Docstring for function.
-
-        :arg1: TODO
-        :returns: TODO
-
+    def test_template_deployment_properties(self):
+        """Assert that the template deployment resource have the
+        right properties.
         """
-        pass
+        self.v.resources('azurerm_template_deployment').should_have_properties(['name', 'template_body', 'resource_group_name', 'deployment_mode', 'parameters'])
 
-    def test_templateDeployment(self):
-        """TODO: Docstring for templateDeployment.
-
-        :arg1: TODO
-        :returns: TODO
-
+    def test_template_deployment_properties_values(self):
+        """Assert that template deployment have the right values.
         """
-        pass
+        self.v.resources('azurerm_template_deployment').property('deployment_mode').should_equal('Incremental')
+        self.v.resources('azurerm_template_deployment').property('template_body').should_equal('${data.template_file.sitetemplate.rendered}')
+        self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.env}-${var.name}')
+
+    def test_template_deployment_parameters(self):
+        """Assert that the template deployment parameters are correct.
+        """
+        self.v.resources('azurerm_template_deployment.parameters').should_have_properties(['name', 'lastKnownGoodSlotName', 'devSlotName', 'aseName', 'location', 'env', 'qaSlotName'])
 
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestWebAppResources)
-    result = unittest.TextTestRunner(verbosity=0).run(suite)
+    result = unittest.TextTestRunner(verbosity=1).run(suite)
     sys.exit(not result.wasSuccessful())
