@@ -112,7 +112,8 @@
           "name": "[parameters('name')]",
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]",
           "hostingEnvironment": "[parameters('aseName')]",
-          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
+          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
+          "scmType": "LocalGit"
         },
         "resources": [
         {
