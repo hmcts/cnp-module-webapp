@@ -24,7 +24,7 @@ class TestWebAppResources(unittest.TestCase):
         """
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
-        self.v.resources('azurerm_resource_group').property('name').should_match_regex('[a-zA-Z]*-[a-zA-Z]*')
+        self.v.resources('azurerm_resource_group').property('name').should_equal('probate-test')
         self.v.resources('azurerm_resource_group').property('location').should_equal('UK South')
 
     def test_template_deployment_properties(self):
@@ -38,7 +38,7 @@ class TestWebAppResources(unittest.TestCase):
         """
         self.v.resources('azurerm_template_deployment').property('deployment_mode').should_equal('Complete')
         self.v.resources('azurerm_template_deployment').property('template_body').should_equal('${data.template_file.sitetemplate.rendered}')
-        self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.env}-${var.name}')
+        self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.product}-${var.env}')
 
     def test_template_deployment_parameters(self):
         """Assert that the template deployment parameters are correct.
