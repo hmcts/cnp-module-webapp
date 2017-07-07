@@ -1,6 +1,5 @@
-variable "name" {
-  type    = "string"
-  default = "demo"
+variable "product" {
+  type = "string"
 }
 
 variable "qaslotname" {
@@ -24,11 +23,9 @@ variable "location" {
 }
 
 variable "env" {
-  type    = "string"
-  default = "example"
+  type = "string"
 }
 
 variable "asename" {
-  type    = "string"
-  default = "examplease"
+  type = "string"
 }
