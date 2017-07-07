@@ -36,7 +36,7 @@ class TestWebAppResources(unittest.TestCase):
     def test_template_deployment_properties_values(self):
         """Assert that template deployment have the right values.
         """
-        self.v.resources('azurerm_template_deployment').property('deployment_mode').should_equal('Incremental')
+        self.v.resources('azurerm_template_deployment').property('deployment_mode').should_equal('Complete')
         self.v.resources('azurerm_template_deployment').property('template_body').should_equal('${data.template_file.sitetemplate.rendered}')
         self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.env}-${var.name}')
 
