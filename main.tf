@@ -21,7 +21,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     aseName               = "${var.asename}"
     qaSlotName            = "${var.product}-${var.env}-${var.qaslotname}"
     devSlotName           = "${var.product}-${var.env}-${var.devslotname}"
-    lastKnownGoodSlotName = "$${var.product}-${var.env}-${var.lastknowngoodslotname}"
+    lastKnownGoodSlotName = "${var.product}-${var.env}-${var.lastknowngoodslotname}"
     location              = "${var.location}"
     env                   = "${var.env}"
   }
