@@ -17,13 +17,10 @@ resource "azurerm_template_deployment" "app_service_site" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    name                  = "${var.product}-${var.env}"
-    aseName               = "${var.asename}"
-    qaSlotName            = "${var.product}-${var.env}-${var.qaslotname}"
-    devSlotName           = "${var.product}-${var.env}-${var.devslotname}"
-    lastKnownGoodSlotName = "${var.product}-${var.env}-${var.lastknowngoodslotname}"
-    location              = "${var.location}"
-    env                   = "${var.env}"
+    name     = "${var.product}-${var.env}"
+    aseName  = "${var.asename}"
+    location = "${var.location}"
+    env      = "${var.env}"
   }
 }
 
