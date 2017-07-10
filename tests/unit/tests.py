@@ -40,12 +40,7 @@ class TestWebAppResources(unittest.TestCase):
         self.v.resources('azurerm_template_deployment').property('template_body').should_equal('${data.template_file.sitetemplate.rendered}')
         self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.product}-${var.env}')
 
-    def test_template_deployment_parameters(self):
-        """Assert that the template deployment parameters are correct.
-        """
-        self.v.resources('azurerm_template_deployment.parameters').should_have_properties(['name', 'lastKnownGoodSlotName', 'devSlotName', 'aseName', 'location', 'env', 'qaSlotName'])
-
-
+  
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestWebAppResources)
     result = unittest.TextTestRunner(verbosity=1).run(suite)

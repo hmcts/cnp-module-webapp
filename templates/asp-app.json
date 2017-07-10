@@ -14,27 +14,7 @@
                 "description": "Name of the App Service Environment"
             }
         },
-        "qaSlotName": {
-            "type": "string",
-            "defaultValue": "qa",
-            "metadata": {
-                "description": "Name of the staging slot"
-            }
-        },
-        "devSlotName": {
-            "type": "string",
-            "defaultValue": "dev",
-            "metadata": {
-                "description": "Name of the staging slot"
-            }
-        },
-        "lastKnownGoodSlotName": {
-            "type": "string",
-            "defaultValue": "lastknowngood",
-            "metadata": {
-                "description": "Name of the last known good slot"
-            }
-        },
+      
         "location": { 
             "type": "string", 
             "allowedValues": [ 
@@ -116,51 +96,8 @@
           "scmType": "LocalGit"
         },
         "resources": [
-        {
-          "apiVersion": "2015-08-01",
-          "name": "[parameters('qaSlotName')]",
-          "type": "slots",
-          "tags": {
-            "displayName": "staging"
-          },
-          "location": "[parameters('location')]",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
-          ],
-          "properties": {
-          },
-          "resources": []
-        },
-        {
-          "apiVersion": "2015-08-01",
-          "name": "[parameters('devSlotName')]",
-          "type": "slots",
-          "tags": {
-            "displayName": "dev"
-          },
-          "location": "[parameters('location')]",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
-          ],
-          "properties": {
-          },
-          "resources": []
-        },
-        {
-          "apiVersion": "2015-08-01",
-          "name": "[parameters('lastKnownGoodSlotName')]",
-          "type": "slots",
-          "tags": {
-            "displayName": "lastknowngood"
-          },
-          "location": "[parameters('location')]",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
-          ],
-          "properties": {
-          },
-          "resources": []
-        }
+       
+       
         ]
       }
     ]
