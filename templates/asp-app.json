@@ -93,7 +93,10 @@
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]",
           "hostingEnvironment": "[parameters('aseName')]",
           "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-          "scmType": "LocalGit"
+          "scmType": "LocalGit",
+          "httpLoggingEnabled": true,
+          "logsDirectorySizeLimit": 35,
+          "detailedErrorLoggingEnabled": true
         },
         "resources": [
        
