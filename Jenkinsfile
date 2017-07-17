@@ -38,7 +38,10 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 
                 stage('Terraform Integration Testing') {
                   docker.image('dsanabria/azkitchentdi:latest').inside {
-                    sh 'export HOME="$WORKSPACE" && cd tests/test && kitchen test azure'
+                    withEnv(["GIT_COMMITTER_NAME=jenkinsmoj",
+                             "GIT_COMMITTER_EMAIL=jenkinsmoj@contino.io"]) {
+                      sh 'export HOME="$WORKSPACE" && cd tests/test && kitchen test azure'
+                    }
                   }
                 }
 
