@@ -38,7 +38,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 
                 stage('Terraform Integration Testing') {
                   docker.image('dsanabria/azkitchentdi:latest').inside {
-                    sh 'ls -l && echo $PATH'
+                    sh 'ls -l && echo $PATH && export PATH=$PATH:/usr/local/bundle:/usr/local/bin'
                   }
                 }
 
