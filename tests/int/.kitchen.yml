@@ -1,6 +1,7 @@
 ---
 driver:
   name: terraform
+  directory: fixtures/tf
 
 provisioner:
   name: terraform
