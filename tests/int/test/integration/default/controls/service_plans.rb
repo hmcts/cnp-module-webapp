@@ -1,6 +1,6 @@
 title 'Check Service Plans'
 
-control 'azure-service-plan-1.0' do
+control 'azure-service-plan' do
 
   impact 1.0
   title 'Check that the service has the correct properties'

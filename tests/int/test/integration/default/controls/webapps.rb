@@ -1,6 +1,6 @@
 title 'Check Webapps'
 
-control 'azure-webapp-1.0' do
+control 'azure-webapp' do
 
   impact 1.0
   title 'Check that the service has the correct properties'
