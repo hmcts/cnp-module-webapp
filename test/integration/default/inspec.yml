@@ -12,4 +12,3 @@ supports:
 depends:
   - name: azure
     git: https://github.com/contino/moj-azure-inspec
-    branch: master
