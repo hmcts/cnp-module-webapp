@@ -11,4 +11,4 @@ supports:
   - platform: azure
 depends:
   - name: azure
-    git: https://github.com/contino/moj-azure-inspec
+    git: git@github.com:contino/moj-azure-inspec.git
