@@ -10,6 +10,6 @@ control 'azure-resource-groups' do
   title ' Check that the resource group exist'
 
   describe azure_resource_group(name: 'inspect-frontend-int') do
-    its('location') { should eq 'UK South' }
+    its('location') { should eq 'uksouth' }
   end
 end
