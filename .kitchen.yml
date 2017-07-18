@@ -1,11 +1,10 @@
 ---
 driver:
   name: terraform
-  directory: fixtures/tf
+  directory: test/fixtures/tf
 
 provisioner:
   name: terraform
-  directory: fixtures/tf
 
 platforms:
   - name: azure
