@@ -2,7 +2,6 @@ require 'ms_rest_azure'
 require 'azure_mgmt_resources'
 require 'azure_mgmt_compute'
 require 'azure_mgmt_network'
-require 'azure_mgmt_web'
 require 'inifile'
 
 # Class to manage the connection to Azure to retrieve the information required about the resources
