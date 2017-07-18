@@ -9,7 +9,7 @@ control 'azure-resource-groups' do
   impact 1.0
   title ' Check that the resource group exist'
 
-  describe azure_resource_group(name: 'probate-test') do
+  describe azure_resource_group(name: 'inspect-frontend-int') do
     its('location') { should eq 'uksouth' }
   end
 end
