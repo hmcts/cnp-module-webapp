@@ -2,6 +2,7 @@ require 'ms_rest_azure'
 require 'azure_mgmt_resources'
 require 'azure_mgmt_compute'
 require 'azure_mgmt_network'
+require 'azure_mgmt_web'
 require 'inifile'
 
 # Class to manage the connection to Azure to retrieve the information required about the resources
@@ -108,7 +109,7 @@ end
 # @attr_reader [ResourceManagement] resource_mgmt Resource object for accessing specific resources and resoure groups
 # @attr_reader [NetworkManagement] network_mgmt Network object for retrieving all information about Network cards and IP configurations
 class Helpers
-  attr_reader :azure, :compute_mgmt, :resource_mgmt, :network_mgmt
+  attr_reader :azure, :compute_mgmt, :resource_mgmt, :network_mgmt, :web_mgmt
 
   # Constructor to configure the various objects that are required for Inspec testing
   #
@@ -121,6 +122,7 @@ class Helpers
     @compute_mgmt = ComputeManagement.new(azure)
     @resource_mgmt = ResourceManagement.new(azure)
     @network_mgmt = NetworkManagement.new(azure)
+    @web_mgmt = WebManagement.new(azure)
   end
 
   # Retrieve the named virtual machine from Azure
@@ -242,6 +244,24 @@ class NetworkManagement
 
   def get_items(rg_name)
     client.virtual_networks.list_as_lazy(rg_name)
+  end
+
+end
+
+class WebManagement
+  attr_reader :client
+
+  def initialize(azure)
+    @client = Azure::ARM::Web::WebSiteManagementClient.new(azure.connection)
+    client.subscription_id = azure.subscription_id
+  end
+
+  def get_service_plan(rg_name, name)
+    client.app_service_plans.get(rg_name, name)
+  end
+
+  def get_ase(rg_name, name)
+    client.app_service_environments.get(rg_name, name)
   end
 
 end
