@@ -1,6 +1,6 @@
 title 'Check Service Environments'
 
-control 'azure-service-environment-1.0' do
+control 'azure-service-environment' do
 
   impact 1.0
   title 'Check that the service has the correct properties'
