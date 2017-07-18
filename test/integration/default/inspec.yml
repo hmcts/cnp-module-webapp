@@ -9,6 +9,3 @@ summary: An Hello World InSpec Compliance Profile
 version: 0.1.0
 supports:
   - platform: azure
-depends:
-  - name: azure
-    url: https://github.com/contino/moj-azure-inspec/archive/v0.1.tar.gz
