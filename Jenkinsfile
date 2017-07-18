@@ -20,7 +20,6 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                 stage('Checkout') {
                     deleteDir()
                     checkout scm
-                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'inspec-azure']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '071b7ad0-86a4-4b53-834d-0f1b2bdb1c41', url: 'https://github.com/contino/moj-azure-inspec.git']]])
                 }
 
                 stage('Terraform Linting Checks'){
@@ -32,9 +31,9 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                 }
 
                 stage('Terraform Unit Testing') {
-                  /*docker.image('dsanabria/terraform_validate:latest').inside {
+                  docker.image('dsanabria/terraform_validate:latest').inside {
                     sh 'cd tests/unit && python tests.py'
-                  }*/
+                  }
                 }
 
                 stage('Terraform Integration Testing') {
