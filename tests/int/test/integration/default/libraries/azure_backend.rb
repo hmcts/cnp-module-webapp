@@ -264,4 +264,7 @@ class WebManagement
     client.app_service_environments.get(rg_name, name)
   end
 
+  def get_webapp(rg_name, name)
+    client.web_apps.get(rg_name, name)
+  end
 end

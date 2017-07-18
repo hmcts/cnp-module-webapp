@@ -24,7 +24,6 @@ class TestWebAppResources(unittest.TestCase):
         """
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
-        self.v.resources('azurerm_resource_group').property('name').should_equal('probate-test')
         self.v.resources('azurerm_resource_group').property('location').should_equal('UK South')
 
     def test_template_deployment_properties(self):
