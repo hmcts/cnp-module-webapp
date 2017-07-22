@@ -38,6 +38,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 
                 stage('Terraform Integration Testing') {
                   docker.image('dsanabria/azkitchentdi:latest').inside("-e TF_VAR_random_name=inspec`date | md5sum | base64 | head -c 10`") {
+                    sh 'echo $TF_VAR_random_name'
                     sh 'export PATH=$PATH:/usr/local/bundle/bin:/usr/local/bin && export HOME="$WORKSPACE" && cd tests/int && kitchen test azure'
                   }
                 }
