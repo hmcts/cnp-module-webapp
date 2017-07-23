@@ -4,7 +4,7 @@ control 'azure-service-plan' do
 
   impact 1.0
   title 'Check that the service has the correct properties'
-  json_obj = json('fixtures/tf/terraform.tfstate')
+  json_obj = json('.kitchen/kitchen-terraform/default/terraform.tfstate')
   random_name = json_obj['modules'][0]['outputs']['random_name']['value'] + '-frontend-int'
 
 
