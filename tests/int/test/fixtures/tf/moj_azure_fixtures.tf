@@ -8,6 +8,8 @@ variable "product" {
   default = "inspect"
 }
 
+variable "random_name" {}
+
 variable "env" {
   default = "int"
 }
@@ -25,8 +27,12 @@ data "terraform_remote_state" "core_sandbox_infrastructure" {
 
 module "frontend" {
   source   = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-webapp?ref=0.0.16"
-  product  = "${var.product}-frontend"
+  product  = "${var.random_name}-frontend"
   location = "${var.location}"
   env      = "${var.env}"
   asename  = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[0]}"
+}
+
+output "random_name" {
+  value = "${var.random_name}"
 }
