@@ -52,7 +52,7 @@
             }
         },
         "app_settings": {
-          "type": "string"
+          "type": "object"
         }
     },
     "resources": [
