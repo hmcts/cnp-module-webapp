@@ -55,6 +55,9 @@
           "type": "string"
         }
     },
+    "variables": {
+        "base64AppSettingObject": "[base64(parameters('app_settings'))]"
+    },
     "resources": [
       {
           "name": "[parameters('name')]",
@@ -109,18 +112,9 @@
             "dependsOn": [
               "[resourceId('Microsoft.Web/sites', parameters('name'))]"
             ],
-            "properties": {
-                "key1": "value1",
-                "key2": "value2"
-            }
+            "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
           }
         ]
       }
-    ],
-    "outputs": {
-        "testoutput" : {
-            "type" : "string",
-            "value": "[parameters('app_settings')]"
-        }
-    }
+    ]
 }
