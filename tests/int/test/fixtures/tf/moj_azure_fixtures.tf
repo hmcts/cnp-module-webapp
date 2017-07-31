@@ -35,12 +35,12 @@ data "terraform_remote_state" "core_sandbox_infrastructure" {
 }
 
 module "frontend" {
-  source              = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-webapp?ref=master"
-  product             = "${var.random_name}-frontend"
-  location            = "${var.location}"
-  env                 = "${var.env}"
-  asename             = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[0]}"
-  applicationSettings = "${jsonencode(var.app_settings)}"
+  source       = "git::https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-module-webapp?ref=master"
+  product      = "${var.random_name}-frontend"
+  location     = "${var.location}"
+  env          = "${var.env}"
+  asename      = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[0]}"
+  app_settings = "${jsonencode(var.app_settings)}"
 }
 
 output "random_name" {
