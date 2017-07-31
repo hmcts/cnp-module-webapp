@@ -51,9 +51,18 @@
                 "description": "The tag"
             }
         },
-        "app_settings": {
+        "applicationSettings": {
           "type": "string"
         }
+    },
+    "variables": {
+        "applicationSettingsVar": {
+              "instancesSize": "Large",
+              "instancesCount": 4
+    },
+    "currentEnvironmentSettings": "[variables('environmentSettings')[parameters('environmentName')]]",
+    "instancesSize": "[variables('currentEnvironmentSettings').instancesSize]",
+    "instancesCount": "[variables('currentEnvironmentSettings').instancesCount]"
     },
     "resources": [
       {
@@ -116,5 +125,11 @@
           }
         ]
       }
-    ]
+    ],
+    "outputs": {
+        "appSettings" : {
+            "type" : "string",
+            "value": "[parameters('applicationSettings')]"
+        }
+    }
 }
