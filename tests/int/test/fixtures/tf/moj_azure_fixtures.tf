@@ -18,6 +18,14 @@ variable "app_settings" {
   default = "${jsonencode(map("TEST_SETTING", "Setting"))}"
 }
 
+variable "app_settings" {
+  type = "map"
+
+  default = {
+    TEST_SETTING = "Setting"
+  }
+}
+
 data "terraform_remote_state" "core_sandbox_infrastructure" {
   backend = "azure"
 
@@ -35,7 +43,7 @@ module "frontend" {
   location     = "${var.location}"
   env          = "${var.env}"
   asename      = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[0]}"
-  app_settings = "${var.app_settings}"
+  app_settings = "${jsonencode(app_settings)}"
 }
 
 output "random_name" {
