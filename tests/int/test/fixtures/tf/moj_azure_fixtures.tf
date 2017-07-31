@@ -15,10 +15,6 @@ variable "env" {
 }
 
 variable "app_settings" {
-  default = "${jsonencode(map("TEST_SETTING", "Setting"))}"
-}
-
-variable "app_settings" {
   type = "map"
 
   default = {
