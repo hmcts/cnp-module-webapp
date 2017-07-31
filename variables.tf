@@ -14,3 +14,7 @@ variable "env" {
 variable "asename" {
   type = "string"
 }
+
+variable "app_settings" {
+  type = "list"
+}

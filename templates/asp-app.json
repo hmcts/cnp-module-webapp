@@ -50,6 +50,9 @@
             "metadata": {
                 "description": "The tag"
             }
+        },
+        "app_settings": {
+          "type": "object"
         }
     },
     "resources": [
@@ -98,10 +101,16 @@
           "logsDirectorySizeLimit": 35,
           "detailedErrorLoggingEnabled": true
         },
-        "resources": [
-       
-       
-        ]
+        "resources": []
+      },
+      {
+        "apiVersion": "2014-11-01",
+        "name": "appsettings",
+        "type": "config",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+        ],
+        "properties": "[parameters('app_settings')]"
       }
     ]
 }
