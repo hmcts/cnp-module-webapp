@@ -52,7 +52,7 @@
             }
         },
         "app_settings": {
-          "type": "object"
+          "type": "string"
         }
     },
     "resources": [
@@ -110,7 +110,7 @@
         "dependsOn": [
           "[resourceId('Microsoft.Web/sites', parameters('name'))]"
         ],
-        "properties": "[parameters('app_settings')]"
+        "properties": {"[parameters('app_settings')]"}
       }
     ]
 }
