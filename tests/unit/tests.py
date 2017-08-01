@@ -15,31 +15,36 @@ class TestWebAppResources(unittest.TestCase):
         self.v = terraform_validate.Validator(self.path)
 
     def test_resource_group_properties(self):
-        """Assert that resource group have the right properties.
+        """Assert that resource group has the right properties.
         """
         self.v.resources('azurerm_resource_group').should_have_properties(['name', 'location'])
 
     def test_resource_group_properties_values(self):
-        """Assert that resource group have the right values.
+        """Assert that resource group has the right values.
         """
         self.v.error_if_property_missing()
         self.v.enable_variable_expansion()
         self.v.resources('azurerm_resource_group').property('location').should_equal('UK South')
 
     def test_template_deployment_properties(self):
-        """Assert that the template deployment resource have the
+        """Assert that the template deployment resource has the
         right properties.
         """
         self.v.resources('azurerm_template_deployment').should_have_properties(['name', 'template_body', 'resource_group_name', 'deployment_mode', 'parameters'])
 
     def test_template_deployment_properties_values(self):
-        """Assert that template deployment have the right values.
+        """Assert that template deployment has the right values.
         """
         self.v.resources('azurerm_template_deployment').property('deployment_mode').should_equal('Incremental')
         self.v.resources('azurerm_template_deployment').property('template_body').should_equal('${data.template_file.sitetemplate.rendered}')
         self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.product}-${var.env}')
+        self.v.resources('azurerm_template_deployment').property('resource_group_name').should_equal('${var.product}-${var.env}')
 
-  
+    def test_template_file_properties(self):
+        """Assert that the tamplate file has the right properties.
+        """
+        self.v.data('template_file').should_have_properties(['template'])
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestWebAppResources)
     result = unittest.TextTestRunner(verbosity=1).run(suite)
