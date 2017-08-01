@@ -40,11 +40,6 @@ class TestWebAppResources(unittest.TestCase):
         self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.product}-${var.env}')
         self.v.resources('azurerm_template_deployment').property('resource_group_name').should_equal('${azurerm_resource_group.rg.name}')
 
-    def test_template_file_properties(self):
-        """Assert that the tamplate file has the right properties.
-        """
-        self.v.data('template_file').should_have_properties(['template'])
-
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestWebAppResources)
     result = unittest.TextTestRunner(verbosity=1).run(suite)
