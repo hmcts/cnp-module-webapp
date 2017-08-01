@@ -38,7 +38,7 @@ class TestWebAppResources(unittest.TestCase):
         self.v.resources('azurerm_template_deployment').property('deployment_mode').should_equal('Incremental')
         self.v.resources('azurerm_template_deployment').property('template_body').should_equal('${data.template_file.sitetemplate.rendered}')
         self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.product}-${var.env}')
-        self.v.resources('azurerm_template_deployment').property('resource_group_name').should_equal('${var.product}-${var.env}')
+        self.v.resources('azurerm_template_deployment').property('resource_group_name').should_equal(self.v.resources('azurerm_resource_group').property('name'))
 
     def test_template_file_properties(self):
         """Assert that the tamplate file has the right properties.
