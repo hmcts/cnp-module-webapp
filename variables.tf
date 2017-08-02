@@ -16,5 +16,5 @@ variable "asename" {
 }
 
 variable "app_settings" {
-  type = "map"
+  type = "string"
 }
