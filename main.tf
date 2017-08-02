@@ -21,7 +21,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     aseName      = "${var.asename}"
     location     = "${var.location}"
     env          = "${var.env}"
-    app_settings = "${var.app_settings}"
+    app_settings = "${jsonencode(var.app_settings)}"
   }
 }
 
