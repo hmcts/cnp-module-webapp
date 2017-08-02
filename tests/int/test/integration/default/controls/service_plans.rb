@@ -13,8 +13,6 @@ control 'azure-service-plan' do
     its('location') { should eq 'UK South' }
     its('name') { should eq "#{random_name}" }
     its('ase_name') { should eq 'sandbox-core-infra' }
-    its('maximum_number_of_workers') { should eq 3 }
-    its('number_of_sites') { should eq 1 }
   end
 end
 
