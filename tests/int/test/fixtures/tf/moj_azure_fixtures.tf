@@ -40,7 +40,7 @@ module "frontend" {
   location     = "${var.location}"
   env          = "${var.env}"
   asename      = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[0]}"
-  app_settings = "${jsonencode(var.app_settings)}"
+  app_settings = "${var.app_settings}"
 }
 
 output "random_name" {
