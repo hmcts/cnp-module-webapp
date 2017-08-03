@@ -122,11 +122,6 @@
         "name": "[variables('config_web_name')]",
         "apiVersion": "2016-08-01",
         "location": "[parameters('location')]",
-        "tags": {
-          "[concat('hidden-related:', resourceId('Microsoft.Web/sites/config', variables('config_web_name')))]": "Resource",
-          "displayName": "ASE-WEB-APP-CONFIG",
-          "environment": "[parameters('env')]"
-        },
         "scale": null,
         "properties": {
             "numberOfWorkers": 1,
