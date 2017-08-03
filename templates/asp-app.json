@@ -57,10 +57,7 @@
     },
     "variables": {
         "base64AppSettingObject": "[base64(parameters('app_settings'))]",
-        "config_web_name": {
-            "defaultValue": "[parameters('name')]/web",
-            "type": "String"
-        }
+        "config_web_name": "[parameters('name')]/web"
     },
     "resources": [
       {
