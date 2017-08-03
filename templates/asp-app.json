@@ -159,9 +159,9 @@
             "use32BitWorkerProcess": true,
             "webSocketsEnabled": false,
             "alwaysOn": true,
-            "javaVersion": null,
-            "javaContainer": null,
-            "javaContainerVersion": null,
+            "javaVersion": "1.8",
+            "javaContainer": "TOMCAT",
+            "javaContainerVersion": "8.0",
             "appCommandLine": "",
             "managedPipelineMode": "Integrated",
             "virtualApplications": [
