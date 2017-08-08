@@ -18,3 +18,12 @@ variable "asename" {
 variable "app_settings" {
   type = "map"
 }
+
+variable "app_settings_defaults" {
+  type = "map"
+
+  default = {
+    WEBSITE_NODE_DEFAULT_VERSION = "6.11.1"
+    NODE_PATH                    = "D:\\home\\site\\wwwroot"
+  }
+}
