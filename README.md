@@ -25,15 +25,15 @@ This module lets you host java 8, and nodejs applications. to use this module, y
 Following is an example of provisioning a nodejs and java enabled empty web app, the following shows a web app for a typical frontend:-
 
 module "frontend" { <br />
-&nbsp;&nbsp;source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
-&nbsp;&nbsp;product  = "${var.product}-frontend" <br />
-&nbsp;&nbsp;location = "${var.location}" <br />
-&nbsp;&nbsp;env      = "${var.env}" <br />
-&nbsp;&nbsp;asename  = "${var.asename}"<br />
+&nbsp;&nbsp;&nbsp;source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
+&nbsp;&nbsp;&nbsp;product  = "${var.product}-frontend" <br />
+&nbsp;&nbsp;&nbsp;location = "${var.location}" <br />
+&nbsp;&nbsp;&nbsp;env      = "${var.env}" <br />
+&nbsp;&nbsp;&nbsp;asename  = "${var.asename}"<br />
 
 app_settings = { <br />
-&nbsp;&nbsp;SERVICE_URL  = "url-to-validationservice" <br />
-&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;SERVICE_URL  = "url-to-validationservice" <br />
+&nbsp;&nbsp;&nbsp;} <br />
 } <br />
 
 In the example above, you can set the variables being set by using terraform variables, so you can set these values in a .tfvars file.
