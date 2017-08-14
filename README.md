@@ -1,10 +1,11 @@
 # moj-module-webapp
 A module that lets you creates a Web App and it's associated App Service Plan, and assigns it to to an Application Service Environment.
 Refer to the following links for a detailed explanation of an App Service Plan, Web App and Application Service Environment.
+The following links give you more detail on Web Apps, App Service Plans, and Application Service Environments.
 
-[App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/azure-web-sites-web-hosting-plans-in-depth-overview)
-[Web Apps](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-overview)
-[Application Service Environment](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-app-service-environment-intro)
+[App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/azure-web-sites-web-hosting-plans-in-depth-overview) <br />
+[Web Apps](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-overview) <br />
+[Application Service Environment](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-app-service-environment-intro) <br />
 
 ## Variables Usage
 This module lets you host java 8, and nodejs applications. to use this module, you need to provide the following parameters:-
