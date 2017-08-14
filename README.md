@@ -1,5 +1,5 @@
 # moj-module-webapp
-A module that lets you create a Web App and it's associated App Service Plan, and assign it to to an Application Service Environment.
+A module that lets you create a Web App and its associated App Service Plan, and assign it to to an Application Service Environment.
 Refer to the following links for a detailed explanation of an App Service Plan, Web App and Application Service Environment in Azure.
 
 [App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/azure-web-sites-web-hosting-plans-in-depth-overview) <br />
