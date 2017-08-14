@@ -17,7 +17,7 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications. to use t
 -	app_settings, this is the key valued pairs of application settings used by the application at runtime
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same, however you would probably replace -frontend with -backend so that it's obvious what it is, in the Azure portal:-
+Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same, however you would probably replace "${var.product}-frontend" with "${var.product}-frontend" so that it's obvious what it is, in the Azure portal:-
 
 module "frontend" { <br />
 &nbsp;&nbsp;&nbsp;source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
@@ -34,9 +34,9 @@ app_settings = { <br />
 In the example above, you can set the variables using terraform variables, so you can set these values in a .tfvars file,
 or pass them in from a Jenkins file.
 
-For a complete example of the various ways the moj-module-webapp can be used please refer to the repo moj-probate-infrastructure.
+For a complete example of provisioning NodeJs, Java or Springboot application infrastructure, please refer to the repo moj-probate-infrastructure.
 
-Creating a web app to host your applications will create a Resource Group containing an App Service Plan, and a Web App.
+Creating a web app to host your application will create a Resource Group containing an App Service Plan, and a Web App.
 
 Each of the aforementioned resources will be named the same, using the convention product-env, so if I provide the values for product as "probate", and env
 as "dev" then the resulting resource group, app service plan and web app will be called probate-dev.
@@ -44,9 +44,10 @@ as "dev" then the resulting resource group, app service plan and web app will be
 ## Testing
 There's a library of unit tests and integration tests in this repository.  In the root of this repository is a tests folder.
 Inside that are two folders named int and unit.  Folder int contains the integration tests and fixtures, the obviously named folder called unit contains
-the unit tests.  These tests are here to give quaity assurance and should be added to and modified in changes are made to moj-module-webapp.  Every commit to the moj-module-webapp will result in all the unit and integration tests being executed against it, if all of this succeeds it is verisoned and released in github.  This so exsiting code that uses older versions of the moj-module-webapp will not break.  and new infrastructure code can refernce later releases.
+the unit tests.  These tests are here to give quality assurance and should be added to and modified if changes are made to moj-module-webapp.  Every commit to the moj-module-webapp will result in all the unit and integration tests being executed against it, if all of this succeeds it is verisoned and released in github.  This so exsiting code that uses older versions of the moj-module-webapp will not break.  and new infrastructure code can reference later releases.
+Consider the following code fragment:-
 
-&nbsp;&nbsp;&nbsp;source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
+source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
 
 the 'ref=0.0.67' in the example code fragment suggests that it is using version 0.0.67 of the moj-module-webapp.
 
@@ -58,9 +59,11 @@ product-env, the following code fragment enforces this in a unit test:-
 
 self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.product}-${var.env}')
 
+You can find the complete set of tests in the file tests.py
+
 ## Integration Testing
 The int folder contains a test folder in which there are seperate folders for fixtures code, and integration tests. the file moj_azure_fixtures.tf contains
-the terraform code that spins up the dependencies that the webapp would need in order to function in production.  The suite of integration tests then run against this ephemeral infrastructure to validate the web app, once all the tests are succesfully executed the infrastructure is destroyed.  Whilst creating and destroying, the resources created use random names so that the integration tests don't conflict with each other, if more that one person is working on the repository.  If any tests fail the infrastructure is not automatically destroyed, this is so you can investigate the fixtures and the webapp through the Azure
+the terraform code that spins up the dependencies that the webapp would need in order to function in production.  The suite of integration tests then run against this ephemeral infrastructure to validate the web app, once all the tests are succesfully executed the infrastructure is destroyed.  Whilst creating and destroying, the resources created use random names so that the integration tests don't conflict with each other, if more that one person is working on the repository.  If any tests fail, the infrastructure is not automatically destroyed, this is so you can investigate the fixtures and the webapp through the Azure
 Portal to help debug the unit test.
 
 All of this automation is driven by Chef Kitchen, the configuration of all this is in the file called .kitchen.yml at the root of the int folder.  The actual 
@@ -69,9 +72,9 @@ integration tests are in the default/controls sub folder in the integration fold
 ## Terraform
 All infrastructure provisioning is done using Terraform native azurerm provider where possible.  You can find the documentation for this at the following link:-
 
-[Terrafirm azurerm](https://www.terraform.io/docs/providers/azurerm/index.html) <br />
+[Terraform azurerm](https://www.terraform.io/docs/providers/azurerm/index.html) <br />
 
-At the time of writing the web app does not have native azurerm provider support in terraform at version 0.0.9, so an ARM template has been used for creation of the web app and app service plan. The template can be found in the templates folder at the repository root.
+At the time of writing the web app does not have native azurerm provider support in terraform at version 0.0.9, so an ARM template has been used for creation of the Web App and App Service Plan. The template can be found in the templates folder at the repository root.
 
 The ARM template is wrapped in azurerm_template_deployment provider in terraform, this is the provider used to run any custom ARM templates using Terraform.
 
