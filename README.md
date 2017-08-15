@@ -17,7 +17,7 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications. to use t
 -	app_settings, this is the key valued pairs of application settings used by the application at runtime
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same, however you would probably replace "${var.product}-frontend" with "${var.product}-frontend" so that it's obvious what it is, in the Azure portal:-
+Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same, however you would probably replace "${var.product}-frontend" with "${var.product}-backend" so that it's obvious what it is, in the Azure portal:-
 
 ```terraform
 module "frontend" {
