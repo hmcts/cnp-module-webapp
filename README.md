@@ -51,7 +51,7 @@ the unit tests.  These tests are here to give quality assurance and should be ad
 Consider the following code fragment:-
 
 ```terraform
-source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
+source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67"
 ```
 
 the 'ref=0.0.67' in the example code fragment suggests that it is using version 0.0.67 of the moj-module-webapp.
