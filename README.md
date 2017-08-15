@@ -78,12 +78,3 @@ All infrastructure provisioning is done using Terraform native azurerm provider 
 At the time of writing the web app does not have native azurerm provider support in terraform at version 0.0.9, so an ARM template has been used for creation of the Web App and App Service Plan. The template can be found in the templates folder at the repository root.
 
 The ARM template is wrapped in azurerm_template_deployment provider in terraform, this is the provider used to run any custom ARM templates using Terraform.
-
-
-
-
-
-
-
-
-
