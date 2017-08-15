@@ -20,17 +20,17 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications. to use t
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same, however you would probably replace "${var.product}-frontend" with "${var.product}-frontend" so that it's obvious what it is, in the Azure portal:-
 
 ```terraform
-module "frontend" { <br />
-&nbsp;&nbsp;&nbsp;source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
-&nbsp;&nbsp;&nbsp;product  = "${var.product}-frontend" <br />
-&nbsp;&nbsp;&nbsp;location = "${var.location}" <br />
-&nbsp;&nbsp;&nbsp;env      = "${var.env}" <br />
-&nbsp;&nbsp;&nbsp;asename  = "${var.asename}"<br />
+module "frontend" {
+	source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67"
+	product  = "${var.product}-frontend"
+	location = "${var.location}"
+	env      = "${var.env}"
+	asename  = "${var.asename}"
 
-app_settings = { <br />
-&nbsp;&nbsp;&nbsp;SERVICE_URL  = "url-to-backendservice" <br />
-&nbsp;&nbsp;&nbsp;} <br />
-} <br />
+	app_settings = { 
+		SERVICE_URL  = "url-to-backendservice"
+	} 
+} 
 ```
 
 In the example above, you can set the variables using terraform variables, so you can set these values in a .tfvars file,
