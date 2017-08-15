@@ -44,7 +44,8 @@ as "dev" then the resulting resource group, app service plan and web app will be
 ## Testing
 There's a library of unit tests and integration tests in this repository.  In the root of this repository is a tests folder.
 Inside that are two folders named int and unit.  Folder int contains the integration tests and fixtures, the obviously named folder called unit contains
-the unit tests.  These tests are here to give quality assurance and should be added to and modified if changes are made to moj-module-webapp.  Every commit to the moj-module-webapp will result in all the unit and integration tests being executed against it, if all of this succeeds it is verisoned and released in github.  This so exsiting code that uses older versions of the moj-module-webapp will not break.  and new infrastructure code can reference later releases.
+the unit tests.  These tests are here to give quality assurance and should be added to and modified if changes are made to moj-module-webapp.  Every commit to the moj-module-webapp will result in all the unit and integration tests being executed against it, if all of this succeeds it's verisoned and released in github.  This so exisiting code that uses older versions of the moj-module-webapp will not break, and new infrastructure code can reference later releases.
+
 Consider the following code fragment:-
 
 source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
@@ -63,8 +64,8 @@ You can find the complete set of tests in the file tests.py
 
 ## Integration Testing
 The int folder contains a test folder in which there are seperate folders for fixtures code, and integration tests. the file moj_azure_fixtures.tf contains
-the terraform code that spins up the dependencies that the webapp would need in order to function in production.  The suite of integration tests then run against this ephemeral infrastructure to validate the web app, once all the tests are succesfully executed the infrastructure is destroyed.  Whilst creating and destroying, the resources created use random names so that the integration tests don't conflict with each other, if more that one person is working on the repository.  If any tests fail, the infrastructure is not automatically destroyed, this is so you can investigate the fixtures and the webapp through the Azure
-Portal to help debug the unit test.
+the terraform code that spins up the dependencies that the webapp would need in order to function in production.  The suite of integration tests run against this ephemeral infrastructure to validate the web app, once all the tests are succesfully executed the infrastructure is destroyed.  The resources created use random names so that the integration tests don't conflict with each other, if more that one person is working on the repository.  If any tests fail, the infrastructure is not automatically destroyed, this is so you can investigate the fixtures and the webapp through the Azure
+Portal, to help debug the unit test.
 
 All of this automation is driven by Chef Kitchen, the configuration of all this is in the file called .kitchen.yml at the root of the int folder.  The actual 
 integration tests are in the default/controls sub folder in the integration folder.  All the code used to drive the integration tests are written in Ruby.  The folder default/libraries contain the ruby libraries that gather information required for the tests to execute.
