@@ -19,6 +19,7 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications. to use t
 ## Usage
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same, however you would probably replace "${var.product}-frontend" with "${var.product}-frontend" so that it's obvious what it is, in the Azure portal:-
 
+```terraform
 module "frontend" { <br />
 &nbsp;&nbsp;&nbsp;source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
 &nbsp;&nbsp;&nbsp;product  = "${var.product}-frontend" <br />
@@ -30,6 +31,7 @@ app_settings = { <br />
 &nbsp;&nbsp;&nbsp;SERVICE_URL  = "url-to-backendservice" <br />
 &nbsp;&nbsp;&nbsp;} <br />
 } <br />
+```
 
 In the example above, you can set the variables using terraform variables, so you can set these values in a .tfvars file,
 or pass them in from a Jenkins file.
@@ -48,7 +50,9 @@ the unit tests.  These tests are here to give quality assurance and should be ad
 
 Consider the following code fragment:-
 
+```terraform
 source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67" <br />
+```
 
 the 'ref=0.0.67' in the example code fragment suggests that it is using version 0.0.67 of the moj-module-webapp.
 
@@ -58,7 +62,9 @@ The unit tests are written in Python, they contain many examples of how to test 
 The following line of code from the tests.py file in the unit folder enforces the naming convention for the web app, as explained earlier the convention is 
 product-env, the following code fragment enforces this in a unit test:-
 
+```python
 self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.product}-${var.env}')
+```
 
 You can find the complete set of tests in the file tests.py
 
