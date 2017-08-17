@@ -12,6 +12,3 @@ supports:
 depends:
   - name: git-profile
     git: https://7fed81743d89f663cc1e746f147c83a74e7b1318@github.com/contino/moj-azure-inspec
-# depends:
-#   - name: azure
-#     url: https://github.com/chef/inspec-azure/archive/master.tar.gz
