@@ -9,9 +9,9 @@ summary: An Hello World InSpec Compliance Profile
 version: 0.1.0
 supports:
   - platform: azure
-depends:
-  - name: git-profile
-    git: https://github.com/contino/moj-azure-inspec/archive/master.tar.gz
 # depends:
-#   - name: azure
-#     url: https://github.com/chef/inspec-azure/archive/master.tar.gz
+#   - name: git-profile
+#     git: https://github.com/contino/moj-azure-inspec/archive/master.tar.gz
+depends:
+  - name: azure
+    url: https://github.com/chef/inspec-azure/archive/master.tar.gz
