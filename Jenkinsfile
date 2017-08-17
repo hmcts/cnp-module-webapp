@@ -47,19 +47,21 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                     }
 
                     stage('Tagging'){
+                      def lastTagVersion = sh(script: 'git describe --abbrev=0', returnStdout: true)
+                      println "Acquired last tag version: "+ lastTagVersion
+                      def lastTagSplit = lastTagVersion.split(/\./)
+                      lastTagSplit[lastTagSplit.length-1] = lastTagSplit[lastTagSplit.length-1].toInteger()+1
+                      def nextVersion = lastTagSplit.join('.')
+
                       if (env.BRANCH_NAME == 'master' && 
                          (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
                         
-                        def lastTagVersion = sh(script: 'git describe --abbrev=0', returnStdout: true)
-                        println "Acquired last tag version: "+ lastTagVersion
-                        def lastTagSplit = lastTagVersion.split(/\./)
-                        lastTagSplit[lastTagSplit.length-1] = lastTagSplit[lastTagSplit.length-1].toInteger()+1
-                        def nextVersion = lastTagSplit.join('.')
                         println "Will tag with version: "+ nextVersion
-
                         sh 'git tag -a ${nextVersion} -m "Jenkins"'
                         sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
                       }
+                      else
+                        println "Not on 'master' branch otherwise would have tagged with version: "+ nextVersion
                     }
                 }
             }
