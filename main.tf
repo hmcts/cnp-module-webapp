@@ -21,11 +21,15 @@ resource "azurerm_template_deployment" "app_service_site" {
     aseName      = "${var.asename}"
     location     = "${var.location}"
     env          = "${var.env}"
-    app_settings = "${jsonencode(var.app_settings)}"
+    app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
   }
 }
 
 # TODO refactor outputs once module is extracted
 output "gitendpoint" {
-  value = "${var.product}-${var.env}.scm.${var.product}-${var.env}.p.azurewebsites.net/${var.product}-${var.env}.git"
+  value = "${azurerm_template_deployment.app_service_site.name}.scm.${var.asename}.p.azurewebsites.net/${azurerm_template_deployment.app_service_site.name}.git"
+}
+
+output "url" {
+  value = "${azurerm_template_deployment.app_service_site.name}.${var.asename}.p.azurewebsites.net"
 }

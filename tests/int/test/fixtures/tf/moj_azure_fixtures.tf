@@ -19,7 +19,7 @@ variable "app_settings" {
 
   default = {
     TEST_SETTING1 = "Setting1"
-    TEST_SETTING1 = "Setting2"
+    TEST_SETTING2 = "Setting2"
   }
 }
 
