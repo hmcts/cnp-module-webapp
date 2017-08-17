@@ -24,12 +24,3 @@ resource "azurerm_template_deployment" "app_service_site" {
     app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
   }
 }
-
-# TODO refactor outputs once module is extracted
-output "gitendpoint" {
-  value = "${azurerm_template_deployment.app_service_site.name}.scm.${var.asename}.p.azurewebsites.net/${azurerm_template_deployment.app_service_site.name}.git"
-}
-
-output "url" {
-  value = "${azurerm_template_deployment.app_service_site.name}.${var.asename}.p.azurewebsites.net"
-}
