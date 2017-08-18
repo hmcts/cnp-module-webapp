@@ -20,8 +20,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                    "GIT_COMMITTER_EMAIL=jenkinsmoj@contino.io"]) {
                     stage('Checkout') {
                         deleteDir()
-                        def scmVars = checkout scm
-                        println scmVars
+                        checkout scm
                     }
 
                     stage('Terraform Linting Checks'){
@@ -48,17 +47,22 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                     }*/
 
                     stage('Tagging'){
-                      //def lastTagVersion = "0.0.70"
-                      sh 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
+                      def lastTagVersionManual = "0.0.71"
+                      def fetchTags = sh(script: 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags', returnStdout: true).split("\r?\n")
+                      println fetchTags
 
+                      /* // Not working because of old GIT version on Jenkins server that doesn't know --sort
                       def lines = sh(script: 'git tag --list --sort="version:refname" -n0', returnStdout: true).split("\r?\n")
-                      println lines
+                      println lines*/
 
                       def lastTagVersion = sh(script: 'git describe --tags $(git rev-list --tags --max-count=1)', returnStdout: true)
                       println "Acquired last tag version: "+ lastTagVersion
                       def lastTagSplit = lastTagVersion.split(/\./)
                       lastTagSplit[lastTagSplit.length-1] = lastTagSplit[lastTagSplit.length-1].toInteger()+1
                       def nextVersion = lastTagSplit.join('.')
+
+                      //TEMP. One time run!
+                      nextVersion = lastTagVersionManual
 
                       if (env.BRANCH_NAME == 'master' && 
                          (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
