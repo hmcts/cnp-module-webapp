@@ -47,7 +47,6 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                     }*/
 
                     stage('Tagging'){
-                      def lastTagVersionManual = "0.0.71"
                       def fetchTags = sh(script: 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags', returnStdout: true)//.split("\r?\n")
                       println fetchTags
 
@@ -61,19 +60,15 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                       lastTagSplit[lastTagSplit.length-1] = lastTagSplit[lastTagSplit.length-1].toInteger()+1
                       def nextVersion = lastTagSplit.join('.')
 
-                      //TEMP. One time run!
-                      nextVersion = lastTagVersionManual
-                      println nextVersion.getClass()
-
-                      // if (env.BRANCH_NAME == 'master' && 
-                      //    (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
+                      if (env.BRANCH_NAME == 'master' && 
+                         (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
                         
-                      println "Will tag with version: "+ nextVersion
-                      sh "git tag -a $nextVersion -m \"Jenkins\""
-                      sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
-                      // }
-                      // else
-                      //   println "Not on 'master' branch otherwise would have tagged with version: "+ nextVersion
+                        println "Will tag with version: "+ nextVersion
+                        sh "git tag -a $nextVersion -m \"Jenkins\""
+                        sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
+                      }
+                      else
+                        println "Not on 'master' branch otherwise would have tagged with version: "+ nextVersion
                     }
                 }
             }
