@@ -20,7 +20,9 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                    "GIT_COMMITTER_EMAIL=jenkinsmoj@contino.io"]) {
                     stage('Checkout') {
                         deleteDir()
-                        checkout scm
+                        def scmVars = checkout scm
+                        println scmVars.viewTag 
+                        println scmVars
                     }
 
                     stage('Terraform Linting Checks'){
@@ -48,7 +50,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 
                     stage('Tagging'){
                       //def lastTagVersion = "0.0.70"
-                      sh 'git fetch --tags'
+                      sh 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
                       def lastTagVersion = sh(script: 'git describe --tags $(git rev-list --tags --max-count=1)', returnStdout: true)
                       println "Acquired last tag version: "+ lastTagVersion
                       def lastTagSplit = lastTagVersion.split(/\./)
