@@ -37,21 +37,20 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                       }
                     }
 
-                    /*stage('Terraform Integration Testing') {
+                    stage('Terraform Integration Testing') {
                       sh 'date|md5sum|base64|head -c 6 > .random_string'
                       RANDOM_STRING = readFile '.random_string'
                       docker.image('dsanabria/azkitchentdi:latest').inside("-e TF_VAR_random_name=inspec${RANDOM_STRING}") {
                         sh 'echo $TF_VAR_random_name'
                         sh 'export PATH=$PATH:/usr/local/bundle/bin:/usr/local/bin && export HOME="$WORKSPACE" && cd tests/int && kitchen test azure'
                       }
-                    }*/
+                    }
 
                     stage('Tagging'){
-                      def lastTagVersionManual = "0.0.71"
                       def fetchTags = sh(script: 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags', returnStdout: true).split("\r?\n")
-                      println fetchTags
-
-                      /* // Not working because of old GIT version on Jenkins server that doesn't know --sort
+                      /* 
+                      // Not working because of old GIT version on Jenkins server that doesn't know --sort
+                      // would be most reliable solution to get last tag
                       def lines = sh(script: 'git tag --list --sort="version:refname" -n0', returnStdout: true).split("\r?\n")
                       println lines*/
 
@@ -61,14 +60,11 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                       lastTagSplit[lastTagSplit.length-1] = lastTagSplit[lastTagSplit.length-1].toInteger()+1
                       def nextVersion = lastTagSplit.join('.')
 
-                      //TEMP. One time run!
-                      nextVersion = lastTagVersionManual
-
                       if (env.BRANCH_NAME == 'master' && 
                          (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
                         
                         println "Will tag with version: "+ nextVersion
-                        sh 'git tag -a ${nextVersion} -m "Jenkins"'
+                        sh "git tag -a $nextVersion -m \"Jenkins\""
                         sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
                       }
                       else
