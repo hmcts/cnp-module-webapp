@@ -48,8 +48,8 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
 
                     stage('Tagging'){
                       def lastTagVersionManual = "0.0.71"
-                      def fetchTags = sh(script: 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags', returnStdout: true).split("\r?\n")
-                      println fetchTags.join("\n")
+                      def fetchTags = sh(script: 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags', returnStdout: true)//.split("\r?\n")
+                      println fetchTags
 
                       /* // Not working because of old GIT version on Jenkins server that doesn't know --sort
                       def lines = sh(script: 'git tag --list --sort="version:refname" -n0', returnStdout: true).split("\r?\n")
@@ -64,15 +64,15 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                       //TEMP. One time run!
                       nextVersion = lastTagVersionManual
 
-                      if (env.BRANCH_NAME == 'master' && 
-                         (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
+                      // if (env.BRANCH_NAME == 'master' && 
+                      //    (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
                         
                         println "Will tag with version: "+ nextVersion
                         sh 'git tag -a ${nextVersion} -m "Jenkins"'
                         sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
-                      }
-                      else
-                        println "Not on 'master' branch otherwise would have tagged with version: "+ nextVersion
+                      // }
+                      // else
+                      //   println "Not on 'master' branch otherwise would have tagged with version: "+ nextVersion
                     }
                 }
             }
