@@ -47,6 +47,8 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                     }
 
                     stage('Tagging'){
+                      //def lastTagVersion = "0.0.70"
+                      sh 'git fetch --tags'
                       def lastTagVersion = sh(script: 'git describe --tags $(git rev-list --tags --max-count=1)', returnStdout: true)
                       println "Acquired last tag version: "+ lastTagVersion
                       def lastTagSplit = lastTagVersion.split(/\./)
