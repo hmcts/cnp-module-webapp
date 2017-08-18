@@ -69,7 +69,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                       //    (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
                         
                       println "Will tag with version: "+ nextVersion
-                      sh 'git tag -a $nextVersion -m "Jenkins"'
+                      sh "git tag -a $nextVersion -m \"Jenkins\""
                       sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
                       // }
                       // else
