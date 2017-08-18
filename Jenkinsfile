@@ -22,7 +22,6 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                         deleteDir()
                         def scmVars = checkout scm
                         println scmVars
-                        println scmVars.branch.viewTag 
                     }
 
                     stage('Terraform Linting Checks'){
