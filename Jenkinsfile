@@ -62,15 +62,15 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                       def nextVersion = lastTagSplit.join('.')
 
                       //TEMP. One time run!
-                      //nextVersion = lastTagVersionManual
-                      //println nextVersion.getClass()
+                      nextVersion = lastTagVersionManual
+                      println nextVersion.getClass()
 
                       // if (env.BRANCH_NAME == 'master' && 
                       //    (currentBuild.result == null || currentBuild.result == 'SUCCESS')) {
                         
-                        println "Will tag with version: "+ nextVersion
-                        sh 'git tag -a ${nextVersion} -m "Jenkins"'
-                        sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
+                      println "Will tag with version: "+ nextVersion
+                      sh 'git tag -a $nextVersion -m "Jenkins"'
+                      sh 'git push "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags'
                       // }
                       // else
                       //   println "Not on 'master' branch otherwise would have tagged with version: "+ nextVersion
