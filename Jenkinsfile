@@ -49,7 +49,7 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                     stage('Tagging'){
                       def lastTagVersionManual = "0.0.71"
                       def fetchTags = sh(script: 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags', returnStdout: true).split("\r?\n")
-                      println fetchTags
+                      println fetchTags.join("\n")
 
                       /* // Not working because of old GIT version on Jenkins server that doesn't know --sort
                       def lines = sh(script: 'git tag --list --sort="version:refname" -n0', returnStdout: true).split("\r?\n")
