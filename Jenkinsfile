@@ -37,20 +37,20 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
                       }
                     }
 
-                    /*stage('Terraform Integration Testing') {
+                    stage('Terraform Integration Testing') {
                       sh 'date|md5sum|base64|head -c 6 > .random_string'
                       RANDOM_STRING = readFile '.random_string'
                       docker.image('dsanabria/azkitchentdi:latest').inside("-e TF_VAR_random_name=inspec${RANDOM_STRING}") {
                         sh 'echo $TF_VAR_random_name'
                         sh 'export PATH=$PATH:/usr/local/bundle/bin:/usr/local/bin && export HOME="$WORKSPACE" && cd tests/int && kitchen test azure'
                       }
-                    }*/
+                    }
 
                     stage('Tagging'){
-                      def fetchTags = sh(script: 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags', returnStdout: true)//.split("\r?\n")
-                      println fetchTags
-
-                      /* // Not working because of old GIT version on Jenkins server that doesn't know --sort
+                      def fetchTags = sh(script: 'git fetch "https://$TOKEN@github.com/contino/moj-module-webapp.git" --tags', returnStdout: true).split("\r?\n")
+                      /* 
+                      // Not working because of old GIT version on Jenkins server that doesn't know --sort
+                      // would be most reliable solution to get last tag
                       def lines = sh(script: 'git tag --list --sort="version:refname" -n0', returnStdout: true).split("\r?\n")
                       println lines*/
 
