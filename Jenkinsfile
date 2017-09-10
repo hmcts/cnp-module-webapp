@@ -1,4 +1,10 @@
 #!groovy
+@Library('Infrastructure@helpers-for-jenkins-test-steps')
+import uk.gov.hmcts.contino.*
+
+GITHUB_PROTOCOL = "https"
+GITHUB_REPO = "github.com/contino/moj-module-webapp/"
+
 properties(
     [[$class: 'GithubProjectProperty', projectUrlStr: 'https://www.github.com/contino/moj-module-webapp/'],
      pipelineTriggers([[$class: 'GitHubPushTrigger']])]
