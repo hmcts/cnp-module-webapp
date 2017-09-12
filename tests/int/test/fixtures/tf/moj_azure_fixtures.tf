@@ -39,7 +39,7 @@ module "frontend" {
   product      = "${var.random_name}-frontend"
   location     = "${var.location}"
   env          = "${var.env}"
-  asename      = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[3]}"
+  asename      = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[0]}"
   app_settings = "${var.app_settings}"
 }
 
