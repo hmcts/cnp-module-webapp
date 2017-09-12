@@ -9,6 +9,7 @@ variable "product" {
 }
 
 variable "random_name" {}
+variable "branch_name" {}
 
 variable "env" {
   default = "int"
@@ -30,7 +31,7 @@ data "terraform_remote_state" "core_sandbox_infrastructure" {
     resource_group_name  = "contino-moj-tf-state"
     storage_account_name = "continomojtfstate"
     container_name       = "contino-moj-tfstate-container"
-    key                  = "core-compute-sample/independent-branch-build/terraform.tfstate"
+    key                  = "core-compute-sample/${var.branch_name}/terraform.tfstate"
   }
 }
 
