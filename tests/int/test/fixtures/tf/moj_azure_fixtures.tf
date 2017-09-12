@@ -30,7 +30,7 @@ data "terraform_remote_state" "core_sandbox_infrastructure" {
     resource_group_name  = "contino-moj-tf-state"
     storage_account_name = "continomojtfstate"
     container_name       = "contino-moj-tfstate-container"
-    key                  = "sandbox-core-infra/dev/terraform.tfstate"
+    key                  = "sandbox-core-infra/${var.env}/terraform.tfstate"
   }
 }
 
@@ -39,7 +39,7 @@ module "frontend" {
   product      = "${var.random_name}-frontend"
   location     = "${var.location}"
   env          = "${var.env}"
-  asename      = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[0]}"
+  asename      = "${data.terraform_remote_state.core_sandbox_infrastructure.ase_name[3]}"
   app_settings = "${var.app_settings}"
 }
 

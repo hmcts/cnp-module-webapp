@@ -29,6 +29,8 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
             checkout scm
           }
 
+          def envSuffix = (env.BRANCH_NAME == 'master') ? 'dev' : env.BRANCH_NAME
+
           stage('Terraform Linting Checks') {
             def terraform = new Terraform(this)
             terraform.lint()
