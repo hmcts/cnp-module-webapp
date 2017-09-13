@@ -13,9 +13,9 @@ control 'azure-service-environment' do
     its('name') { should eq 'sandbox-core-infra-dev' }
     its('vnet_name') { should eq 'sandbox-core-infra-vnet-dev' }
     its('vnet_resource_group_name') { should eq 'sandbox-core-infra-dev' }
-    its('vnet_subnet_name') { should eq 'sandbox-core-infra-subnet-0-devvvvv' }
+    its('vnet_subnet_name') { should eq 'sandbox-core-infra-subnet-0-dev' }
     its('internal_load_balancing_mode') { should eq 'Web, Publishing' }
-    its('maximum_number_of_machines') { should eq 220 }
+    its('maximum_number_of_machines') { should eq 250 }
   end
 end
 
