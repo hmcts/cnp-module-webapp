@@ -64,7 +64,7 @@
           "name": "[parameters('name')]",
           "type": "Microsoft.Web/serverfarms",
           "location": "[parameters('location')]",
-          "apiVersion": "2014-06-01",
+          "apiVersion": "2016-09-01",
           "tags": {
             "displayName": "Application Service Plan",
             "environment": "[parameters('env')]"
@@ -86,7 +86,7 @@
         "name": "[parameters('name')]",
         "type": "Microsoft.Web/sites",
         "location": "[parameters('location')]",
-        "apiVersion": "2015-08-01",
+        "apiVersion": "2016-08-01",
         "dependsOn": [
           "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]"
         ],
