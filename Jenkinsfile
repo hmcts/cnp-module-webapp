@@ -34,7 +34,6 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
           stage('Terraform Linting Checks') {
             def terraform = new Terraform(this)
             terraform.lint()
-            terraform.show()
           }
 
           stage('Terraform Unit Testing') {
