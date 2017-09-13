@@ -75,12 +75,12 @@
             "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
           },
           "sku": {
-            "name": "[concat('P', parameters('aseAppServiceWorkerPool'))]",
-            "tier": "Premium",
-            "size": "[concat('P', parameters('aseAppServiceWorkerPool'))]",
-            "family": "P",
-            "capacity": "[parameters('aseAppServiceNumberOfWorkers')]"
-          }
+            "name": "I1",
+            "tier": "Isolated",
+            "size": "I1",
+            "family": "I",
+            "capacity": 2
+        }
       },
       {
         "name": "[parameters('name')]",
@@ -124,7 +124,6 @@
         "location": "[parameters('location')]",
         "scale": null,
         "properties": {
-            "numberOfWorkers": 1,
             "defaultDocuments": [
                 "Default.htm",
                 "Default.html",
