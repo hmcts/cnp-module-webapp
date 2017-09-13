@@ -11,11 +11,11 @@ control 'azure-service-environment' do
   describe azure_service_environment(rg_name: 'sandbox-core-infra-dev', name: 'sandbox-core-infra-dev') do
     its('location') { should eq 'UK South' }
     its('name') { should eq 'sandbox-core-infra-dev' }
-    its('vnet_name') { should eq 'sandbox-core-infra-vnet' }
+    its('vnet_name') { should eq 'sandbox-core-infra-vnet-dev' }
     its('vnet_resource_group_name') { should eq 'sandbox-core-infra-dev' }
-    its('vnet_subnet_name') { should eq 'sandbox-core-infra-subnet-0' }
-    its('internal_load_balancing_mode') { should eq 'None' }
-    its('maximum_number_of_machines') { should eq 55 }
+    its('vnet_subnet_name') { should eq 'sandbox-core-infra-subnet-0-devvvvv' }
+    its('internal_load_balancing_mode') { should eq 'Web, Publishing' }
+    its('maximum_number_of_machines') { should eq 220 }
   end
 end
 
