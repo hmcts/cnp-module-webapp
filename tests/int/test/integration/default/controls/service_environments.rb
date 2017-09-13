@@ -8,9 +8,9 @@ control 'azure-service-environment' do
   # TODO: Because of the limitations for ASEv1 we use an existing ASE
   # to validate our lib
   # Ensure that the expected resources have been deployed
-  describe azure_service_environment(rg_name: 'sandbox-core-infra-dev', name: 'sandbox-core-infra') do
+  describe azure_service_environment(rg_name: 'sandbox-core-infra-dev', name: 'sandbox-core-infra-dev') do
     its('location') { should eq 'UK South' }
-    its('name') { should eq 'sandbox-core-infra' }
+    its('name') { should eq 'sandbox-core-infra-dev' }
     its('vnet_name') { should eq 'sandbox-core-infra-vnet' }
     its('vnet_resource_group_name') { should eq 'sandbox-core-infra-dev' }
     its('vnet_subnet_name') { should eq 'sandbox-core-infra-subnet-0' }
