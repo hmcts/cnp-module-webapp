@@ -64,7 +64,7 @@
           "name": "[parameters('name')]",
           "type": "Microsoft.Web/serverfarms",
           "location": "[parameters('location')]",
-          "apiVersion": "2014-06-01",
+          "apiVersion": "2016-09-01",
           "tags": {
             "displayName": "Application Service Plan",
             "environment": "[parameters('env')]"
@@ -75,18 +75,18 @@
             "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
           },
           "sku": {
-            "name": "[concat('P', parameters('aseAppServiceWorkerPool'))]",
-            "tier": "Premium",
-            "size": "[concat('P', parameters('aseAppServiceWorkerPool'))]",
-            "family": "P",
-            "capacity": "[parameters('aseAppServiceNumberOfWorkers')]"
-          }
+            "name": "I1",
+            "tier": "Isolated",
+            "size": "I1",
+            "family": "I",
+            "capacity": 2
+        }
       },
       {
         "name": "[parameters('name')]",
         "type": "Microsoft.Web/sites",
         "location": "[parameters('location')]",
-        "apiVersion": "2015-08-01",
+        "apiVersion": "2016-08-01",
         "dependsOn": [
           "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]"
         ],
@@ -124,7 +124,6 @@
         "location": "[parameters('location')]",
         "scale": null,
         "properties": {
-            "numberOfWorkers": 1,
             "defaultDocuments": [
                 "Default.htm",
                 "Default.html",

@@ -9,6 +9,7 @@ variable "product" {
 }
 
 variable "random_name" {}
+variable "branch_name" {}
 
 variable "env" {
   default = "int"
