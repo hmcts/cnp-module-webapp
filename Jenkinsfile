@@ -29,21 +29,18 @@ withCredentials([string(credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECR
             checkout scm
           }
 
-          def envSuffix = (env.BRANCH_NAME == 'master') ? 'dev' : env.BRANCH_NAME
-
           stage('Terraform Linting Checks') {
             def terraform = new Terraform(this)
             terraform.lint()
           }
 
+          testLib = new Testing(this)
           stage('Terraform Unit Testing') {
-            docker.image('dsanabria/terraform_validate:latest').inside {
-              sh 'cd tests/unit && python tests.py'
-            }
+            testLib.unitTest()
           }
 
           stage('Terraform Integration Testing') {
-            new Testing(this).moduleIntegrationTests()
+            testLib.moduleIntegrationTests()
           }
 
           stage('Tagging') {
