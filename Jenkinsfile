@@ -15,7 +15,7 @@ try {
       withEnv(["GIT_COMMITTER_NAME=jenkinsmoj",
                "GIT_COMMITTER_EMAIL=jenkinsmoj@contino.io"]) {
 
-        step([$class: 'GitHubSetCommitStatusBuilder'])
+//        step([$class: 'GitHubSetCommitStatusBuilder'])
 
         stage('Checkout') {
           deleteDir()
