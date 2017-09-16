@@ -9,23 +9,22 @@ properties(
     [[$class: 'GithubProjectProperty', projectUrlStr: 'https://www.github.com/contino/moj-module-webapp/'],
      pipelineTriggers([[$class: 'GitHubPushTrigger']])]
 )
-try {
-  node {
-    platformSetup {
-      withEnv(["GIT_COMMITTER_NAME=jenkinsmoj",
-               "GIT_COMMITTER_EMAIL=jenkinsmoj@contino.io"]) {
+node {
+  platformSetup {
+    withEnv(["GIT_COMMITTER_NAME=jenkinsmoj",
+             "GIT_COMMITTER_EMAIL=jenkinsmoj@contino.io"]) {
 
-//        step([$class: 'GitHubSetCommitStatusBuilder'])
+      step([$class: 'GitHubSetCommitStatusBuilder'])
 
-        stage('Checkout') {
-          deleteDir()
-          checkout scm
-        }
+      stage('Checkout') {
+        deleteDir()
+        checkout scm
+      }
 
-        stage('Terraform Linting Checks') {
-          terraform 'fmt --diff=true > diff.out'
-          sh 'if [ ! -s diff.out ]; then echo "Initial Linting OK ..."; else echo "Linting errors found while running terraform fmt --diff=true... Applying terraform fmt first" && cat diff.out &&  terraform fmt; fi'
-        }
+      stage('Terraform Linting Checks') {
+        terraform 'fmt --diff=true > diff.out'
+        sh 'if [ ! -s diff.out ]; then echo "Initial Linting OK ..."; else echo "Linting errors found while running terraform fmt --diff=true... Applying terraform fmt first" && cat diff.out &&  terraform fmt; fi'
+      }
 
 /*
         testLib = new Testing(this)
@@ -44,14 +43,9 @@ try {
 
         }
 */
-      }
     }
   }
-}
-catch (err) {
-  throw err
-}
-finally {
   step([$class: 'GitHubCommitStatusSetter'])
+
 }
 
