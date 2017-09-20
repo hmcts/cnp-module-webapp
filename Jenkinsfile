@@ -36,8 +36,7 @@ try {
 
       stage('Tagging') {
         def tag = new Tagging(this)
-        String result = tag.applyTag(tag.nextTag())
-        printf $result
+        printf tag.applyTag(tag.nextTag())
       }
     }
   }
