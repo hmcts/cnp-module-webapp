@@ -12,7 +12,7 @@ control 'azure-service-plan' do
   describe azure_service_plan(rg_name: random_name, name: random_name) do
     its('location') { should eq 'UK South' }
     its('name') { should eq "#{random_name}" }
-    its('ase_name') { should eq 'sandbox-core-infra-dev' }
+    its('ase_name') { should eq 'sandbox-core-compute-dev' }
   end
 end
 

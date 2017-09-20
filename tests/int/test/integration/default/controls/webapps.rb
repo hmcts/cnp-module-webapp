@@ -10,7 +10,7 @@ control 'azure-webapp' do
   # Ensure that the expected resources have been deployed
   describe azure_webapp(rg_name: random_name, name: random_name) do
     its('location') { should eq 'UK South' }
-    its('default_host_name') { should eq "#{random_name.downcase}.sandbox-core-infra-dev.p.azurewebsites.net" }
-    its('enabled_host_names') { should include "#{random_name.downcase}.scm.sandbox-core-infra-dev.p.azurewebsites.net" }
+    its('default_host_name') { should eq "#{random_name.downcase}.sandbox-core-compute-dev.p.azurewebsites.net" }
+    its('enabled_host_names') { should include "#{random_name.downcase}.scm.sandbox-core-compute-dev.p.azurewebsites.net" }
   end
 end
