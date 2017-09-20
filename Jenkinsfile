@@ -1,5 +1,7 @@
 #!groovy
 @Library('Infrastructure') _
+import uk.gov.hmcts.contino.Testing
+import uk.gov.hmcts.contino.Tagging
 
 GITHUB_PROTOCOL = "https"
 GITHUB_REPO = "github.com/contino/moj-module-webapp/"
@@ -13,14 +15,12 @@ try {
   node {
     platformSetup {
 
-      step([$class: 'GitHubSetCommitStatusBuilder'])
-
       stage('Checkout') {
         deleteDir()
         checkout scm
       }
 
-      terraform.ini(this, infrastructure)
+      terraform.ini(this)
       stage('Terraform Linting Checks') {
         terraform.lint()
       }
@@ -44,7 +44,4 @@ try {
 }
 catch (err) {
   throw err
-}
-finally {
-  step([$class: 'GitHubCommitStatusSetter'])
 }
