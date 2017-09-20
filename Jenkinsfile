@@ -1,6 +1,5 @@
 #!groovy
-@Library('Infrastructure@different-approach')
-import uk.gov.hmcts.contino.*
+@Library('Infrastructure') _
 
 GITHUB_PROTOCOL = "https"
 GITHUB_REPO = "github.com/contino/moj-module-webapp/"
@@ -9,10 +8,10 @@ properties(
     [[$class: 'GithubProjectProperty', projectUrlStr: 'https://www.github.com/contino/moj-module-webapp/'],
      pipelineTriggers([[$class: 'GitHubPushTrigger']])]
 )
-node {
-  platformSetup {
-    withEnv(["GIT_COMMITTER_NAME=jenkinsmoj",
-             "GIT_COMMITTER_EMAIL=jenkinsmoj@contino.io"]) {
+
+try {
+  node {
+    platformSetup {
 
       step([$class: 'GitHubSetCommitStatusBuilder'])
 
@@ -21,31 +20,31 @@ node {
         checkout scm
       }
 
+      terraform.ini(this, infrastructure)
       stage('Terraform Linting Checks') {
-        terraform 'fmt --diff=true > diff.out'
-        sh 'if [ ! -s diff.out ]; then echo "Initial Linting OK ..."; else echo "Linting errors found while running terraform fmt --diff=true... Applying terraform fmt first" && cat diff.out &&  terraform fmt; fi'
+        terraform.lint()
       }
 
-/*
-        testLib = new Testing(this)
-        stage('Terraform Unit Testing') {
-          testLib.unitTest()
-        }
+      testLib = new Testing(this)
+      stage('Terraform Unit Testing') {
+        testLib.unitTest()
+      }
 
-        stage('Terraform Integration Testing') {
-          testLib.moduleIntegrationTests()
-        }
+      stage('Terraform Integration Testing') {
+        testLib.moduleIntegrationTests()
+      }
 
-        stage('Tagging') {
-          def tag = new Tagging(this)
-          String result = tag.applyTag(tag.nextTag())
-          sh "echo $result"
-
-        }
-*/
+      stage('Tagging') {
+        def tag = new Tagging(this)
+        String result = tag.applyTag(tag.nextTag())
+        printf $result
+      }
     }
   }
-  step([$class: 'GitHubCommitStatusSetter'])
-
 }
-
+catch (err) {
+  throw err
+}
+finally {
+  step([$class: 'GitHubCommitStatusSetter'])
+}
