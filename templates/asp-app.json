@@ -75,9 +75,9 @@
             "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
           },
           "sku": {
-            "name": "I1",
+            "name": "I2",
             "tier": "Isolated",
-            "size": "I1",
+            "size": "I2",
             "family": "I",
             "capacity": 2
         }
