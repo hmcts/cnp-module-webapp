@@ -25,14 +25,14 @@ try {
         terraform.lint()
       }
 
-      testLib = new Testing(this)
-      stage('Terraform Unit Testing') {
-        testLib.unitTest()
-      }
-
-      stage('Terraform Integration Testing') {
-        testLib.moduleIntegrationTests()
-      }
+#      testLib = new Testing(this)
+#      stage('Terraform Unit Testing') {
+#        testLib.unitTest()
+#      }
+#
+#      stage('Terraform Integration Testing') {
+#        testLib.moduleIntegrationTests()
+#      }
 
       stage('Tagging') {
         def tag = new Tagging(this)
