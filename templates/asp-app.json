@@ -8,13 +8,6 @@
                 "description": "Name of the App Service Environment"
             }
         },
-        "aseName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the App Service Environment"
-            }
-        },
-      
         "location": { 
             "type": "string", 
             "allowedValues": [ 
