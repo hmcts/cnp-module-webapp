@@ -3,9 +3,9 @@ output "webapp_name" {
 }
 
 output "gitendpoint" {
-  value = "${azurerm_template_deployment.app_service_site.name}.scm.${var.asename}.p.azurewebsites.net/${azurerm_template_deployment.app_service_site.name}.git"
+  value = "${azurerm_template_deployment.app_service_site.name}.scm.app-compute${var.env}.p.azurewebsites.net/${azurerm_template_deployment.app_service_site.name}.git"
 }
 
 output "url" {
-  value = "http://${azurerm_template_deployment.app_service_site.name}.${var.asename}.p.azurewebsites.net"
+  value = "http://${azurerm_template_deployment.app_service_site.name}.app-compute${var.env}.p.azurewebsites.net"
 }
