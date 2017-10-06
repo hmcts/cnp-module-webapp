@@ -5,7 +5,7 @@ control 'azure-webapp' do
   impact 1.0
   title 'Check that the service has the correct properties'
   json_obj = json('.kitchen/kitchen-terraform/default-azure/terraform.tfstate')
-  random_name = json_obj['modules'][0]['outputs']['random_name']['value'] + '-frontend-int'
+  random_name = json_obj['modules'][0]['outputs']['random_name']['value'] + '-frontend-sandboxtestsupport'
 
   # Ensure that the expected resources have been deployed
   describe azure_webapp(rg_name: random_name, name: random_name) do
