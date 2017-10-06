@@ -18,7 +18,6 @@ resource "azurerm_template_deployment" "app_service_site" {
 
   parameters = {
     name         = "${var.product}-${var.env}"
-    aseName      = "${var.asename}"
     location     = "${var.location}"
     env          = "${var.env}"
     app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
