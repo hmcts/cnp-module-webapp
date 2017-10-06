@@ -12,7 +12,7 @@ variable "random_name" {}
 variable "branch_name" {}
 
 variable "env" {
-  default = "int"
+  default = "sandboxtestsupport"
 }
 
 variable "app_settings" {
@@ -24,23 +24,11 @@ variable "app_settings" {
   }
 }
 
-data "terraform_remote_state" "sandbox_core_infra" {
-  backend = "azure"
-
-  config {
-    resource_group_name  = "contino-moj-tf-state"
-    storage_account_name = "continomojtfstate"
-    container_name       = "contino-moj-tfstate-container"
-    key                  = "sandbox-core-infra/dev/terraform.tfstate"
-  }
-}
-
 module "frontend" {
   source       = "../../../../../"
   product      = "${var.random_name}-frontend"
   location     = "${var.location}"
   env          = "${var.env}"
-  asename      = "${data.terraform_remote_state.sandbox_core_infra.ase_name[0]}"
   app_settings = "${var.app_settings}"
 }
 

@@ -1,5 +1,5 @@
 # moj-module-webapp
-A module that lets you create a Web App and its associated App Service Plan, and assign it to to an Application Service Environment.
+A module that lets you create a Web App and its associated App Service Plan, and depending on the environment you are targeting, the module will automatically deploy to the correct Application Service Environment.
 Refer to the following links for a detailed explanation of an App Service Plan, Web App and Application Service Environment in Azure.
 
 [App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/azure-web-sites-web-hosting-plans-in-depth-overview) <br />
@@ -13,7 +13,6 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications. to use t
 -	product,  this is the name of the product or project i.e. probate, divorce etc.
 -	location, this is the azure region for this service
 - 	env, this is used to differentiate the environments e.g dev, prod, test etc
-- 	asename, this is the name of the application service enviroments that will be hosting the web app
 -	app_settings, this is the key valued pairs of application settings used by the application at runtime
 
 ## Usage
@@ -25,7 +24,6 @@ module "frontend" {
 	product  = "${var.product}-frontend"
 	location = "${var.location}"
 	env      = "${var.env}"
-	asename  = "${var.asename}"
 
 	app_settings = { 
 		SERVICE_URL  = "url-to-backendservice"
