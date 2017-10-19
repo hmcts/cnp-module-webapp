@@ -12,5 +12,6 @@ control 'azure-webapp' do
     its('location') { should eq 'UK South' }
     its('default_host_name') { should eq "#{random_name.downcase}.app-compute-sandboxtestsupport.p.azurewebsites.net" }
     its('enabled_host_names') { should include "#{random_name.downcase}.scm.app-compute-sandboxtestsupport.p.azurewebsites.net" }
+    its('config.use32BitWorkerProcess') {should be false }
   end
 end
