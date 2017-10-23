@@ -23,3 +23,49 @@ resource "azurerm_template_deployment" "app_service_site" {
     app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
   }
 }
+
+resource "azurerm_key_vault_certificate" "james" {
+  name      = "${var.product}-${var.env}"
+  vault_uri = "${var.key_vault_uri}"
+
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 2048
+      key_type   = "RSA"
+      reuse_key  = true
+    }
+
+    lifetime_action {
+      action {
+        action_type = "AutoRenew"
+      }
+
+      trigger {
+        days_before_expiry = 30
+      }
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+
+    x509_certificate_properties {
+      key_usage = [
+        "cRLSign",
+        "dataEncipherment",
+        "digitalSignature",
+        "keyAgreement",
+        "keyCertSign",
+        "keyEncipherment",
+      ]
+
+      subject = "CN=${var.product}-${var.env}.cp-moj.interal"
+      validity_in_months = 12
+    }
+  }
+}
