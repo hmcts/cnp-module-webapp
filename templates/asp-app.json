@@ -2,22 +2,52 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
+      "serverFarmId":{
+         "type":"string",
+         "metadata":{
+            "description":"Existing App Service Plan resource id that contains the App Service being updated"
+         }
+      },
+      "certificateName":{
+         "type":"string",
+         "metadata":{
+            "description":"User friendly certificate resource name"
+         }
+      },
+      "keyVaultId":{
+         "type":"string",
+         "metadata":{
+            "description":"Existing Key Vault resource Id with an access policy to allow Microsoft.Web RP to read Key Vault secrets (Checkout README.md for more information)"
+         }
+      },
+      "sslVaultSecretName":{
+         "type":"string",
+         "metadata":{
+            "description":"Key Vault Secret that contains a PFX certificate"
+         }
+      },
+      "hostname":{
+         "type":"string",
+         "metadata":{
+            "description":"Custom hostname for creating SSL binding. This hostname should already be assigned to the Web App"
+         }
+      },
         "name": {
             "type": "string",
             "metadata": {
                 "description": "Name of the App Service Environment"
             }
         },
-        "location": { 
-            "type": "string", 
-            "allowedValues": [ 
-                "UK South", 
+        "location": {
+            "type": "string",
+            "allowedValues": [
+                "UK South",
                 "UK West",
                 "West Europe"
-            ], 
-            "metadata": { 
-                "description": "Location of the App Service Environment" 
-            } 
+            ],
+            "metadata": {
+                "description": "Location of the App Service Environment"
+            }
          },
         "aseAppServiceWorkerPool": {
           "type": "string",
@@ -76,12 +106,24 @@
         }
       },
       {
+         "type":"Microsoft.Web/certificates",
+         "name":"[parameters('certificateName')]",
+         "apiVersion":"2016-03-01",
+         "location":"[parameters('location')]",
+         "properties":{
+            "keyVaultId":"[parameters('keyVaultId')]",
+            "keyVaultSecretName":"[parameters('sslVaultSecretName')]",
+            "serverFarmId":"[parameters('serverFarmId')]"
+         }
+      },
+      {
         "name": "[parameters('name')]",
         "type": "Microsoft.Web/sites",
         "location": "[parameters('location')]",
         "apiVersion": "2016-08-01",
         "dependsOn": [
-          "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]"
+          "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]",
+          "[resourceId('Microsoft.Web/certificates', parameters('certificateName'))]"
         ],
         "tags": {
           "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('name')))]": "Resource",
@@ -96,7 +138,15 @@
           "scmType": "LocalGit",
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
-          "detailedErrorLoggingEnabled": true
+          "detailedErrorLoggingEnabled": true,
+          "hostNameSslStates":[
+             {
+                "name":"[parameters('hostname')]",
+                "sslState":"SniEnabled",
+                "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('certificateName'))).Thumbprint]",
+                "toUpdate":true
+             }
+          ]
         },
         "resources": [
           {

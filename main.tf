@@ -19,10 +19,14 @@ resource "azurerm_template_deployment" "app_service_site" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    name         = "${var.product}-${var.env}"
-    location     = "${var.location}"
-    env          = "${var.env}"
-    app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
+    name               = "${var.product}-${var.env}"
+    location           = "${var.location}"
+    env                = "${var.env}"
+    certificateName    = "${var.product}-${var.env}"
+    keyVaultId         = "${var.key_vault_id}"
+    sslVaultSecretName = "${azurerm_key_vault_certificate.ssl.name}"
+    app_settings       = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
+    hostname           = "${var.product}-${var.env}.cp-moj.interal"
   }
 }
 
@@ -70,10 +74,13 @@ resource "azurerm_key_vault_certificate" "ssl" {
       validity_in_months = 12
     }
   }
+  tags {
+    abitrary = "${azurerm_template_deployment.app_service_site.id}"
+  }
 }
 
 # The ARM template that creates ssl binding
-data "template_file" "bindtemplate" {
+/*data "template_file" "bindtemplate" {
   template = "${file("${path.module}/templates/ssl-bind.json")}"
 }
 
@@ -93,3 +100,4 @@ resource "azurerm_template_deployment" "ssl_bind" {
     serverFarmId       = "${var.serverFarmId}"
   }
 }
+*/
