@@ -139,7 +139,6 @@
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
           "detailedErrorLoggingEnabled": true,
-          "use32BitWorkerProcess": false
           "hostNameSslStates":[
              {
                 "name":"[parameters('hostname')]",
@@ -147,7 +146,8 @@
                 "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('certificateName'))).Thumbprint]",
                 "toUpdate":true
              }
-          ]
+          ],
+          "use32BitWorkerProcess": false
         },
         "resources": [
           {
