@@ -96,7 +96,8 @@
           "scmType": "LocalGit",
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
-          "detailedErrorLoggingEnabled": true
+          "detailedErrorLoggingEnabled": true,
+          "use32BitWorkerProcess": false
         },
         "resources": [
           {
