@@ -139,6 +139,7 @@
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
           "detailedErrorLoggingEnabled": true,
+          "use32BitWorkerProcess": false
           "hostNameSslStates":[
              {
                 "name":"[parameters('hostname')]",
