@@ -77,7 +77,6 @@ data "template_file" "bindtemplate" {
   template = "${file("${path.module}/templates/ssl-bind.json")}"
 }
 
-# Create Application Service site
 resource "azurerm_template_deployment" "ssl_bind" {
   template_body       = "${data.template_file.bindtemplate.rendered}"
   name                = "${var.product}-${var.env}"
@@ -86,7 +85,7 @@ resource "azurerm_template_deployment" "ssl_bind" {
 
   parameters = {
     location           = "${var.location}"
-    certificateName    = "${azurerm_key_vault_certificate.ssl.name}"
+    certificateName    = "${var.product}-${var.env}"
     keyVaultId         = "${var.key_vault_id}"
     sslVaultSecretName = "${azurerm_key_vault_certificate.ssl.name}"
     webAppName         = "${azurerm_template_deployment.app_service_site.name}"
