@@ -75,26 +75,3 @@ resource "azurerm_key_vault_certificate" "ssl" {
     }
   }
 }
-
-# The ARM template that creates ssl binding
-/*data "template_file" "bindtemplate" {
-  template = "${file("${path.module}/templates/ssl-bind.json")}"
-}
-
-resource "azurerm_template_deployment" "ssl_bind" {
-  template_body       = "${data.template_file.bindtemplate.rendered}"
-  name                = "${var.product}-${var.env}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  deployment_mode     = "Incremental"
-
-  parameters = {
-    location           = "${var.location}"
-    certificateName    = "${var.product}-${var.env}"
-    keyVaultId         = "${var.key_vault_id}"
-    sslVaultSecretName = "${azurerm_key_vault_certificate.ssl.name}"
-    webAppName         = "${azurerm_template_deployment.app_service_site.name}"
-    hostname           = "${azurerm_template_deployment.app_service_site.name}"
-    serverFarmId       = "${var.serverFarmId}"
-  }
-}
-*/

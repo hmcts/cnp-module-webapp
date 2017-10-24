@@ -28,6 +28,4 @@ variable "key_vault_uri" {}
 
 variable "key_vault_id" {}
 
-#variable "hostname" {}
-
 variable "serverFarmId" {}
