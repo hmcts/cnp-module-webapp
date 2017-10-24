@@ -74,9 +74,6 @@ resource "azurerm_key_vault_certificate" "ssl" {
       validity_in_months = 12
     }
   }
-  tags {
-    abitrary = "${azurerm_template_deployment.app_service_site.id}"
-  }
 }
 
 # The ARM template that creates ssl binding
