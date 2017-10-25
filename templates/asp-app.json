@@ -2,42 +2,42 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "serverFarmId":{
-         "type":"string",
-         "metadata":{
-            "description":"Existing App Service Plan resource id that contains the App Service being updated"
-         }
-      },
-      "certificateName":{
-         "type":"string",
-         "metadata":{
-            "description":"User friendly certificate resource name"
-         }
-      },
-      "keyVaultId":{
-         "type":"string",
-         "metadata":{
-            "description":"Existing Key Vault resource Id with an access policy to allow Microsoft.Web RP to read Key Vault secrets (Checkout README.md for more information)"
-         }
-      },
-      "sslVaultSecretName":{
-         "type":"string",
-         "metadata":{
-            "description":"Key Vault Secret that contains a PFX certificate"
-         }
-      },
-      "hostname":{
-         "type":"string",
-         "metadata":{
-            "description":"Custom hostname for creating SSL binding. This hostname should already be assigned to the Web App"
-         }
-      },
         "name": {
             "type": "string",
             "metadata": {
                 "description": "Name of the App Service Environment"
             }
         },
+        "certificateName":{
+           "type":"string",
+           "metadata":{
+              "description":"User friendly certificate resource name"
+           }
+        },
+        "hostname":{
+           "type":"string",
+           "metadata":{
+              "description":"Custom hostname for creating SSL binding. This hostname should already be assigned to the Web App"
+           }
+        },
+        "sslVaultSecretName":{
+           "type":"string",
+           "metadata":{
+              "description":"Key Vault Secret that contains a PFX certificate"
+           }
+         },
+         "key_vault_uri":{
+            "type":"string",
+            "metadata":{
+               "description":"Existing Key Vault resource Id with an access policy to allow Microsoft.Web RP to read Key Vault secrets (Checkout README.md for more information)"
+            }
+         },
+         "key_vault_id":{
+            "type":"string",
+            "metadata":{
+               "description":"Existing Key Vault resource Id with an access policy to allow Microsoft.Web RP to read Key Vault secrets (Checkout README.md for more information)"
+            }
+         },
         "location": {
             "type": "string",
             "allowedValues": [
@@ -94,8 +94,8 @@
           },
           "properties": {
             "name": "[parameters('name')]",
-            "hostingEnvironment": "[concat('app-compute-', parameters('env'))]",
-            "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('app-compute-', parameters('env')))]"
+            "hostingEnvironment": "[concat('whinn-core-infra-', parameters('env'))]",
+            "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('whinn-core-infra-', parameters('env')))]"
           },
           "sku": {
             "name": "I2",
@@ -111,9 +111,9 @@
          "apiVersion":"2016-03-01",
          "location":"[parameters('location')]",
          "properties":{
-            "keyVaultId":"[parameters('keyVaultId')]",
+            "keyVaultId":"[parameters('key_vault_id')]",
             "keyVaultSecretName":"[parameters('sslVaultSecretName')]",
-            "serverFarmId":"[parameters('serverFarmId')]"
+            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms/', concat('whinn-core-infra-', parameters('env')))]"
          }
       },
       {
@@ -122,8 +122,7 @@
         "location": "[parameters('location')]",
         "apiVersion": "2016-08-01",
         "dependsOn": [
-          "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]",
-          "[resourceId('Microsoft.Web/certificates', parameters('certificateName'))]"
+          "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]"
         ],
         "tags": {
           "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('name')))]": "Resource",
@@ -133,20 +132,12 @@
         "properties": {
           "name": "[parameters('name')]",
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]",
-          "hostingEnvironment": "[concat('app-compute-', parameters('env'))]",
-          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('app-compute-', parameters('env')))]",
+          "hostingEnvironment": "[concat('whinn-core-infra-', parameters('env'))]",
+          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('whinn-core-infra-', parameters('env')))]",
           "scmType": "LocalGit",
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
           "detailedErrorLoggingEnabled": true,
-          "hostNameSslStates":[
-             {
-                "name":"[parameters('hostname')]",
-                "sslState":"SniEnabled",
-                "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('certificateName'))).Thumbprint]",
-                "toUpdate":true
-             }
-          ],
           "use32BitWorkerProcess": false
         },
         "resources": [
@@ -271,4 +262,4 @@
         ]
       }
     ]
-}
+  }

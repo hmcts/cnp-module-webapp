@@ -1,6 +1,4 @@
 # Create a resource group
-provider "azurerm" {}
-
 resource "azurerm_resource_group" "rg" {
   name     = "${var.product}-${var.env}"
   location = "${var.location}"
@@ -22,11 +20,13 @@ resource "azurerm_template_deployment" "app_service_site" {
     name               = "${var.product}-${var.env}"
     location           = "${var.location}"
     env                = "${var.env}"
-    certificateName    = "${var.product}-${var.env}"
-    keyVaultId         = "${var.key_vault_id}"
-    sslVaultSecretName = "${azurerm_key_vault_certificate.ssl.name}"
     app_settings       = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
-    hostname           = "${var.product}-${var.env}.cp-moj.interal"
+    certificateName    = "${var.product}-${var.env}"
+    hostname           = "${var.product}-${var.env}.service.internal"
+    sslVaultSecretName = "${var.product}-${var.env}"
+    key_vault_id       = "${var.key_vault_id}"
+    key_vault_uri      = "${var.key_vault_uri}"
+  //  serverFarmId       = "${var.serverFarmId}"
   }
 }
 
@@ -70,7 +70,7 @@ resource "azurerm_key_vault_certificate" "ssl" {
         "keyEncipherment",
       ]
 
-      subject = "CN=${var.product}-${var.env}.cp-moj.interal"
+      subject = "CN=${var.product}-${var.env}.service.internal"
       validity_in_months = 12
     }
   }
