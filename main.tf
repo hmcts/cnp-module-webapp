@@ -87,7 +87,7 @@ resource "null_resource" "pub_key_whitelist" {
 
   provisioner "local-exec" {
 
-    command = "bash -e pubkey_whitelist.sh ${var.product}-${var.env}"
+    command = "bash -e pubkey_whitelist.sh ${var.product}-${var.env} ${var.appGateway} ${azurerm_resource_group.rg.name}"
 
   }
 

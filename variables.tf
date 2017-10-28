@@ -27,3 +27,5 @@ variable "app_settings_defaults" {
 variable "key_vault_uri" {}
 
 variable "key_vault_id" {}
+
+variable "appGateway" {}
