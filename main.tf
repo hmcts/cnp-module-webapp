@@ -26,10 +26,13 @@ resource "azurerm_template_deployment" "app_service_site" {
     sslVaultSecretName = "${var.product}-${var.env}"
     key_vault_id       = "${var.key_vault_id}"
     key_vault_uri      = "${var.key_vault_uri}"
-  //  serverFarmId       = "${var.serverFarmId}"
+    dependancy         = "${azurerm_key_vault_certificate.ssl.id}"
   }
 }
 
+// creates self-signed cert to be assigned to webapp. domain must not overlap
+// the domains to be used by webapps. For more info see
+// https://docs.microsoft.com/en-us/azure/app-service/environment/create-ilb-ase
 resource "azurerm_key_vault_certificate" "ssl" {
   name      = "${var.product}-${var.env}"
   vault_uri = "${var.key_vault_uri}"
@@ -74,4 +77,18 @@ resource "azurerm_key_vault_certificate" "ssl" {
       validity_in_months = 12
     }
   }
+}
+
+resource "null_resource" "pub_key_whitelist" {
+
+  triggers {
+    certificate = "${azurerm_key_vault_certificate.ssl.id}"
+  }
+
+  provisioner "local-exec" {
+
+    command = "bash -e pubkey_whitelist.sh ${var.product}-${var.env}"
+
+  }
+
 }

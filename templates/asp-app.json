@@ -76,6 +76,9 @@
         },
         "app_settings": {
           "type": "string"
+        },
+        "dependancy": {
+          "type": "string"
         }
     },
     "variables": {
