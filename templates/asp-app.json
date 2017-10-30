@@ -29,7 +29,7 @@
          "key_vault_uri":{
             "type":"string",
             "metadata":{
-               "description":"Existing Key Vault resource Id with an access policy to allow Microsoft.Web RP to read Key Vault secrets (Checkout README.md for more information)"
+               "description":"Existing Key Vault URI"
             }
          },
          "key_vault_id":{
@@ -41,9 +41,7 @@
         "location": {
             "type": "string",
             "allowedValues": [
-                "UK South",
-                "UK West",
-                "West Europe"
+                "UK South"
             ],
             "metadata": {
                 "description": "Location of the App Service Environment"
