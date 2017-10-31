@@ -35,3 +35,15 @@ module "frontend" {
 output "random_name" {
   value = "${var.random_name}"
 }
+
+variable "appGateway" {
+  default = "appgateway"
+}
+
+variable "key_vault_id" {
+  default = "keyvaultid"
+}
+
+variable "key_vault_uri" {
+  default = "keyvaulturi"
+}
