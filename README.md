@@ -6,6 +6,8 @@ Refer to the following links for a detailed explanation of an App Service Plan, 
 [Web Apps](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-overview) <br />
 [Application Service Environment](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-app-service-environment-intro) <br />
 
+As part of the web app creation, an SSL cert for it is created and whitelisted at the application gateway provided in the appGateway var provided in the declaration of the module
+
 ## Variables
 This module lets you host Java 8, Spring Boot, and NodeJs applications. to use this module, you need to provide the following variables:-
 
@@ -20,15 +22,15 @@ Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled w
 
 ```terraform
 module "frontend" {
-	source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67"
-	product  = "${var.product}-frontend"
-	location = "${var.location}"
-	env      = "${var.env}"
-
-	app_settings = { 
+	source     = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67"
+	product    = "${var.product}-frontend"
+	location   = "${var.location}"
+	env        = "${var.env}"
+  appGateway = ${var.appGateway}
+	app_settings = {
 		SERVICE_URL  = "url-to-backendservice"
-	} 
-} 
+	}
+}
 ```
 
 In the example above, you can set the variables using terraform variables, so you can set these values in a .tfvars file,
@@ -60,7 +62,7 @@ the 'ref=0.0.67' in the example code fragment suggests that it is using version 
 ## Unit Testing
 The unit tests are written in Python, they contain many examples of how to test different aspects of the moj-module-webapp terraform code.
 
-The following line of code from the tests.py file in the unit folder enforces the naming convention for the web app, as explained earlier the convention is 
+The following line of code from the tests.py file in the unit folder enforces the naming convention for the web app, as explained earlier the convention is
 product-env, the following code fragment enforces this in a unit test:-
 
 ```python
@@ -74,7 +76,7 @@ The int folder contains a test folder in which there are seperate folders for fi
 the terraform code that spins up the dependencies that the webapp would need in order to function in production.  The suite of integration tests run against this ephemeral infrastructure to validate the web app, once all the tests are succesfully executed the infrastructure is destroyed.  The resources created use random names so that the integration tests don't conflict with each other, if more that one person is working on the repository.  If any tests fail, the infrastructure is not automatically destroyed, this is so you can investigate the fixtures and the webapp through the Azure
 Portal, to help debug the unit test.
 
-All of this automation is driven by Chef Kitchen, the configuration of all this is in the file called .kitchen.yml at the root of the int folder.  The actual 
+All of this automation is driven by Chef Kitchen, the configuration of all this is in the file called .kitchen.yml at the root of the int folder.  The actual
 integration tests are in the default/controls sub folder in the integration folder.  All the code used to drive the integration tests are written in Ruby.  The folder default/libraries contain the ruby libraries that gather information required for the tests to execute.
 
 ## Terraform

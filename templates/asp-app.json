@@ -8,16 +8,44 @@
                 "description": "Name of the App Service Environment"
             }
         },
-        "location": { 
-            "type": "string", 
-            "allowedValues": [ 
-                "UK South", 
-                "UK West",
-                "West Europe"
-            ], 
-            "metadata": { 
-                "description": "Location of the App Service Environment" 
-            } 
+        "certificateName":{
+           "type":"string",
+           "metadata":{
+              "description":"User friendly certificate resource name"
+           }
+        },
+        "hostname":{
+           "type":"string",
+           "metadata":{
+              "description":"Custom hostname for creating SSL binding. This hostname should already be assigned to the Web App"
+           }
+        },
+        "sslVaultSecretName":{
+           "type":"string",
+           "metadata":{
+              "description":"Key Vault Secret that contains a PFX certificate"
+           }
+         },
+         "key_vault_uri":{
+            "type":"string",
+            "metadata":{
+               "description":"Existing Key Vault URI"
+            }
+         },
+         "key_vault_id":{
+            "type":"string",
+            "metadata":{
+               "description":"Existing Key Vault resource Id with an access policy to allow Microsoft.Web RP to read Key Vault secrets (Checkout README.md for more information)"
+            }
+         },
+        "location": {
+            "type": "string",
+            "allowedValues": [
+                "UK South"
+            ],
+            "metadata": {
+                "description": "Location of the App Service Environment"
+            }
          },
         "aseAppServiceWorkerPool": {
           "type": "string",
@@ -45,6 +73,9 @@
             }
         },
         "app_settings": {
+          "type": "string"
+        },
+        "dependancy": {
           "type": "string"
         }
     },
@@ -76,6 +107,17 @@
         }
       },
       {
+         "type":"Microsoft.Web/certificates",
+         "name":"[parameters('certificateName')]",
+         "apiVersion":"2016-03-01",
+         "location":"[parameters('location')]",
+         "properties":{
+            "keyVaultId":"[parameters('key_vault_id')]",
+            "keyVaultSecretName":"[parameters('sslVaultSecretName')]",
+            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms/', concat('app-compute-', parameters('env')))]"
+         }
+      },
+      {
         "name": "[parameters('name')]",
         "type": "Microsoft.Web/sites",
         "location": "[parameters('location')]",
@@ -97,7 +139,15 @@
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
           "detailedErrorLoggingEnabled": true,
-          "use32BitWorkerProcess": false
+          "use32BitWorkerProcess": false,
+          "hostNameSslStates":[
+            {
+              "name":"[parameters('hostname')]",
+              "sslState":"SniEnabled",
+              "thumbprint":"[reference(resourceId('Microsoft.Web/certificates', parameters('certificateName'))).Thumbprint]",
+              "toUpdate":true
+            }
+          ]
         },
         "resources": [
           {
@@ -108,8 +158,24 @@
               "[resourceId('Microsoft.Web/sites', parameters('name'))]"
             ],
             "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
-          }
-        ]
+          },
+          {
+            "name": "[parameters('name')]",
+            "type": "hostNameBindings",
+            "apiVersion": "2016-08-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+              "siteName": "[parameters('hostname')]",
+              "domainId": null,
+              "hostNameType": "Verified"
+            },
+            "dependsOn": [
+                  "[resourceId('Microsoft.Web/sites', parameters('name'))]",
+                  "[resourceId('Microsoft.Web/certificates', parameters('certificateName'))]"
+              ]
+            }
+          ]
       },
       {
         "type": "Microsoft.Web/sites/config",
@@ -221,4 +287,4 @@
         ]
       }
     ]
-}
+  }
