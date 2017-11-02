@@ -2,6 +2,7 @@
 @Library('Infrastructure') _
 import uk.gov.hmcts.contino.Testing
 import uk.gov.hmcts.contino.Tagging
+import groovy.json.JsonSlurper
 
 GITHUB_PROTOCOL = "https"
 GITHUB_REPO = "github.com/contino/moj-module-webapp/"
@@ -28,10 +29,10 @@ try {
         println internalip
       }
 
-  /*  stage('create_cert'){
+    stage('create_cert'){
 
     }
-*/
+
     stage('create_consul_record'){
 
     }
