@@ -20,6 +20,19 @@ try {
         checkout scm
       }
 
+      stage('Get vip') {
+        withCredentials([[$class: 'StringBinding', credentialsId: 'sp_password', variable: 'ARM_CLIENT_SECRET'],
+        [$class: 'StringBinding', credentialsId: 'tenant_id', variable: 'ARM_TENANT_ID'],
+        [$class: 'StringBinding', credentialsId: 'subscription_id', variable: 'ARM_SUBSCRIPTION_ID'],
+        [$class: 'StringBinding', credentialsId: 'object_id', variable: 'ARM_CLIENT_ID']]) {
+        def response = httpRequest httpMode: 'POST', requestBody: "grant_type=client_credentials&resource=https%3A%2F%2Fmanagement.core.windows.net%2F&client_id=$ARM_CLIENT_ID&client_secret=$ARM_CLIENT_SECRET", acceptType: 'APPLICATION_JSON', url: "https://login.microsoftonline.com/$ARM_TENANT_ID/oauth2/token"
+        TOKEN = new JsonSlurper().parseText(response.content).access_token
+        def vip = httpRequest httpMode: 'GET', customHeaders: [[name: 'Authorization', value: "Bearer ${TOKEN}"]], url: "https://management.azure.com/subscriptions/$ARM_SUBSCRIPTION_ID/resourceGroups/applications-infra-mo-dev/providers/Microsoft.Web/hostingEnvironments/applications-compute-4-dev/capacities/virtualip?api-version=2016-09-01"
+        def internalip = new JsonSlurper().parseText(vip.content).internalIpAddress
+        println internalip
+      }
+    }
+
       terraform.ini(this)
       stage('Terraform Linting Checks') {
         terraform.lint()
