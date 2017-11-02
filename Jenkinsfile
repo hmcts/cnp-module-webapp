@@ -27,7 +27,6 @@ try {
         def internalip = new JsonSlurper().parseText(vip.content).internalIpAddress
         println internalip
       }
-    }
 
   /*  stage('create_cert'){
 
