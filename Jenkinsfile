@@ -28,7 +28,7 @@ try {
         def script = "./create-cert.sh"
         def command = "bash ${script} ${app} ${pxfPass}"
         "script".execute()
-        String pxfPass = ""
+        pxfPass = ""
       }
 
       stage('create_consul_record'){
