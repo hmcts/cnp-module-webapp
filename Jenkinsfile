@@ -24,9 +24,8 @@ try {
 
       stage('ssl_creation') {
         String pxfPass = org.apache.commons.lang.RandomStringUtils.random(9, true, true)
-        println pxfPass
         def script = "./create-cert.sh"
-        def command = "bash ${script} ${app} ${pxfPass}"
+        def command = "bash ${script} ${BUILD_NUMBER} ${pxfPass}"
         "script".execute()
         pxfPass = ""
       }

@@ -37,4 +37,3 @@ openssl x509 -req -in \*.$domain.csr -signkey \*.$domain.key -out $domain.cer
 openssl pkcs12 -export -in $domain.cer -inkey \*.$domain.key -out $domain.pfx -password pass:$pfxPass
 
 rm -f \*.$domain.key \*.$domain.csr $domain.conf
-
