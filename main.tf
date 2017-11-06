@@ -25,6 +25,5 @@ resource "azurerm_template_deployment" "app_service_site" {
     hostname           = "${var.product}-${var.env}.service.internal"
     sslVaultSecretName = "${var.product}-${var.env}"
     key_vault_id       = "${var.key_vault_id}"
-    key_vault_uri      = "${var.key_vault_uri}"
   }
 }

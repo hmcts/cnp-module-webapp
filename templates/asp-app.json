@@ -26,12 +26,6 @@
               "description":"Key Vault Secret that contains a PFX certificate"
            }
          },
-         "key_vault_uri":{
-            "type":"string",
-            "metadata":{
-               "description":"Existing Key Vault URI"
-            }
-         },
          "key_vault_id":{
             "type":"string",
             "metadata":{

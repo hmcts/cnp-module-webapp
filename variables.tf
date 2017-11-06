@@ -23,3 +23,5 @@ variable "app_settings_defaults" {
     NODE_PATH                    = "D:\\home\\site\\wwwroot"
   }
 }
+
+variable "key_vault_id" {}
