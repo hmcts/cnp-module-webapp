@@ -8,6 +8,10 @@ uri=$3
 #get ip of consul
 consul=$(az vmss nic list --resource-group $rg --vmss-name consul-server --query "[0].ipConfigurations[0].privateIpAddress")
 
+consul=$(echo "$consul" | sed -e 's/^"//' -e 's/"$//')
+
+echo $consul
+
 # Create 2 consul entries (service + scm)
 sed -i -e "s/serviceId/$domain/g" $uri/consul.json
 sed -i -e "s/serviceName/$domain/g" $uri/consul.json
