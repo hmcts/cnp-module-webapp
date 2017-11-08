@@ -34,6 +34,6 @@ resource "null_resource" "consul" {
   }
 
   provisioner "local-exec" {
-    command = "bash -e ${path.module}/createDns.sh ${var.product}-${var.env} core-infra-prod"
+    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}' 'core-infra-prod' '${path.module}'"
   }
 }
