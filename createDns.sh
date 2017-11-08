@@ -29,7 +29,7 @@ sed -i -e "s/aseIlb/$consul/g" "${uri}/consul.json"
 curl --request PUT --data $uri/consul.json "http://${consul}:8500/v1/agent/service/register"
 
 sed -i -e "s/$domain/scm/g" "${uri}/consul.json"
-sed -i -e "s/\[\]/\[$domain\]/g" "${uri}/consul.json"
+sed -i -e "s/\[\]/\[\"$domain\"\]/g" "${uri}/consul.json"
 
 
 curl --request PUT --data $uri/consul.json "http://${consul}:8500/v1/agent/service/register"
