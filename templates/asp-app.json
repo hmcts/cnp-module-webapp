@@ -89,8 +89,8 @@
           },
           "properties": {
             "name": "[parameters('name')]",
-            "hostingEnvironment": "[concat('app-compute-', parameters('env'))]",
-            "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('app-compute-', parameters('env')))]"
+            "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+            "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
           },
           "sku": {
             "name": "I2",
@@ -108,7 +108,7 @@
          "properties":{
             "keyVaultId":"[parameters('key_vault_id')]",
             "keyVaultSecretName":"[parameters('sslVaultSecretName')]",
-            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms/', concat('app-compute-', parameters('env')))]"
+            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms/', concat('core-compute-', parameters('env')))]"
          }
       },
       {
@@ -127,8 +127,8 @@
         "properties": {
           "name": "[parameters('name')]",
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('name'))]",
-          "hostingEnvironment": "[concat('app-compute-', parameters('env'))]",
-          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('app-compute-', parameters('env')))]",
+          "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]",
           "scmType": "LocalGit",
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
