@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-rg=$1
-domain=$1
 
+domain=$1
+rg=$2
 
 #get ip of consul
 consul=$(az vmss nic list --resource-group $rg --vmss-name consul-server --query "[0].ipConfigurations[0].privateIpAddress")
