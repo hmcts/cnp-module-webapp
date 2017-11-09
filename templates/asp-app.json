@@ -105,7 +105,7 @@
          "properties":{
             "keyVaultId":"[parameters('key_vault_id')]",
             "keyVaultSecretName":"[parameters('sslVaultSecretName')]",
-            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms/', concat('core-compute-', parameters('env')))]"
+            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms/', parameters('name'))]"
          }
       },
       {
