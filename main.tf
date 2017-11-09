@@ -22,10 +22,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     #env = "${var.env}"
     env = "prod"
     app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
-    certificateName = "webapp"  #"${var.product}-${var.env}"
     hostname = "${var.product}-${var.env}.service.consul"
-    sslVaultSecretName = "webapp" #"${var.product}-${var.env}"
-    key_vault_id = "${var.key_vault_id}"
   }
 }
 
