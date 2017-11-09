@@ -19,7 +19,8 @@ resource "azurerm_template_deployment" "app_service_site" {
   parameters = {
     name = "${var.product}-${var.env}"
     location = "${var.location}"
-    env = "${var.env}"
+    #env = "${var.env}"
+    env = "prod"
     app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
     certificateName = "webapp"
     hostname = "${var.product}-${var.env}.service.consul"
