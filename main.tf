@@ -27,7 +27,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     key_vault_id = "${var.key_vault_id}"
   }
 }
-
+/*
 resource "null_resource" "consul" {
   triggers {
     trigger = "${azurerm_template_deployment.app_service_site.name}"
@@ -36,4 +36,4 @@ resource "null_resource" "consul" {
   provisioner "local-exec" {
     command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}' 'core-infra-prod' '${path.module}' '${var.ilbIp}'"
   }
-}
+}*/
