@@ -3,14 +3,6 @@
 import uk.gov.hmcts.contino.Testing
 import uk.gov.hmcts.contino.Tagging
 
-GITHUB_PROTOCOL = "https"
-GITHUB_REPO = "github.com/contino/moj-module-webapp/"
-
-properties(
-    [[$class: 'GithubProjectProperty', projectUrlStr: 'https://www.github.com/contino/moj-module-webapp/'],
-     pipelineTriggers([[$class: 'GitHubPushTrigger']])]
-)
-
 try {
   node {
     platformSetup {
