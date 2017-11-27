@@ -19,8 +19,7 @@ resource "azurerm_template_deployment" "app_service_site" {
   parameters = {
     name = "${var.product}-${var.env}"
     location = "${var.location}"
-    #env = "${var.env}"
-    env = "prod"
+    env = "${var.env}"
     app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
     hostname = "${var.product}-${var.env}.service.core-compute-prod.internal"
   }
