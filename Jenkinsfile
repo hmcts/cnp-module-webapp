@@ -23,7 +23,8 @@ try {
       }
 
       stage('Terraform Integration Testing') {
-        testLib.moduleIntegrationTests()
+        // Disabled until moj-azure-inspec is open sourced CNP-260
+        // testLib.moduleIntegrationTests()
       }
 
       stage('Tagging') {
