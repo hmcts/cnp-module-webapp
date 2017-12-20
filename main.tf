@@ -11,26 +11,84 @@ data "template_file" "sitetemplate" {
 
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
-  template_body = "${data.template_file.sitetemplate.rendered}"
-  name = "${var.product}-${var.env}"
+  template_body       = "${data.template_file.sitetemplate.rendered}"
+  name                = "${var.product}-${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
-  deployment_mode = "Incremental"
+  deployment_mode     = "Incremental"
 
   parameters = {
-    name = "${var.product}-${var.env}"
-    location = "${var.location}"
-    env = "${var.env}"
-    app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
-    hostname = "${var.product}-${var.env}.service.core-compute-prod.internal"
+    name               = "${var.product}-${var.env}"
+    location           = "${var.location}"
+    env                = "${var.env}"
+    app_settings       = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
+    certificateName    = "${var.product}-${var.env}"
+    hostname           = "${var.product}-${var.env}.service.internal"
+    sslVaultSecretName = "${var.product}-${var.env}"
+    key_vault_id       = "${var.key_vault_id}"
+    key_vault_uri      = "${var.key_vault_uri}"
+    dependancy         = "${azurerm_key_vault_certificate.ssl.id}"
   }
 }
 
-resource "null_resource" "consul" {
+// creates self-signed cert to be assigned to webapp. domain must not overlap
+// the domains to be used by webapps. For more info see
+// https://docs.microsoft.com/en-us/azure/app-service/environment/create-ilb-ase
+resource "azurerm_key_vault_certificate" "ssl" {
+  name      = "${var.product}-${var.env}"
+  vault_uri = "${var.key_vault_uri}"
+
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 2048
+      key_type   = "RSA"
+      reuse_key  = true
+    }
+
+    lifetime_action {
+      action {
+        action_type = "AutoRenew"
+      }
+
+      trigger {
+        days_before_expiry = 30
+      }
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+
+    x509_certificate_properties {
+      key_usage = [
+        "cRLSign",
+        "dataEncipherment",
+        "digitalSignature",
+        "keyAgreement",
+        "keyCertSign",
+        "keyEncipherment",
+      ]
+
+      subject = "CN=${var.product}-${var.env}.service.internal"
+      validity_in_months = 12
+    }
+  }
+}
+
+resource "null_resource" "pub_key_whitelist" {
+
   triggers {
-    trigger = "${azurerm_template_deployment.app_service_site.name}"
+    certificate = "${azurerm_key_vault_certificate.ssl.id}"
   }
 
   provisioner "local-exec" {
-    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}' 'core-infra-${var.env}' '${path.module}' '${var.ilbIp}'"
+
+    command = "bash -e ${path.module}/pubkey_whitelist.sh ${var.product}-${var.env} ${var.appGateway} ${azurerm_resource_group.rg.name}"
+
   }
+
 }
