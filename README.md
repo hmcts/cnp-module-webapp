@@ -37,6 +37,7 @@ module "frontend" {
 In the example above, you can set the variables using terraform variables, so you can set these values in a .tfvars file,
 or pass them in from a Jenkins file.
 
+
 For a complete example of provisioning NodeJs, Java or Springboot application infrastructure, please refer to the repo moj-probate-infrastructure.
 
 Creating a web app to host your application will create a Resource Group containing an App Service Plan, and a Web App.
