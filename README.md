@@ -22,13 +22,14 @@ Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled w
 
 ```terraform
 module "frontend" {
-	source     = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67"
-	product    = "${var.product}-frontend"
-	location   = "${var.location}"
-	env        = "${var.env}"
-  appGateway = ${var.appGateway}
+	source   = "git@github.com:contino/moj-module-webapp?ref=0.0.78"
+	product  = "${var.product}-frontend"
+	location = "${var.location}"
+	env      = "${var.env}"
+	asename  = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+
 	app_settings = {
-		SERVICE_URL  = "url-to-backendservice"
+		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
 }
 ```
