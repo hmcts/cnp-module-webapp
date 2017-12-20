@@ -26,6 +26,19 @@ class TestWebAppResources(unittest.TestCase):
         self.v.enable_variable_expansion()
         self.v.resources('azurerm_resource_group').property('location').should_equal('UK South')
 
+    def test_appinsights_properties(self):
+        """Assert that Application Insights resource has the right properties.
+        """
+        self.v.resources('azurerm_application_insights').should_have_properties(['name', 'location', 'resource_group_name', 'application_type'])
+
+    def test_appinsights_properties_values(self):
+        """Assert that Application Insights resource has the right values.
+        """
+        self.v.error_if_property_missing()
+        self.v.enable_variable_expansion()
+        self.v.resources('azurerm_application_insights').property('location').should_equal('West Europe')
+        self.v.resources('azurerm_application_insights').property('application_type').should_equal('Web')
+
     def test_template_deployment_properties(self):
         """Assert that the template deployment resource has the
         right properties.
