@@ -7,6 +7,13 @@ variable "location" {
   default = "UK South"
 }
 
+// as of now, UK South is unavailable for Application Insights
+variable "appinsights_location" {
+  type    = "string"
+  default = "West Europe"
+  description = "Location for Application Insights"
+}
+
 variable "env" {
   type = "string"
 }
@@ -25,3 +32,9 @@ variable "app_settings_defaults" {
 }
 
 variable "ilbIp" {}
+
+variable "application_type" {
+  type = "string"
+  default = "Web"
+  description = "Type of Application Insights (Web/Other)"
+}
