@@ -9,6 +9,20 @@ data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"
 }
 
+# Create Application Insights for the service
+resource "azurerm_application_insights" "appinsights" {
+  name                = "${var.product}-appinsights-${var.env}"
+  location            = "${var.appinsights_location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  application_type    = "${var.application_type}"
+}
+
+locals {
+  app_settings_evaluated = {
+    APPLICATION_INSIGHTS_IKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
+  }
+}
+
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
   template_body = "${data.template_file.sitetemplate.rendered}"
@@ -20,7 +34,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     name = "${var.product}-${var.env}"
     location = "${var.location}"
     env = "${var.env}"
-    app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings))}"
+    app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings, local.app_settings_evaluated))}"
     hostname = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
     stagingSlotName = "${var.staging_slot_name}"
   }
