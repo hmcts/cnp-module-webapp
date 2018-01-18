@@ -50,6 +50,13 @@
         },
         "app_settings": {
           "type": "string"
+        },
+        "stagingSlotName": {
+          "type": "string",
+          "defaultValue": "staging",
+          "metadata": {
+            "description": "Defines the name of the staging slot. (Default: staging)"
+          }
         }
     },
     "variables": {
@@ -126,6 +133,22 @@
             },
             "dependsOn": [
                   "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+              ]
+            },
+            {
+              "apiVersion": "2016-08-01",
+              "name": "[parameters('stagingSlotName')]",
+              "type": "slots",
+              "tags": {
+                "displyName": "[parameters('stagingSlotName')] Slot"
+              },
+              "location": "[parameters['location']]",
+              "dependsOn": [
+                "resourceId('Microsoft.Web/sites', parameters['name'])"
+              ],
+              "properties": {
+              },
+              "resources": [
               ]
             }
           ]
