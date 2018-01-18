@@ -24,4 +24,9 @@ variable "app_settings_defaults" {
   }
 }
 
+variable "staging_slot_name" {
+  type = "string"
+  default = "staging"
+}
+
 variable "ilbIp" {}
