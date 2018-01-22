@@ -142,9 +142,9 @@
               "tags": {
                 "displyName": "[parameters('stagingSlotName')] Slot"
               },
-              "location": "[parameters['location']]",
+              "location": "[parameters('location')]",
               "dependsOn": [
-                "resourceId('Microsoft.Web/sites', parameters['name'])"
+                "resourceId('Microsoft.Web/sites', parameters('name'))"
               ],
               "properties": {
               },
