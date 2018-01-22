@@ -22,16 +22,22 @@ echo $consul
 
 echo "-----------------------"
 
+register_dns () {
+  domain=$1
+  uri=$2
+  ilbIp=$3
+
+  tmp_dir=$(mktemp -d)
+  cp "${uri}/consul.json" "$tmp_dir"
+  sed -i -e "s/serviceId/$domain/g" "$tmp_dir/consul.json"
+  sed -i -e "s/serviceName/$domain/g" "$tmp_dir/consul.json"
+  sed -i -e "s/aseIlb/$ilbIp/g" "$tmp_dir/consul.json"
+
+  curl -T "$tmp_dir/consul.json" "http://${consul}:8500/v1/agent/service/register"
+}
 
 # Create 2 consul entries (service + scm)
-sed -i -e "s/serviceId/$domain/g" "${uri}/consul.json"
-sed -i -e "s/serviceName/$domain/g" "${uri}/consul.json"
-sed -i -e "s/aseIlb/$ilbIp/g" "${uri}/consul.json"
 
-curl -T "${uri}/consul.json" "http://${consul}:8500/v1/agent/service/register"
+register_dns $domain $uri $ilbIp
 
-sed -i -e "s/$domain/scm/g" "${uri}/consul.json"
-sed -i -e "s/\[\]/\[\"$domain\"\]/g" "${uri}/consul.json"
-
-
-curl -T "${uri}/consul.json" "http://${consul}:8500/v1/agent/service/register"
+register_dns scm $uri $ilbIp
