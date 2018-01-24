@@ -29,9 +29,3 @@ sed -i -e "s/serviceName/$domain/g" "${uri}/consul.json"
 sed -i -e "s/aseIlb/$ilbIp/g" "${uri}/consul.json"
 
 curl -T "${uri}/consul.json" "http://${consul}:8500/v1/agent/service/register"
-
-sed -i -e "s/$domain/scm/g" "${uri}/consul.json"
-sed -i -e "s/\[\]/\[\"$domain\"\]/g" "${uri}/consul.json"
-
-
-curl -T "${uri}/consul.json" "http://${consul}:8500/v1/agent/service/register"
