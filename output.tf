@@ -3,7 +3,7 @@ output "webapp_name" {
 }
 
 output "gitendpoint" {
-  value = "${azurerm_template_deployment.app_service_site.name}.scm.service.core-compute-prod.internal/${azurerm_template_deployment.app_service_site.name}.git"
+  value = "I AM DEPRECATED! PLEASE REMOVE ALL REFERENCES TO module.<WEB_APP>.gitendpoint!"
 }
 
 output "url" {
