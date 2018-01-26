@@ -39,5 +39,3 @@ register_dns () {
 # Create 2 consul entries (service + scm)
 
 register_dns $domain $uri $ilbIp
-
-register_dns scm $uri $ilbIp
