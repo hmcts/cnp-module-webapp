@@ -147,6 +147,9 @@
                 "[resourceId('Microsoft.Web/sites', parameters('name'))]"
               ],
               "properties": {
+                "javaVersion": "1.8",
+                "javaContainer": "TOMCAT",
+                "javaContainerVersion": "8.0"
               },
               "resources": [
                 {
