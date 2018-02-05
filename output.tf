@@ -9,3 +9,7 @@ output "gitendpoint" {
 output "url" {
   value = "http://${azurerm_template_deployment.app_service_site.name}.service.internal"
 }
+
+output "resource_group_name" {
+  value = "${azurerm_resource_group.rg.name}"
+}
