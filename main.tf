@@ -6,7 +6,7 @@ resource "azurerm_resource_group" "rg" {
 
 # The ARM template that creates a web app and app service plan
 data "template_file" "sitetemplate" {
-  template = "${file("${path.module}/templates/asp-app.v2.json")}"
+  template = "${file("${path.module}/templates/asp-app.json")}"
 }
 
 # Create Application Service site
