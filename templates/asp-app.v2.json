@@ -111,8 +111,7 @@
           "logsDirectorySizeLimit": 35,
           "javaVersion": "1.8",
           "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
-          "appSettings": "[base64ToJson(variables('base64AppSettingObject'))]"
+          "javaContainerVersion": "8.0"
         }
       },
       "resources": [
@@ -148,8 +147,7 @@
           "logsDirectorySizeLimit": 35,
           "javaVersion": "1.8",
           "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
-          "appSettings": "[base64ToJson(variables('base64AppSettingObject'))]"
+          "javaContainerVersion": "8.0"
         }
       },
       "dependsOn": [
