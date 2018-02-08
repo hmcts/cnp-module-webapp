@@ -4,6 +4,7 @@
   "parameters": {
     "name": {
       "type": "string",
+      "defaultValue": "debug",
       "metadata": {
         "description": "Name of the App Service Environment"
       }
