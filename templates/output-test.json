@@ -1,0 +1,23 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "test-string": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "base64AppSettingObject": "[base64(parameters('test-string'))]",
+        "jsonAppSettingObject": "[base64ToJson(variables('base64AppSettingObject'))]"
+    },
+    "outputs": {
+        "test-string": {
+            "type": "string",
+            "value": "[parameters('test-string')]"
+        },
+        "test-string-base64-json": {
+            "type": "object",
+            "value": "[base64ToJson(variables('base64AppSettingObject'))]"
+        }
+    }
+}

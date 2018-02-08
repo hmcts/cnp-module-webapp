@@ -60,8 +60,7 @@
     }
   },
   "variables": {
-    "base64AppSettingObject": "[base64(parameters('app_settings'))]",
-    "jsonAppSettingObject": "[base64ToJson(variables('base64AppSettingObject'))]"
+    "base64AppSettingObject": "[base64(parameters('app_settings'))]"
   },
   "resources": [
     {
@@ -114,7 +113,7 @@
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
           "appSettings": [
-            "[variables('jsonAppSettingObject')]"
+            "[base64ToJson(variables('base64AppSettingObject'))]"
           ]
         }
       },
@@ -152,8 +151,8 @@
           "javaVersion": "1.8",
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
-          "appSettings": [
-            "[variables('jsonAppSettingObject')]"
+                    "appSettings": [
+            "[base64ToJson(variables('base64AppSettingObject'))]"
           ]
         }
       },
