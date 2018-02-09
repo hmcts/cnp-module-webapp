@@ -38,6 +38,12 @@ variable "staging_slot_name" {
 
 variable "ilbIp" {}
 
+variable "resource_group_name" {
+  type = "string"
+  default = ""
+  description = "Resource group name for the web application. If empty, the default will be set"
+}
+
 variable "application_type" {
   type = "string"
   default = "Web"
