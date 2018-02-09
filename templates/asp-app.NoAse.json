@@ -23,10 +23,29 @@
         "description": "Location of the App Service Environment"
       }
     },
+    "aseAppServiceWorkerPool": {
+      "type": "string",
+      "allowedValues": [
+        "1",
+        "2",
+        "3"
+      ],
+      "defaultValue": "1",
+      "metadata": {
+        "description": "Defines which worker pool's (WP1, WP2 or WP3) resources will be used for the app service plan."
+      }
+    },
+    "aseAppServiceNumberOfWorkers": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "Defines the number of workers from the worker pool that will be used by the app service plan."
+      }
+    },
     "env": {
       "type": "string",
       "metadata": {
-        "description": "Environment Specific tag"
+        "description": "The tag"
       }
     },
     "app_settings": {
@@ -54,16 +73,12 @@
         "environment": "[parameters('env')]"
       },
       "properties": {
-        "name": "[parameters('name')]",
-        "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-        "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
+        "name": "[parameters('name')]"
       },
       "sku": {
-        "name": "I2",
-        "tier": "Isolated",
-        "size": "I2",
-        "family": "I",
-        "capacity": 2
+        "name": "S1",
+        "size": "S1",
+        "tier": "Standard"
       }
     },
     {
@@ -96,29 +111,16 @@
         }
       },
       "resources": [
-        {
-          "apiVersion": "2016-08-01",
-          "name": "appsettings",
-          "type": "config",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-          ],
-          "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
-        },
-        {
-          "name": "[parameters('name')]",
-          "type": "hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[parameters('hostname')]"
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-          ]
-        }
-      ]
+          {
+            "apiVersion": "2016-08-01",
+            "name": "appsettings",
+            "type": "config",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+            ],
+            "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
+          }
+        ]
     },
     {
       "apiVersion": "2016-08-01",
@@ -144,16 +146,16 @@
         }
       },
       "resources": [
-        {
-          "apiVersion": "2016-08-01",
-          "name": "appsettings",
-          "type": "config",
-          "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
-          ],
-          "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
-        }
-      ]
+          {
+            "apiVersion": "2016-08-01",
+            "name": "appsettings",
+            "type": "config",
+            "dependsOn": [
+              "[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
+            ],
+            "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
+          }
+        ]
     }
   ]
 }
