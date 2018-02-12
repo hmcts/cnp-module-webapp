@@ -26,8 +26,9 @@ variable "app_settings_defaults" {
   type = "map"
 
   default = {
-    WEBSITE_NODE_DEFAULT_VERSION = "6.11.1"
-    NODE_PATH                    = "D:\\home\\site\\wwwroot"
+    WEBSITE_NODE_DEFAULT_VERSION                     = "6.11.1"
+    NODE_PATH                                        = "D:\\home\\site\\wwwroot"
+    WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION = "0"
   }
 }
 
