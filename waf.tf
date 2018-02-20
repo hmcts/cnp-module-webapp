@@ -100,5 +100,6 @@ resource "azurerm_application_gateway" "waf" {
     host                = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
     interval            = "${var.healthCheckInterval}"
     unhealthy_threshold = "${var.unhealthyThreshold}"
+    timeout             = "60"
   }
 }
