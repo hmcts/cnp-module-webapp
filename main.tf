@@ -24,7 +24,9 @@ resource "azurerm_application_insights" "appinsights" {
 
 locals {
   app_settings_evaluated = {
+    # Java and nodejs sdks expect different vars for application insights, go microsoft.
     APPLICATION_INSIGHTS_IKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
+    APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
   }
 }
 
