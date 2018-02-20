@@ -23,7 +23,7 @@ resource "azurerm_application_gateway" "waf" {
  
   gateway_ip_configuration {
     name      = "appGatewayIpConfig"
-    subnet_id = "${data.terraform_remote_state.core_infra.vnetname/subnets/${data.terraform_remote_state.core_infra.subnet_names[0]}"
+    subnet_id = "${data.terraform_remote_state.core_infra.vnetname}/subnets/${data.terraform_remote_state.core_infra.subnet_names[0]}"
   }
 
   frontend_port {
