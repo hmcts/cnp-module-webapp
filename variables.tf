@@ -37,8 +37,6 @@ variable "staging_slot_name" {
   default = "staging"
 }
 
-variable "ilbIp" {}
-
 variable "resource_group_name" {
   type = "string"
   default = ""
@@ -73,4 +71,13 @@ variable "healthCheckInterval" {
 variable "unhealthyThreshold" {
   default     = "3"
   description = "unhealthy threshold applied to healthprobe"
+}
+
+variable "infra_location" {
+  type    = "string"
+  default = "core-infra"
+}
+
+variable "subscription" {
+  type = "string"
 }
