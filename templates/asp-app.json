@@ -8,10 +8,10 @@
         "description": "Name of the App Service Environment"
       }
     },
-    "hostname": {
-      "type": "string",
+    "hostnames": {
+      "type": "array",
       "metadata": {
-        "description": "Custom hostname for creating SSL binding. This hostname should already be assigned to the Web App"
+        "description": "The hostnames this application should be accessible on"
       }
     },
     "location": {
@@ -107,12 +107,14 @@
         },
         {
           "name": "[parameters('name')]",
+          "name": "parameters('hostnames'))]",
+
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('hostname')]"
+            "siteName": "[parameters('hostnames[0]')]"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"

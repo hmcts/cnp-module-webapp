@@ -50,3 +50,8 @@ variable "application_type" {
   default = "Web"
   description = "Type of Application Insights (Web/Other)"
 }
+
+variable "additional_host_name" {
+  default = ""
+  description = "An additional hostname the app should be available on, e.g. an external hostname"
+}
