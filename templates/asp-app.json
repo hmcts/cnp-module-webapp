@@ -112,7 +112,7 @@
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('hostnames[0]')]"
+            "siteName": "[parameters('name')]"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
