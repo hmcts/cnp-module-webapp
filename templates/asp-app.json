@@ -106,9 +106,7 @@
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
         },
         {
-          "name": "[parameters('name')]",
           "name": "parameters('hostnames'))]",
-
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",

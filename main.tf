@@ -49,7 +49,7 @@ resource "azurerm_template_deployment" "app_service_site" {
 
 resource "null_resource" "consul" {
   triggers {
-    trigger = "${azurerm_template_deployment.app_service_site.name}"
+    trigger = "${azurerm_template_deployment.app_service_site.name[0]}"
   }
 
   # register 'production' slot dns
