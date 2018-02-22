@@ -27,7 +27,7 @@ locals {
     APPLICATION_INSIGHTS_IKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
   }
   internal_hostname = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
-  hostnames = "${compact(list(${local.internal_hostname}, ${var.additional_host_name}))}"
+  hostnames = "${compact(list(local.internal_hostname, var.additional_host_name))}"
 }
 
 # Create Application Service site
