@@ -8,13 +8,6 @@
         "description": "Name of the App Service Environment"
       }
     },
-    "blah1": {
-      "type": "string",
-      "defaultValue": "notblah",
-      "metadata": {
-        "description": "blaaa"
-      }
-    },
     "hostname": {
       "type": "string",
       "metadata": {
