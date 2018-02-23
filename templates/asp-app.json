@@ -8,10 +8,23 @@
         "description": "Name of the App Service Environment"
       }
     },
-    "hostnames": {
-      "type": "array",
+    "blah1": {
+      "type": "string",
+      "defaultValue": "notblah",
       "metadata": {
-        "description": "The hostnames this application should be accessible on"
+        "description": "blaaa"
+      }
+    },
+    "hostname": {
+      "type": "string",
+      "metadata": {
+        "description": "The hostname this application should be accessible on"
+      }
+    },
+    "additional_host_name": {
+      "type": "string",
+      "metadata": {
+        "description": "An additional hostname this application should be accessible on"
       }
     },
     "location": {
@@ -106,13 +119,39 @@
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
         },
         {
-          "name": "parameters('hostnames'))]",
-          "type": "hostNameBindings",
+          "name": "[concat(parameters('name'), '/', parameters('name'))]",
+          "type": "Microsoft.Web/sites/hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
             "siteName": "[parameters('name')]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+          ]
+        },
+        {
+          "name": "[concat(parameters('name'), '/', parameters('hostname'))]",
+          "type": "Microsoft.Web/sites/hostNameBindings",
+          "apiVersion": "2016-08-01",
+          "location": "[parameters('location')]",
+          "tags": {},
+          "properties": {
+            "siteName": "[parameters('hostname')]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+          ]
+        },
+        {
+          "name": "[concat(parameters('name'), '/', parameters('additional_host_name'))]",
+          "type": "Microsoft.Web/sites/hostNameBindings",
+          "apiVersion": "2016-08-01",
+          "location": "[parameters('location')]",
+          "tags": {},
+          "properties": {
+            "siteName": "[parameters('additional_host_name')]"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"

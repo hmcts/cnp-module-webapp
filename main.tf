@@ -5,7 +5,7 @@ locals {
 
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
-  name     = "${local.resource_group_name}"
+  name = "${local.resource_group_name}"
   location = "${var.location}"
 }
 
@@ -16,18 +16,16 @@ data "template_file" "sitetemplate" {
 
 # Create Application Insights for the service
 resource "azurerm_application_insights" "appinsights" {
-  name                = "${var.product}-appinsights-${var.env}"
-  location            = "${var.appinsights_location}"
+  name = "${var.product}-appinsights-${var.env}"
+  location = "${var.appinsights_location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
-  application_type    = "${var.application_type}"
+  application_type = "${var.application_type}"
 }
 
 locals {
   app_settings_evaluated = {
     APPLICATION_INSIGHTS_IKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
   }
-  internal_hostname = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
-  hostnames = "${compact(list(local.internal_hostname, var.additional_host_name))}"
 }
 
 # Create Application Service site
@@ -42,7 +40,9 @@ resource "azurerm_template_deployment" "app_service_site" {
     location = "${var.location}"
     env = "${var.env}"
     app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings, local.app_settings_evaluated))}"
-    hostnames = "${local.hostnames}"
+    hostname = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
+    additional_host_name = "${var.additional_host_name}"
+    blah1 = "hi"
     stagingSlotName = "${var.staging_slot_name}"
   }
 }
