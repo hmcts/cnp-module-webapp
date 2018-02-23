@@ -119,26 +119,14 @@
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
         },
         {
-          "name": "[concat(parameters('name'), '/', parameters('name'))]",
-          "type": "Microsoft.Web/sites/hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[parameters('name')]"
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-          ]
-        },
-        {
           "name": "[concat(parameters('name'), '/', parameters('hostname'))]",
           "type": "Microsoft.Web/sites/hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('hostname')]"
+            "siteName": "[parameters('hostname')]",
+            "hostNameType": "Verified"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
@@ -151,7 +139,8 @@
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('additional_host_name')]"
+            "siteName": "[parameters('additional_host_name')]",
+            "hostNameType": "Verified"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
