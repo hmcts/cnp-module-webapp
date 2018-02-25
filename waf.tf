@@ -55,13 +55,13 @@ resource "azurerm_application_gateway" "waf" {
     probe_name            = "http"
   }
 
-  # backend_http_settings {
-  #   name                  = "backendSettingsHTTPS"
-  #   cookie_based_affinity = "Disabled"
-  #   port                  = 443
-  #   protocol              = "Https"
-  #   request_timeout       = 1
-  # }
+  backend_http_settings {
+    name                  = "backendSettingsHTTPS"
+    cookie_based_affinity = "Disabled"
+    port                  = 443
+    protocol              = "Https"
+    request_timeout       = 1
+  }
 
   http_listener {
     name                           = "httplstn"
@@ -75,7 +75,7 @@ resource "azurerm_application_gateway" "waf" {
   #   frontend_ip_configuration_name = "appGW-IP"
   #   frontend_port_name             = "http443"
   #   protocol                       = "Https"
-  #   ssl_certificate_name           = "${var.}"
+  #   ssl_certificate_name           = "${var.env}"
   # } 
 
   request_routing_rule {
