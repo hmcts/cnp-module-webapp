@@ -61,6 +61,7 @@ resource "azurerm_application_gateway" "waf" {
     port                  = 443
     protocol              = "Https"
     request_timeout       = 1
+    probe_name            = "https"
   }
 
   http_listener {
