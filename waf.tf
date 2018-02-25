@@ -75,7 +75,7 @@ resource "azurerm_application_gateway" "waf" {
   #   frontend_ip_configuration_name = "appGW-IP"
   #   frontend_port_name             = "http443"
   #   protocol                       = "Https"
-  #   ssl_certificate_name           =
+  #   ssl_certificate_name           = "${var.}"
   # } 
 
   request_routing_rule {
@@ -96,6 +96,16 @@ resource "azurerm_application_gateway" "waf" {
   probe {
     name                = "http"
     protocol            = "http"
+    path                = "${var.healthCheck}"
+    host                = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
+    interval            = "${var.healthCheckInterval}"
+    unhealthy_threshold = "${var.unhealthyThreshold}"
+    timeout             = "60"
+  }
+
+  probe {
+    name                = "https"
+    protocol            = "https"
     path                = "${var.healthCheck}"
     host                = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
     interval            = "${var.healthCheckInterval}"
