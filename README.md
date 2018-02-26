@@ -18,16 +18,17 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications. to use t
 -	app_settings, this is the key valued pairs of application settings used by the application at runtime
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same, however you would probably replace "${var.product}-frontend" with "${var.product}-backend" so that it's obvious what it is, in the Azure portal:-
+Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false.
 
 ```terraform
 module "frontend" {
-	source   = "git@github.com:contino/moj-module-webapp?ref=0.0.78"
-	product  = "${var.product}-frontend"
-	location = "${var.location}"
-	env      = "${var.env}"
-	asename  = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
-
+	source       = "git@github.com:contino/moj-module-webapp?ref=0.0.78"
+	product      = "${var.product}-frontend"
+	location     = "${var.location}"
+	env          = "${var.env}"
+	asename      = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+	is_frontend  = true
+    subscription = "${var.subscription}"
 	app_settings = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
