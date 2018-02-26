@@ -28,7 +28,7 @@ module "frontend" {
 	env          = "${var.env}"
 	asename      = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
 	is_frontend  = true
-    subscription = "${var.subscription}"
+    	subscription = "${var.subscription}"
 	app_settings = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
