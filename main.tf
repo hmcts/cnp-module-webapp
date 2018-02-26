@@ -25,6 +25,8 @@ resource "azurerm_application_insights" "appinsights" {
 locals {
   app_settings_evaluated = {
     APPLICATION_INSIGHTS_IKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
+    # Support for nodejs apps (java apps to migrate to this env var in future PR)
+    APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
   }
 }
 
