@@ -37,8 +37,6 @@ variable "staging_slot_name" {
   default = "staging"
 }
 
-variable "ilbIp" {}
-
 variable "resource_group_name" {
   type = "string"
   default = ""
@@ -49,4 +47,37 @@ variable "application_type" {
   type = "string"
   default = "Web"
   description = "Type of Application Insights (Web/Other)"
+}
+
+variable "is_frontend" {
+  description = "if set to true, tf will create a WAF enabled application gateway"
+  default = false
+}
+
+variable "ilbIp" {
+  default = "0.0.0.0"
+}
+
+variable "healthCheck" {
+  default = "/health"
+  description = "endpoint for healthcheck"
+}
+
+variable "healthCheckInterval" {
+  default     = "60"
+  description = "interval between healthchecks in seconds"
+}
+
+variable "unhealthyThreshold" {
+  default     = "3"
+  description = "unhealthy threshold applied to healthprobe"
+}
+
+variable "infra_location" {
+  type    = "string"
+  default = "core-infra"
+}
+
+variable "subscription" {
+  type = "string"
 }
