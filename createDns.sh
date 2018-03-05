@@ -5,6 +5,7 @@ domain=$1
 rg=$2
 uri=$3
 ilbIp=$4
+subscription=$5
 
 echo "-----------------------"
 
@@ -14,7 +15,7 @@ echo $uri
 pwd
 echo "-----------------------"
 #get ip of consul
-consul=$(az vmss nic list --resource-group $rg --vmss-name consul-server --query "[0].ipConfigurations[0].privateIpAddress")
+consul=$(env AZURE_CONFIG_DIR=/opt/jenkins/.azure-$subscription az vmss nic list --resource-group $rg --vmss-name consul-server --query "[0].ipConfigurations[0].privateIpAddress")
 
 consul=$(echo "$consul" | sed -e 's/^"//' -e 's/"$//')
 
