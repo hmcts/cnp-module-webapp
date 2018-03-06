@@ -92,7 +92,8 @@
           "logsDirectorySizeLimit": 35,
           "javaVersion": "1.8",
           "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0"
+          "javaContainerVersion": "8.0",
+          "alwaysOn": true
         }
       },
       "resources": [
@@ -140,7 +141,8 @@
           "logsDirectorySizeLimit": 35,
           "javaVersion": "1.8",
           "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0"
+          "javaContainerVersion": "8.0",
+          "alwaysOn": true
         }
       },
       "resources": [
