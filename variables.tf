@@ -26,7 +26,7 @@ variable "app_settings_defaults" {
   type = "map"
 
   default = {
-    WEBSITE_NODE_DEFAULT_VERSION                     = "6.11.1"
+    WEBSITE_NODE_DEFAULT_VERSION                     = "8.9.4"
     NODE_PATH                                        = "D:\\home\\site\\wwwroot"
     WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION = "0"
   }
@@ -36,8 +36,6 @@ variable "staging_slot_name" {
   type = "string"
   default = "staging"
 }
-
-variable "ilbIp" {}
 
 variable "resource_group_name" {
   type = "string"
@@ -54,4 +52,37 @@ variable "application_type" {
 variable "additional_host_name" {
   default = ""
   description = "An additional hostname the app should be available on, e.g. an external hostname"
+}
+
+variable "is_frontend" {
+  description = "if set to true, tf will create a WAF enabled application gateway"
+  default = false
+}
+
+variable "ilbIp" {
+  default = "0.0.0.0"
+}
+
+variable "healthCheck" {
+  default = "/health"
+  description = "endpoint for healthcheck"
+}
+
+variable "healthCheckInterval" {
+  default     = "60"
+  description = "interval between healthchecks in seconds"
+}
+
+variable "unhealthyThreshold" {
+  default     = "3"
+  description = "unhealthy threshold applied to healthprobe"
+}
+
+variable "infra_location" {
+  type    = "string"
+  default = "core-infra"
+}
+
+variable "subscription" {
+  type = "string"
 }
