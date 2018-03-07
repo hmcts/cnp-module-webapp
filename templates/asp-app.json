@@ -119,7 +119,7 @@
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('hostname')]",
+            "siteName": "[parameters('name')]",
             "hostNameType": "Verified"
           },
           "dependsOn": [
@@ -133,7 +133,7 @@
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('additional_host_name')]",
+            "siteName": "[parameters('name')]",
             "hostNameType": "Verified"
           },
           "dependsOn": [
