@@ -81,3 +81,7 @@ variable "infra_location" {
 variable "subscription" {
   type = "string"
 }
+
+variable "instance_count" {
+  default = "2"
+}
