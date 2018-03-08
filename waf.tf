@@ -1,4 +1,8 @@
 
+locals {
+  prod_capacity = 2
+  capacity  = "${var.env != "prod" ? 1 : locals.capacity}"
+}
 # Public ip for assigning to app gateway - Only created if var.is_frontend is set to true
 resource "azurerm_public_ip" "appGwPIP" {
   count                        = "${var.is_frontend}"
@@ -18,7 +22,7 @@ resource "azurerm_application_gateway" "waf" {
   sku {
     name           = "WAF_Medium"
     tier           = "WAF"
-    capacity       = 2
+    capacity       = "${local.capacity}"
   }
  
   gateway_ip_configuration {
