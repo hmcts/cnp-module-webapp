@@ -1,7 +1,7 @@
 
 locals {
   prod_capacity = 2
-  capacity      = "${var.env != "prod" ? 1 : local.capacity}"
+  capacity      = "${var.env != "prod" ? 1 : local.prod_capacity}"
 }
 # Public ip for assigning to app gateway - Only created if var.is_frontend is set to true
 resource "azurerm_public_ip" "appGwPIP" {
