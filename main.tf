@@ -44,6 +44,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings, local.app_settings_evaluated))}"
     hostname = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
     stagingSlotName = "${var.staging_slot_name}"
+    capacity = "{var.instance_count}"
   }
 }
 
