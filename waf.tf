@@ -4,7 +4,7 @@ resource "azurerm_public_ip" "appGwPIP" {
   count                        = "${var.is_frontend}"
   name                         = "appGW-PIP"
   location                     = "${var.location}"
-  resource_group_name          = "${local.resource_group_name}"
+  resource_group_name          = "${azurerm_resource_group.rg.name}"
   public_ip_address_allocation = "dynamic"
 }
 
@@ -12,7 +12,7 @@ resource "azurerm_public_ip" "appGwPIP" {
 resource "azurerm_application_gateway" "waf" {
   count               = "${var.is_frontend}"
   name                = "${var.product}-${var.env}"
-  resource_group_name = "${local.resource_group_name}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
   location            = "${var.location}"
 
   sku {
@@ -20,24 +20,24 @@ resource "azurerm_application_gateway" "waf" {
     tier           = "WAF"
     capacity       = 2
   }
- 
+
   gateway_ip_configuration {
     name      = "appGatewayIpConfig"
     subnet_id = "${data.terraform_remote_state.core_infra.vnet_id}/subnets/${data.terraform_remote_state.core_infra.subnet_names[0]}"
   }
 
   frontend_port {
-    name = "http80" 
+    name = "http80"
     port = 80
   }
 
     frontend_port {
-    name = "http443" 
+    name = "http443"
     port = 443
   }
 
   frontend_ip_configuration {
-    name                 = "appGW-IP"  
+    name                 = "appGW-IP"
     public_ip_address_id = "${azurerm_public_ip.appGwPIP.id}"
   }
 
@@ -77,7 +77,7 @@ resource "azurerm_application_gateway" "waf" {
   #   frontend_port_name             = "http443"
   #   protocol                       = "Https"
   #   ssl_certificate_name           = "${var.env}"
-  # } 
+  # }
 
   request_routing_rule {
     name                       = "rule1"
