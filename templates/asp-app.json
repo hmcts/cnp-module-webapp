@@ -124,7 +124,7 @@
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]",
-            "[resourceId('Microsoft.Web/sites', parameters('name'), 'config')]"
+            "[resourceId('Microsoft.Web/sites/config', parameters('name'))]"
           ]
         },
         {
@@ -139,7 +139,7 @@
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]",
-            "[resourceId('Microsoft.Web/sites', parameters('name'), 'config')]"
+            "[resourceId('Microsoft.Web/sites/config', parameters('name'))]"
           ]
         },
         {
@@ -154,7 +154,7 @@
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]",
-            "[resourceId('Microsoft.Web/sites', parameters('name'), 'config')]"
+            "[resourceId('Microsoft.Web/sites/config', parameters('name'))]"
           ]
         }
       ]
