@@ -1,4 +1,3 @@
-
 # Public ip for assigning to app gateway - Only created if var.is_frontend is set to true
 resource "azurerm_public_ip" "appGwPIP" {
   count                        = "${var.is_frontend}"
@@ -16,9 +15,9 @@ resource "azurerm_application_gateway" "waf" {
   location            = "${var.location}"
 
   sku {
-    name           = "WAF_Medium"
-    tier           = "WAF"
-    capacity       = 2
+    name     = "WAF_Medium"
+    tier     = "WAF"
+    capacity = 2
   }
 
   gateway_ip_configuration {
@@ -31,7 +30,7 @@ resource "azurerm_application_gateway" "waf" {
     port = 80
   }
 
-    frontend_port {
+  frontend_port {
     name = "http443"
     port = 443
   }
@@ -86,14 +85,12 @@ resource "azurerm_application_gateway" "waf" {
     backend_address_pool_name  = "backendPool"
     backend_http_settings_name = "backendSettingsHTTP"
   }
-
   waf_configuration {
-    firewall_mode    = "Detection"
+    firewall_mode    = "Prevention"
     rule_set_type    = "OWASP"
     rule_set_version = "3.0"
     enabled          = "true"
   }
-
   probe {
     name                = "http"
     protocol            = "http"
@@ -103,7 +100,6 @@ resource "azurerm_application_gateway" "waf" {
     unhealthy_threshold = "${var.unhealthyThreshold}"
     timeout             = "60"
   }
-
   probe {
     name                = "https"
     protocol            = "https"
