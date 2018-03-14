@@ -1,5 +1,6 @@
 module "trafficmanager" {
   source              = "git::git@github.com:contino/moj-module-trafficmanager?ref=master"
+  count               = "${var.is_frontend}"
   name                = "${var.product}"
   env                 = "${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
