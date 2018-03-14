@@ -8,6 +8,7 @@
 # }
 // perhaps this should belong at core-infra level then only backend configuration here
 resource "azurerm_traffic_manager_profile" "trafficmanager" {
+  count                  = "${var.is_frontend}"
   name                   = "${var.product}-${var.env}"
   resource_group_name    = "${azurerm_resource_group.rg.name}"
   traffic_routing_method = "Weighted"
@@ -30,10 +31,19 @@ resource "azurerm_traffic_manager_profile" "trafficmanager" {
 
 // Add multi backend logic for mult az here 
 resource "azurerm_traffic_manager_endpoint" "backend" {
+  count               = "${var.is_frontend}"
   name                = "${var.product}-${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
   target              = "${azurerm_public_ip.appGwPIP.fqdn}"                     //"whinnntest.blob.core.windows.net"                       // test/index.html"       //"${azurerm_public_ip.appGwPIP.fqdn}"
   type                = "externalEndpoints"
   weight              = 100
+}
+
+resource "azurerm_storage_blob" "maintenance" {
+  count                  = "${var.include_maintenance}"
+  name                   = "${var.product}-${var.env}-maintenance"
+  resource_group_name    = ""
+  storage_account_name   = ""
+  storage_container_name = ""
 }

@@ -9,8 +9,8 @@ variable "location" {
 
 // as of now, UK South is unavailable for Application Insights
 variable "appinsights_location" {
-  type    = "string"
-  default = "West Europe"
+  type        = "string"
+  default     = "West Europe"
   description = "Location for Application Insights"
 }
 
@@ -33,25 +33,25 @@ variable "app_settings_defaults" {
 }
 
 variable "staging_slot_name" {
-  type = "string"
+  type    = "string"
   default = "staging"
 }
 
 variable "resource_group_name" {
-  type = "string"
-  default = ""
+  type        = "string"
+  default     = ""
   description = "Resource group name for the web application. If empty, the default will be set"
 }
 
 variable "application_type" {
-  type = "string"
-  default = "Web"
+  type        = "string"
+  default     = "Web"
   description = "Type of Application Insights (Web/Other)"
 }
 
 variable "is_frontend" {
   description = "if set to true, tf will create a WAF enabled application gateway"
-  default = false
+  default     = false
 }
 
 variable "ilbIp" {
@@ -59,7 +59,7 @@ variable "ilbIp" {
 }
 
 variable "healthCheck" {
-  default = "/health"
+  default     = "/health"
   description = "endpoint for healthcheck"
 }
 
@@ -80,4 +80,8 @@ variable "infra_location" {
 
 variable "subscription" {
   type = "string"
+}
+
+variable "include_maintenance" {
+  default = false
 }
