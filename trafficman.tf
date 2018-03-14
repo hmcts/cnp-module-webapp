@@ -1,5 +1,5 @@
 module "trafficmanager" {
-  source              = "git::git@github.com:contino/moj-module-trafficmanager?ref=trafficman"
+  source              = "git::git@github.com:contino/moj-module-trafficmanager?ref=master"
   name                = "${var.product}"
   env                 = "${var.env}"
   resource_group_name = "${var.resource_group_name}"
