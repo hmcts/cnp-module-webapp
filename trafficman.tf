@@ -32,7 +32,7 @@ resource "azurerm_traffic_manager_endpoint" "backend" {
   name                = "${var.product}-${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
-  target              = "${azurerm_public_ip.appGwPIP.ip_address}"
+  target              = "${azurerm_public_ip.appGwPIP.fqdn}"
   type                = "externalEndpoints"
   weight              = 100
 }
