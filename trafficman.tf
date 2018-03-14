@@ -41,6 +41,7 @@ resource "azurerm_traffic_manager_endpoint" "backend" {
 }
 
 resource "azurerm_storage_account" "sa" {
+  count                    = "${var.include_maintenance}"
   name                     = "${replace(${var.product},-,)}${var.env}"
   resource_group_name      = "${azurerm_resource_group.rg.name}"
   location                 = "${var.location}"
@@ -53,6 +54,7 @@ resource "azurerm_storage_account" "sa" {
 }
 
 resource "azurerm_storage_container" "container" {
+  count                 = "${var.include_maintenance}"
   name                  = "${var.product}${var.env}maintenance"
   resource_group_name   = "${azurerm_resource_group.rg.name}"
   storage_account_name  = "${azurerm_storage_account.sa.name}"
