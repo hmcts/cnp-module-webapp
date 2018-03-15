@@ -26,6 +26,7 @@ module "frontend" {
 	product      = "${var.product}-frontend"
 	location     = "${var.location}"
 	env          = "${var.env}"
+	max_capacity = "${var.max_capacity}"
 	asename      = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
 	is_frontend  = true
     	subscription = "${var.subscription}"
