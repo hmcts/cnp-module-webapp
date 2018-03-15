@@ -74,7 +74,8 @@
         "tier": "Isolated",
         "size": "I2",
         "family": "I",
-        "capacity": "[if(equals(parameters('env'),'prod'), parameters('maxCapacity'), (if(greater(parameters('maxCapacity'),'2'),'2',parameters('maxCapacity')))]"
+        "capacity": "[if(equals(parameters('env'),'prod'), parameters('maxCapacity'), '1')]"
+        // (if(greater(parameters('maxCapacity'),'2'),'2',parameters('maxCapacity')))]"
       }
     },
     {
