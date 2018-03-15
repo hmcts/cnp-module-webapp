@@ -47,7 +47,8 @@
     }
   },
   "variables": {
-    "base64AppSettingObject": "[base64(parameters('app_settings'))]"
+    "base64AppSettingObject": "[base64(parameters('app_settings'))]",
+    "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
   },
   "resources": [
     {
@@ -113,7 +114,8 @@
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
         },
         {
-          "name": "[concat(parameters('name'), '/', parameters('additional_host_name'))]",
+          "condition": "[not(equals(parameters('additional_host_name'), ''))]",
+          "name": "[variables('additional_host_name_resource')]",
           "type": "Microsoft.Web/sites/hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
