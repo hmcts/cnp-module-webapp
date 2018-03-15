@@ -44,6 +44,10 @@
       "metadata": {
         "description": "Defines the name of the staging slot. (Default: staging)"
       }
+    },
+    "MaxCapacity": {
+      "type": "string",
+      "defaultValue": "2"
     }
   },
   "variables": {
