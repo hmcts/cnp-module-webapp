@@ -86,3 +86,4 @@ variable "infra_location" {
 variable "subscription" {
   type = "string"
 }
+
