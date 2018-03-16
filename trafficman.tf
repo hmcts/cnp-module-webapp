@@ -11,7 +11,7 @@ resource "azurerm_traffic_manager_profile" "trafficmanager" {
   count                  = "${var.is_frontend}"
   name                   = "${var.product}-${var.env}"
   resource_group_name    = "${azurerm_resource_group.rg.name}"
-  traffic_routing_method = "Weighted"
+  traffic_routing_method = "Priority"
 
   dns_config {
     relative_name = "hmcts-${var.env}"
@@ -37,5 +37,17 @@ resource "azurerm_traffic_manager_endpoint" "backend" {
   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
   target              = "${azurerm_public_ip.appGwPIP.fqdn}"
   type                = "externalEndpoints"
-  weight              = 100
+  weight              = 1
 }
+
+# resource "azurerm_traffic_manager_endpoint" "maintenance" {
+#   count               = "${var.is_frontend}"
+#   name                = "maintenance-page"
+#   resource_group_name = "${azurerm_resource_group.rg.name}"
+#   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
+#   target_resource_id  = "${var.maintenancepg_id}"
+#   type                = "azureEndpoints"
+#   weight              = 2
+#   endpoint_status     = "Disabled"
+# }
+

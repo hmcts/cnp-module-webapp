@@ -82,6 +82,5 @@ variable "subscription" {
   type = "string"
 }
 
-variable "include_maintenance" {
-  default = false
-}
+# variable "maintenancepg_id" {}
+
