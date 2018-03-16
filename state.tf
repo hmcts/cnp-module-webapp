@@ -12,3 +12,4 @@ data "terraform_remote_state" "core_infra" {
     key                  = "${var.infra_location}/${var.env}/terraform.tfstate"
   }
 }
+

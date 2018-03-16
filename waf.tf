@@ -114,3 +114,4 @@ resource "azurerm_application_gateway" "waf" {
     timeout             = "60"
   }
 }
+
