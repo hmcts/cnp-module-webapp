@@ -29,46 +29,13 @@ resource "azurerm_traffic_manager_profile" "trafficmanager" {
   }
 }
 
-// Add multi backend logic for mult az here 
+// Add multi backend logic for mult az here later
 resource "azurerm_traffic_manager_endpoint" "backend" {
   count               = "${var.is_frontend}"
   name                = "${var.product}-${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
-  target              = "${azurerm_public_ip.appGwPIP.fqdn}"                     //"whinnntest.blob.core.windows.net"                       // test/index.html"       //"${azurerm_public_ip.appGwPIP.fqdn}"
+  target              = "${azurerm_public_ip.appGwPIP.fqdn}"
   type                = "externalEndpoints"
   weight              = 100
 }
-
-# resource "azurerm_storage_account" "sa" {
-#   count                    = "${var.include_maintenance}"
-#   name                     = "${replace(${var.product},-,)}${var.env}"
-#   resource_group_name      = "${azurerm_resource_group.rg.name}"
-#   location                 = "${var.location}"
-#   account_tier             = "Standard"
-#   account_replication_type = "GRS"
-
-
-#   tags {
-#     environment = "${var.env}"
-#   }
-# }
-
-
-# resource "azurerm_storage_container" "container" {
-#   count                 = "${var.include_maintenance}"
-#   name                  = "${var.product}${var.env}maintenance"
-#   resource_group_name   = "${azurerm_resource_group.rg.name}"
-#   storage_account_name  = "${azurerm_storage_account.sa.name}"
-#   container_access_type = "blob"
-# }
-
-
-# resource "azurerm_storage_blob" "maintenance" {
-#   count                  = "${var.include_maintenance}"
-#   name                   = "${var.product}${var.env}maintenance"
-#   resource_group_name    = "${azurerm_resource_group.rg.name}"
-#   storage_account_name   = "${azurerm_storage_account.sa.name}"
-#   storage_container_name = "${azurerm_storage_container.container.name}"
-# }
-
