@@ -89,5 +89,5 @@ variable "subscription" {
 
 variable "max_capacity" {
   default     = "2"
-  description = "Maximum number of instances. Can be greater than 2 but then only production will pick this up."
+  description = "Maximum number of instances."
 }
