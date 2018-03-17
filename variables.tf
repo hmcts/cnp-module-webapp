@@ -49,6 +49,11 @@ variable "application_type" {
   description = "Type of Application Insights (Web/Other)"
 }
 
+variable "additional_host_name" {
+  default = ""
+  description = "An additional hostname the app should be available on, e.g. an external hostname"
+}
+
 variable "is_frontend" {
   description = "if set to true, tf will create a WAF enabled application gateway"
   default     = false
@@ -83,4 +88,3 @@ variable "subscription" {
 }
 
 # variable "maintenancepg_id" {}
-
