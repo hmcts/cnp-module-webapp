@@ -18,7 +18,7 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications. to use t
 -	app_settings, this is the key valued pairs of application settings used by the application at runtime
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'max_capacity' is optional value as by default is set to '2'
+Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
 
 ```terraform
 module "frontend" {
@@ -26,7 +26,7 @@ module "frontend" {
 	product      = "${var.product}-frontend"
 	location     = "${var.location}"
 	env          = "${var.env}"
-	max_capacity = "${var.max_capacity}"
+	capacity = "${var.capacity}"
 	asename      = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
 	is_frontend  = true
     	subscription = "${var.subscription}"

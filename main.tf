@@ -45,7 +45,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     hostname = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
     additional_host_name = "${var.additional_host_name}"
     stagingSlotName = "${var.staging_slot_name}"
-    maxCapacity = "${var.max_capacity}"
+    capacity = "${var.capacity}"
   }
 }
 

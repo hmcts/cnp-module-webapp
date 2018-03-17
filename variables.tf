@@ -87,7 +87,7 @@ variable "subscription" {
   type = "string"
 }
 
-variable "max_capacity" {
+variable "capacity" {
   default     = "2"
   description = "Maximum number of instances."
 }
