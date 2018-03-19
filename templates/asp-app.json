@@ -44,6 +44,13 @@
       "metadata": {
         "description": "Defines the name of the staging slot. (Default: staging)"
       }
+    },
+    "https_only": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Configures a web site to accept only https requests. Issues redirect for http requests"
+      }
     }
   },
   "variables": {
@@ -101,7 +108,8 @@
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
           "alwaysOn": true
-        }
+        },
+        "httpsOnly": "[parameters('https_only')]"
       },
       "resources": [
         {
