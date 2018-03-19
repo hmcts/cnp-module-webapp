@@ -14,7 +14,7 @@ resource "azurerm_traffic_manager_profile" "trafficmanager" {
   traffic_routing_method = "Priority"
 
   dns_config {
-    relative_name = "hmcts-${var.env}"
+    relative_name = "hmcts-${var.name}-${var.env}"
     ttl           = 100
   }
 
