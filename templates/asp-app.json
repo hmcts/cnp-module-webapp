@@ -50,8 +50,8 @@
       "defaultValue": "2"
     },
     "https_only": {
-      "type": "bool",
-      "defaultValue": true,
+      "type": "string",
+      "defaultValue": "true",
       "metadata": {
         "description": "Configures a web site to accept only https requests. Issues redirect for http requests"
       }
@@ -113,7 +113,7 @@
           "javaContainerVersion": "8.0",
           "alwaysOn": true
         },
-        "httpsOnly": "[parameters('https_only')]"
+        "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
         {
