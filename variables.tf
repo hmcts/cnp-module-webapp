@@ -83,5 +83,5 @@ variable "subscription" {
 }
 
 variable "shutterURL" {
-  default = "https://mojmaintenance.azurewebsites.net/"
+  default = "https://mojmaintenance.azurewebsites.net"
 }
