@@ -23,7 +23,7 @@ Name | Type |  Required | Default | description
 `https_only` | Boolean | No | True | Configures a web site to accept only https requests. Issues redirect for http requests
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false.
+Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
 
 ```terraform
 module "frontend" {
@@ -31,8 +31,9 @@ module "frontend" {
 	product      = "${var.product}-frontend"
 	location     = "${var.location}"
 	env          = "${var.env}"
+	capacity     = "${var.capacity}"
 	is_frontend  = true
-  subscription = "${var.subscription}"
+	subscription = "${var.subscription}"
 	app_settings = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
