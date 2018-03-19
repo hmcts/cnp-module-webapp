@@ -46,7 +46,7 @@ resource "azurerm_traffic_manager_endpoint" "maintenance" {
   resource_group_name = "${azurerm_resource_group.rg.name}"
   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
   target              = "${var.shutterURL}"
-  type                = "azureEndpoints"
+  type                = "externalEndpoints"
   weight              = 2
   endpoint_status     = "Disabled"
 }
