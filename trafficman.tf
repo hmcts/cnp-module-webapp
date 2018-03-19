@@ -40,14 +40,13 @@ resource "azurerm_traffic_manager_endpoint" "backend" {
   weight              = 1
 }
 
-# resource "azurerm_traffic_manager_endpoint" "maintenance" {
-#   count               = "${var.is_frontend}"
-#   name                = "maintenance-page"
-#   resource_group_name = "${azurerm_resource_group.rg.name}"
-#   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
-#   target_resource_id  = "${var.maintenancepg_id}"
-#   type                = "azureEndpoints"
-#   weight              = 2
-#   endpoint_status     = "Disabled"
-# }
-
+resource "azurerm_traffic_manager_endpoint" "maintenance" {
+  count               = "${var.is_frontend}"
+  name                = "maintenance-page"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
+  target              = "${var.shutterURL}"
+  type                = "azureEndpoints"
+  weight              = 2
+  endpoint_status     = "Disabled"
+}

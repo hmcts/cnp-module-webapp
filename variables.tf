@@ -82,5 +82,6 @@ variable "subscription" {
   type = "string"
 }
 
-# variable "maintenancepg_id" {}
-
+variable "shutterURL" {
+  default = "https://mojmaintenance.azurewebsites.net/"
+}
