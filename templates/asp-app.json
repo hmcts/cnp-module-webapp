@@ -44,6 +44,10 @@
       "metadata": {
         "description": "Defines the name of the staging slot. (Default: staging)"
       }
+    },
+    "capacity": {
+      "type": "string",
+      "defaultValue": "2"
     }
   },
   "variables": {
@@ -70,7 +74,7 @@
         "tier": "Isolated",
         "size": "I2",
         "family": "I",
-        "capacity": 2
+        "capacity": "[parameters('capacity')]"
       }
     },
     {

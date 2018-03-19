@@ -87,4 +87,7 @@ variable "subscription" {
   type = "string"
 }
 
-# variable "maintenancepg_id" {}
+variable "capacity" {
+  default     = "2"
+  description = "Maximum number of instances."
+}
