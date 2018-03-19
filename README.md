@@ -18,7 +18,7 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications. to use t
 -	app_settings, this is the key valued pairs of application settings used by the application at runtime
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
+Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false.
 
 ```terraform
 module "frontend" {
@@ -45,6 +45,8 @@ Creating a web app to host your application will create a Resource Group contain
 
 Each of the aforementioned resources will be named the same, using the convention product-env, so if I provide the values for product as "probate", and env
 as "dev" then the resulting resource group, app service plan and web app will be called probate-dev.
+
+Additional and optional parameter which you can add to terraform template is 'capacity'. It defines how many instances will run per environment. Default value is 2 instances per environment but if from some reason production requires more resources you can simply change it. Please be aware that Azure resources are limited and spinning to much boxes might affect whole subscription. Spinning more than 2 instances per environment is not recommended on envs different to production or in case of performance tests
 
 ## Testing
 There's a library of unit tests and integration tests in this repository.  In the root of this repository is a tests folder.
