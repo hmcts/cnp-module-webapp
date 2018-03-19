@@ -61,7 +61,7 @@ variable "is_frontend" {
 
 variable "https_only" {
   description = "Configures a web site to accept only https requests. Issues redirect for http requests"
-  default = true
+  default = "true"
 }
 
 variable "ilbIp" {
