@@ -34,7 +34,7 @@
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
-                    "targetResourceId": "resourceId('mojmaintenancepage', 'Microsoft.Web/sites', 'mojmaintenance'",
+                    "targetResourceId": "[resourceId('mojmaintenancepage', 'Microsoft.Web/sites', 'mojmaintenance')]",
                     "target": "mojmaintenance.azurewebsites.net",
                     "weight": 1,
                     "priority": 1,
