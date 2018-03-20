@@ -120,13 +120,13 @@
           ]
         },
         {
-          "name": "[concat('hmcts-', parameters('hostname'),'.trafficmanager.net')]",
-          "type": "[concat('hmcts-', parameters('hostname'),'.trafficmanager.net')]",
+          "name": "TrafficManager",
+          "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('hostname')]"
+            "siteName": "[concat('hmcts-', parameters('hostname'),'.trafficmanager.net')]"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
