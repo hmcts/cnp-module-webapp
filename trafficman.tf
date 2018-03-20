@@ -1,9 +1,9 @@
-data "template_file" "sitetemplate" {
+data "template_file" "tmtemplate" {
   template = "${file("${path.module}/templates/trafficmanager.json")}"
 }
 
 resource "azurerm_template_deployment" "tmprofile" {
-  template_body       = "${data.template_file.sitetemplate.rendered}"
+  template_body       = "${data.template_file.tmtemplate.rendered}"
   name                = "${var.product}-${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
