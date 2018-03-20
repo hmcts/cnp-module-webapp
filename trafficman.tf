@@ -45,7 +45,7 @@ resource "azurerm_traffic_manager_endpoint" "maintenance" {
   name                = "maintenance-page"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
-  target_resource_id  = "/subscriptions/${var.subscription_id}/resourceGroups/mojmaintenancepage/providers/Microsoft.Web/sites/mojmaintenance}"
+  target_resource_id  = "/subscriptions/${var.sandox_subscription_id}/resourceGroups/mojmaintenancepage/providers/Microsoft.Web/sites/mojmaintenance}"
   type                = "azureEndpoints"
   weight              = 1
   endpoint_status     = "Enabled"
