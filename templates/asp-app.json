@@ -120,7 +120,7 @@
           ]
         },
         {
-          "name": "TrafficManager",
+          "name": "[concat('hmcts-', parameters('hostname'),'.trafficmanager.net')]",
           "type": "[concat('hmcts-', parameters('hostname'),'.trafficmanager.net')]",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
