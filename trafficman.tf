@@ -45,8 +45,8 @@ resource "azurerm_traffic_manager_endpoint" "maintenance" {
   name                = "maintenance-page"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
-  target              = "${var.shutterURL}"
-  type                = "externalEndpoints"
+  Target_resource_id  = "/subscriptions/${var.ARM_SUBSCRIPTION_ID}/resourceGroups/mojmaintenancepage/providers/Microsoft.Web/sites/mojmaintenance}"
+  type                = "azureEndpoints"
   weight              = 1
   endpoint_status     = "Enabled"
 }
