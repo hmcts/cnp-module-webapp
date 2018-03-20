@@ -30,15 +30,15 @@ resource "azurerm_traffic_manager_profile" "trafficmanager" {
 }
 
 // Add multi backend logic for mult az here later
-resource "azurerm_traffic_manager_endpoint" "backend" {
-  count               = "${var.is_frontend}"
-  name                = "${var.product}-${var.env}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
-  target              = "${azurerm_public_ip.appGwPIP.fqdn}"
-  type                = "externalEndpoints"
-  weight              = 1
-}
+# resource "azurerm_traffic_manager_endpoint" "backend" {
+#   count               = "${var.is_frontend}"
+#   name                = "${var.product}-${var.env}"
+#   resource_group_name = "${azurerm_resource_group.rg.name}"
+#   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
+#   target              = "${azurerm_public_ip.appGwPIP.fqdn}"
+#   type                = "externalEndpoints"
+#   weight              = 1
+# }
 
 resource "azurerm_traffic_manager_endpoint" "maintenance" {
   count               = "${var.is_frontend}"
@@ -47,6 +47,6 @@ resource "azurerm_traffic_manager_endpoint" "maintenance" {
   profile_name        = "${azurerm_traffic_manager_profile.trafficmanager.name}"
   target              = "${var.shutterURL}"
   type                = "externalEndpoints"
-  weight              = 2
-  endpoint_status     = "Disabled"
+  weight              = 1
+  endpoint_status     = "Enabled"
 }
