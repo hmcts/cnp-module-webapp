@@ -86,4 +86,4 @@ variable "shutterURL" {
   default = "mojmaintenance.azurewebsites.net"
 }
 
-variable "ARM_SUBSCRIPTION_ID" {}
+variable "subscription_id" {}
