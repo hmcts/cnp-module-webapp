@@ -118,6 +118,19 @@
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
           ]
+        },
+        {
+          "name": "TrafficManager",
+          "type": "[concat('hmcts-', parameters('hostname'),'.trafficmanager.net')]",
+          "apiVersion": "2016-08-01",
+          "location": "[parameters('location')]",
+          "tags": {},
+          "properties": {
+            "siteName": "[parameters('hostname')]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+          ]
         }
       ]
     },
