@@ -85,5 +85,3 @@ variable "subscription" {
 variable "shutterURL" {
   default = "mojmaintenance.azurewebsites.net"
 }
-
-variable "sandox_subscription_id" {}
