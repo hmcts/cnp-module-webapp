@@ -1,7 +1,7 @@
-# locals {
-#   run      = "false"
-#   frontend = "${var.frontend != true ? var.is_frontend : local.default_resource_group_name}"
-# }
+locals {
+  host                 = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
+  additional_host_name = "${var.additional_host_name != "" ? var.additional_host_name : local.host}"
+}
 
 data "template_file" "tmtemplate" {
   template = "${file("${path.module}/templates/trafficmanager.json")}"
