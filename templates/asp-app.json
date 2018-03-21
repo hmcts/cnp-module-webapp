@@ -51,7 +51,7 @@
     },
     "https_only": {
       "type": "string",
-      "defaultValue": "true",
+      "defaultValue": "false",
       "metadata": {
         "description": "Configures a web site to accept only https requests. Issues redirect for http requests"
       }
