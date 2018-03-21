@@ -164,7 +164,8 @@
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
           "alwaysOn": true
-        }
+        },
+        "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
         {
