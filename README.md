@@ -20,7 +20,7 @@ Name | Type |  Required | Default | description
 `app_settings` String | | Yes | | this is the key valued pairs of application settings used by the application at runtime
 `is_frontend` | Boolean | No | False | Indicates that this app could be routable from the public internet
 `additional_host_name` | String | No | | A custom domain name for your web application
-`https_only` | Boolean | No | True | Configures a web site to accept only https requests. Issues redirect for http requests
+`https_only` | String | No | `"true"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
 
 ## Usage
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
