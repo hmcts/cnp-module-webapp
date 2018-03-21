@@ -16,7 +16,7 @@ resource "azurerm_template_deployment" "tmprofile" {
   parameters = {
     name                 = "${var.product}-${var.env}"
     additional_host_name = "${var.additional_host_name}"
-    frontend             = "${var.is_frontend}"
+    is_frontend          = "${var.is_frontend}"
   }
 }
 
