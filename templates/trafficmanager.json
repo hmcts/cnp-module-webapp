@@ -53,12 +53,11 @@
                 }
             },
             {
-                "condition": "[not(equals(parameters('additional_host_name'), ''))]",
                 "name": "app",
                 "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
-                    "target": "[parameters('additional_host_name')]",
+                    "target": "[if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name'))]",   
                     "weight": 1,
                     "priority": 1,
                     "endpointLocation": "UK South"
