@@ -53,7 +53,6 @@
             {
                 "condition": "[not(equals(parameters('additional_host_name'), ''))]",
                 "name": "[variables('additional_host_name_resource')]",
-                "name": "app",
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
