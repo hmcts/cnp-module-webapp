@@ -13,13 +13,14 @@ resource "azurerm_template_deployment" "tmprofile" {
   }
 }
 
-// Add multi backend logic for mult az here later
-resource "azurerm_traffic_manager_endpoint" "backend" {
-  count               = "${var.is_frontend}"
-  name                = "${var.product}-${var.env}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  profile_name        = "${var.product}-${var.env}"
-  target              = "${azurerm_public_ip.appGwPIP.fqdn}"
-  type                = "externalEndpoints"
-  weight              = 1
-}
+# // Add multi backend logic for mult az here later
+# resource "azurerm_traffic_manager_endpoint" "backend" {
+#   count               = "${var.is_frontend}"
+#   name                = "${var.product}-${var.env}"
+#   resource_group_name = "${azurerm_resource_group.rg.name}"
+#   profile_name        = "${var.product}-${var.env}"
+#   target              = "${azurerm_public_ip.appGwPIP.fqdn}"
+#   type                = "externalEndpoints"
+#   weight              = 1
+# }
+
