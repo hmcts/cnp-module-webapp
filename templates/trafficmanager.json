@@ -10,10 +10,14 @@
             "metadata": {
               "description": "An additional hostname this application should be accessible on"
             }
-          }
+          },
+        "is_frontend": {
+
+        }
     },
 "resources": [
 {
+    "condition": "[not(equals(parameters('is_frontend'), '0'))]",
     "type": "Microsoft.Network/trafficManagerProfiles",
     "name": "[parameters('name')]",
     "apiVersion": "2017-05-01",

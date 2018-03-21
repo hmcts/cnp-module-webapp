@@ -1,3 +1,8 @@
+# locals {
+#   run      = "false"
+#   frontend = "${var.frontend != true ? var.is_frontend : local.default_resource_group_name}"
+# }
+
 data "template_file" "tmtemplate" {
   template = "${file("${path.module}/templates/trafficmanager.json")}"
 }
@@ -11,6 +16,7 @@ resource "azurerm_template_deployment" "tmprofile" {
   parameters = {
     name                 = "${var.product}-${var.env}"
     additional_host_name = "${var.additional_host_name}"
+    frontend             = "${var.is_frontend}"
   }
 }
 
