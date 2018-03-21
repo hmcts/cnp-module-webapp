@@ -12,9 +12,6 @@
             }
           }
     },
-    "variables": {
-        "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
-      },
 "resources": [
 {
     "type": "Microsoft.Network/trafficManagerProfiles",
