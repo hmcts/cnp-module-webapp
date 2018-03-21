@@ -1,6 +1,6 @@
 locals {
   default_resource_group_name = "${var.product}-${var.env}"
-  resource_group_name = "${var.resource_group_name != "" ? var.resource_group_name : local.default_resource_group_name}"
+  resource_group_name         = "${var.resource_group_name != "" ? var.resource_group_name : local.default_resource_group_name}"
 }
 
 # Create a resource group
@@ -25,6 +25,7 @@ resource "azurerm_application_insights" "appinsights" {
 locals {
   app_settings_evaluated = {
     APPLICATION_INSIGHTS_IKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
+
     # Support for nodejs apps (java apps to migrate to this env var in future PR)
     APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
   }
@@ -32,18 +33,20 @@ locals {
 
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
-  template_body = "${data.template_file.sitetemplate.rendered}"
-  name = "${var.product}-${var.env}"
+  template_body       = "${data.template_file.sitetemplate.rendered}"
+  name                = "${var.product}-${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
-  deployment_mode = "Incremental"
+  deployment_mode     = "Incremental"
 
   parameters = {
-    name = "${var.product}-${var.env}"
-    location = "${var.location}"
-    env = "${var.env}"
-    app_settings = "${jsonencode(merge(var.app_settings_defaults, var.app_settings, local.app_settings_evaluated))}"
-    hostname = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
-    stagingSlotName = "${var.staging_slot_name}"
+    name                 = "${var.product}-${var.env}"
+    location             = "${var.location}"
+    env                  = "${var.env}"
+    app_settings         = "${jsonencode(merge(var.app_settings_defaults, var.app_settings, local.app_settings_evaluated))}"
+    hostname             = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
+    additional_host_name = "${var.additional_host_name}"
+    stagingSlotName      = "${var.staging_slot_name}"
+    capacity             = "${var.capacity}"
   }
 }
 
