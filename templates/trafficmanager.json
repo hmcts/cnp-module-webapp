@@ -12,6 +12,9 @@
             }
           }
     },
+    "variables": {
+        "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
+      },
 "resources": [
 {
     "type": "Microsoft.Network/trafficManagerProfiles",
@@ -48,6 +51,8 @@
                 }
             },
             {
+                "condition": "[not(equals(parameters('additional_host_name'), ''))]",
+                "name": "[variables('additional_host_name_resource')]",
                 "name": "app",
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
