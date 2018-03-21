@@ -45,6 +45,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     hostname = "${var.product}-${var.env}.service.core-compute-${var.env}.internal"
     additional_host_name = "${var.additional_host_name}"
     stagingSlotName = "${var.staging_slot_name}"
+    https_only = "${var.https_only}"
     capacity = "${var.capacity}"
   }
 }
@@ -64,4 +65,3 @@ resource "null_resource" "consul" {
     command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}-${var.staging_slot_name}' 'core-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
   }
 }
-
