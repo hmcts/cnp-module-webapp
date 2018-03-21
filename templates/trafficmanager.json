@@ -53,6 +53,7 @@
                 }
             },
             {
+                "condition": "[not(equals(parameters('additional_host_name'), ''))]",
                 "name": "app",
                 "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
                 "properties": {
