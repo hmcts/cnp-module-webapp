@@ -11,7 +11,13 @@
     "hostname": {
       "type": "string",
       "metadata": {
-        "description": "Custom hostname for creating SSL binding. This hostname should already be assigned to the Web App"
+        "description": "The hostname this application should be accessible on"
+      }
+    },
+    "additional_host_name": {
+      "type": "string",
+      "metadata": {
+        "description": "An additional hostname this application should be accessible on"
       }
     },
     "location": {
@@ -38,10 +44,15 @@
       "metadata": {
         "description": "Defines the name of the staging slot. (Default: staging)"
       }
+    },
+    "capacity": {
+      "type": "string",
+      "defaultValue": "2"
     }
   },
   "variables": {
-    "base64AppSettingObject": "[base64(parameters('app_settings'))]"
+    "base64AppSettingObject": "[base64(parameters('app_settings'))]",
+    "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
   },
   "resources": [
     {
@@ -63,7 +74,7 @@
         "tier": "Isolated",
         "size": "I2",
         "family": "I",
-        "capacity": 2
+        "capacity": "[parameters('capacity')]"
       }
     },
     {
@@ -107,26 +118,15 @@
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
         },
         {
-          "name": "[parameters('name')]",
-          "type": "hostNameBindings",
+          "condition": "[not(equals(parameters('additional_host_name'), ''))]",
+          "name": "[variables('additional_host_name_resource')]",
+          "type": "Microsoft.Web/sites/hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('hostname')]"
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-          ]
-        },
-        {
-          "name": "[concat('hmcts-', parameters('hostname'),'.trafficmanager.net')]",
-          "type": "hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[concat('hmcts-', parameters('hostname'),'.trafficmanager.net')]"
+            "siteName": "[parameters('name')]",
+            "hostNameType": "Verified"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"

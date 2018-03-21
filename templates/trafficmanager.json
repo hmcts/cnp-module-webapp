@@ -4,7 +4,13 @@
     "parameters": {
         "name": {
             "type": "string"
-        }
+        },
+        "additional_host_name": {
+            "type": "string",
+            "metadata": {
+              "description": "An additional hostname this application should be accessible on"
+            }
+          }
     },
 "resources": [
 {
@@ -30,12 +36,23 @@
         },
         "endpoints": [
             {
-                "name": "tm",
+                "name": "shutter",
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
                     "targetResourceId": "[resourceId('mojmaintenancepage', 'Microsoft.Web/sites', 'mojmaintenance')]",
                     "target": "mojmaintenance.azurewebsites.net",
+                    "weight": 2,
+                    "priority": 2,
+                    "endpointLocation": "UK South"
+                }
+            },
+            {
+                "name": "app",
+                "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
+                "properties": {
+                    "endpointStatus": "Enabled",
+                    "target": "[parameters('additional_host_name')]",
                     "weight": 1,
                     "priority": 1,
                     "endpointLocation": "UK South"

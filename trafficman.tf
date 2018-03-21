@@ -9,7 +9,8 @@ resource "azurerm_template_deployment" "tmprofile" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    name = "${var.product}-${var.env}"
+    name                 = "${var.product}-${var.env}"
+    additional_host_name = "${var.additional_host_name}"
   }
 }
 
