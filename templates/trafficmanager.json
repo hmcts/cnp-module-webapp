@@ -57,7 +57,7 @@
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
-                    "targetResourceId": "[resourceId(parameters('name'), 'Microsoft.Network/publicIPAddresses', 'appGW-PIP')]",
+                    "targetResourceId": "[resourceId('Microsoft.Network/publicIPAddresses', 'appGW-PIP')]",
                     "weight": 2,
                     "priority": 2,
                     "endpointLocation": "UK South"
