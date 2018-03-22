@@ -13,3 +13,7 @@ output "url" {
 output "resource_group_name" {
   value = "${azurerm_resource_group.rg.name}"
 }
+
+output "appgw_id" {
+  value = "${azurerm_application_gateway.waf.id}"
+}
