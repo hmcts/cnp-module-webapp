@@ -47,7 +47,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     additional_host_name = "${var.additional_host_name}"
     stagingSlotName      = "${var.staging_slot_name}"
     capacity             = "${var.capacity}"
-    trigger              = "${azurerm_public_ip.appGwPIP.ip_address}"
+    trigger              = "${azurerm_public_ip.appGwPIP.fqdn}"
   }
 }
 
