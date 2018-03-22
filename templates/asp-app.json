@@ -131,6 +131,21 @@
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
           ]
+        },
+        {
+          "condition": "[not(equals(parameters('additional_host_name'), ''))]",
+          "name": "trafficmanager",
+          "type": "Microsoft.Web/sites/hostNameBindings",
+          "apiVersion": "2016-08-01",
+          "location": "[parameters('location')]",
+          "tags": {},
+          "properties": {
+            "siteName": "[concat(parameters('name'),'.trafficmanager.net')]",
+            "hostNameType": "Verified"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+          ]
         }
       ]
     },
