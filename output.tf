@@ -15,5 +15,5 @@ output "resource_group_name" {
 }
 
 output "appgw_id" {
-  value = "${azurerm_application_gateway.waf.id}"
+  value = "${azurerm_application_gateway.waf.*.id}"
 }
