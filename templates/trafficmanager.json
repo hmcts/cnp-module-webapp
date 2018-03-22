@@ -16,7 +16,6 @@
             "type": "string"
         },
         "gatewayId": {
-            "type": "string"
         }
     },
 "resources": [
