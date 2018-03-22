@@ -62,17 +62,6 @@
                     "priority": 2,
                     "endpointLocation": "UK South"
                 }
-            },
-            {
-                "name": "tmhealth",
-                "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
-                "properties": {
-                    "endpointStatus": "Enabled",
-                    "target": "concat(parameters('name'), 'trafficmanager.net')",//"[if(equals(parameters('additional_host_name'),''),'tmdefault',concat('tm',parameters('additional_host_name')))]",   
-                    "weight": 3,
-                    "priority": 3,
-                    "endpointLocation": "UK South"
-                }
             }
         ]
     },
