@@ -57,7 +57,7 @@
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
-                    "targetResourceId": "[concat(resourceGroup(), 'providers/Microsoft.Network/applicationGateways/', parameters('name'))]",
+                    "targetResourceId": "[resourceId(parameters('name'), 'Microsoft.Web/applicationGateways', parameters('name'))]",
                     "weight": 2,
                     "priority": 2,
                     "endpointLocation": "UK South"
