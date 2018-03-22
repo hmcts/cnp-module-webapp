@@ -120,8 +120,7 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]",
-            "[resourceId('Microsoft.Web/sites/hostNameBindings/', 'hostname')]"
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
           ]
         },
         {

@@ -45,7 +45,7 @@
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Disabled",
-                    "targetResourceId": "[resourceId('Microsoft.Web/sites', 'mojmaintenance')]",
+                    "targetResourceId": "[resourceId('mojmaintenancepage', 'Microsoft.Web/sites', 'mojmaintenance')]",
                     "target": "mojmaintenance.azurewebsites.net",
                     "weight": 1,
                     "priority": 1,
@@ -57,7 +57,7 @@
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
-                    "targetResourceId": "'Microsoft.Network/publicIPAddresses', 'appGW-PIP')]",
+                    "targetResourceId": "[resourceId(parameters('name'), 'Microsoft.Network/publicIPAddresses', 'appGW-PIP')]",
                     "weight": 2,
                     "priority": 2,
                     "endpointLocation": "UK South"
