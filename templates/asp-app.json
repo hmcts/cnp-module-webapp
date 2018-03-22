@@ -128,7 +128,7 @@
         },
         {
           "condition": "[not(equals(parameters('additional_host_name'), ''))]",
-          "name": "parameters('additional_host_name')",
+          "name": "[parameters('additional_host_name')]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
