@@ -110,7 +110,7 @@
       },
       "resources": [
         {
-          "name": "trafficmanager",
+          "name": "[variables('trafficmanager')]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
@@ -125,13 +125,13 @@
         },
         {
           "condition": "[not(equals(parameters('additional_host_name'), ''))]",
-          "name": "hostname",
+          "name": "parameters('additional_host_name')",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[parameters('name')]",
+            "siteName": "[parameters('additional_host_name')]",
             "hostNameType": "Verified"
           },
           "dependsOn": [
