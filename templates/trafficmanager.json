@@ -14,8 +14,6 @@
           },
         "is_frontend": {
             "type": "string"
-        },
-        "gatewayId": {
         }
     },
 "resources": [
@@ -59,7 +57,7 @@
                 "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
-                    "targetResourceId": "[parameters('gatewayId')]",
+                    "targetResourceId": "[concat(resourceGroup(), 'providers/Microsoft.Network/applicationGateways/', parameters('name'))]",
                     "weight": 2,
                     "priority": 2,
                     "endpointLocation": "UK South"
