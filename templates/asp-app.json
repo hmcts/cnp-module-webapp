@@ -8,6 +8,9 @@
         "description": "Name of the App Service Environment"
       }
     },
+    "trigger": {
+      "type": "string"
+    },
     "hostname": {
       "type": "string",
       "metadata": {
