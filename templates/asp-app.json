@@ -117,22 +117,36 @@
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
           ],
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
-        },
-        {
-          "condition": "[not(equals(parameters('additional_host_name'), ''))]",
-          "name": "[variables('additional_host_name_resource')]",
-          "type": "Microsoft.Web/sites/hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[parameters('name')]",
-            "hostNameType": "Verified"
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-          ]
         }
+      ]
+    },
+    {
+      "condition": "[not(equals(parameters('additional_host_name'), ''))]",
+      "name": "hostname",
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2016-08-01",
+      "location": "[parameters('location')]",
+      "tags": {},
+      "properties": {
+        "siteName": "[parameters('name')]",
+        "hostNameType": "Verified"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+      ]
+    },
+    {
+      "name": "trafficmanager",
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2016-08-01",
+      "location": "[parameters('location')]",
+      "tags": {},
+      "properties": {
+        "siteName": "[variables('trafficmanager')]",
+        "hostNameType": "Verified"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
       ]
     },
     {
