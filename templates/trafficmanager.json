@@ -14,9 +14,6 @@
           },
         "is_frontend": {
             "type": "string"
-        },
-        "gateway_ip": {
-            "type": "string"
         }
     },
 "resources": [
@@ -57,10 +54,10 @@
             },
             {
                 "name": "app",
-                "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+                "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
-                    "target": "[parameters('gateway_ip')]",
+                    "targetResourceId": "[resourceId(parameters('name'), 'Microsoft.Network/publicIPAddresses', 'appGW-PIP')]",
                     "weight": 2,
                     "priority": 2,
                     "endpointLocation": "UK South"
