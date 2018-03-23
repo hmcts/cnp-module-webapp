@@ -10,14 +10,9 @@
     },
     "additional_host_name": {
       "type": "string",
+      "defaultValue": "example",
       "metadata": {
         "description": "The hostname this application should be accessible on"
-      }
-    },
-    "additional_host_name": {
-      "type": "string",
-      "metadata": {
-        "description": "An additional hostname this application should be accessible on"
       }
     },
     "location": {
