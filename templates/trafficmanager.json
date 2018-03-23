@@ -7,7 +7,7 @@
         },
         "additional_host_name": {
             "type": "string",
-            "defaultValue": "defualt",
+            "defaultValue": "default",
             "metadata": {
               "description": "An additional hostname this application should be accessible on"
             }
