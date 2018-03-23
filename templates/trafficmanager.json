@@ -14,9 +14,6 @@
           },
         "is_frontend": {
             "type": "string"
-        },
-        "fqdn": {
-            "type": "string"
         }
     },
 "resources": [
