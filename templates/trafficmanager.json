@@ -60,7 +60,7 @@
                 "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
                 "properties": {
                     "endpointStatus": "Enabled",
-                    "target": "[parameters('fqdn')]",
+                    "target": "[parameters('additional_host_name')]",
                     "weight": 2,
                     "priority": 2,
                     "endpointLocation": "UK South"

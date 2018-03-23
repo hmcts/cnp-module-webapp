@@ -103,6 +103,20 @@
         }
       },
       "resources": [
+          {
+            "name": "[concat('tm', parameters('additional_host_name'))]",
+            "type": "hostNameBindings",
+            "apiVersion": "2016-08-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+              "siteName": "[concat('tm', parameters('additional_host_name'))]",
+              "hostNameType": "Verified"
+            },
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+            ]
+          },
         {
           "name": "[variables('trafficmanager')]",
           "type": "hostNameBindings",
@@ -131,7 +145,7 @@
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
           ]
-        },
+        },additional_host_name
         {
           "apiVersion": "2016-08-01",
           "name": "appsettings",
