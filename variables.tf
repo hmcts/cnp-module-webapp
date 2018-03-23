@@ -50,13 +50,18 @@ variable "application_type" {
 }
 
 variable "additional_host_name" {
-  default     = ""
+  default = ""
   description = "An additional hostname the app should be available on, e.g. an external hostname"
 }
 
 variable "is_frontend" {
   description = "if set to true, tf will create a WAF enabled application gateway"
   default     = false
+}
+
+variable "https_only" {
+  description = "Configures a web site to accept only https requests. Issues redirect for http requests"
+  default = "false"
 }
 
 variable "ilbIp" {

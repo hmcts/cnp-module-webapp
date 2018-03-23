@@ -9,26 +9,31 @@ Refer to the following links for a detailed explanation of an App Service Plan, 
 As part of the web app creation, an SSL cert for it is created and whitelisted at the application gateway provided in the appGateway var provided in the declaration of the module
 
 ## Variables
-This module lets you host Java 8, Spring Boot, and NodeJs applications. to use this module, you need to provide the following variables:-
+This module lets you host Java 8, Spring Boot, and NodeJs applications.
 
--	source, this is the location source for the moj-module-webapp, the example implies a github repo containing the moj-module-webapp source
--	product,  this is the name of the product or project i.e. probate, divorce etc.
--	location, this is the azure region for this service
-- 	env, this is used to differentiate the environments e.g dev, prod, test etc
--	app_settings, this is the key valued pairs of application settings used by the application at runtime
+Name | Type |  Required | Default | description
+--- | --- | --- | --- | ---
+`source` | String | Yes | | this is the location source for the moj-module-webapp, the example implies a github repo containing the moj-module-webapp source
+`product` | String | Yes | |  this is the name of the product or project i.e. probate, divorce etc.
+`location` | String | No | UK South | this is the azure region for this service
+`env` | String | Yes | | this is used to differentiate the environments e.g dev, prod, test etc
+`app_settings` String | | Yes | | this is the key valued pairs of application settings used by the application at runtime
+`is_frontend` | Boolean | No | False | Indicates that this app could be routable from the public internet
+`additional_host_name` | String | No | | A custom domain name for your web application
+`https_only` | String | No | `"false"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false.
+Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
 
 ```terraform
 module "frontend" {
-	source       = "git@github.com:contino/moj-module-webapp?ref=0.0.78"
+	source       = "git@github.com:contino/moj-module-webapp?ref=master"
 	product      = "${var.product}-frontend"
 	location     = "${var.location}"
 	env          = "${var.env}"
-	asename      = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+	capacity     = "${var.capacity}"
 	is_frontend  = true
-    	subscription = "${var.subscription}"
+	subscription = "${var.subscription}"
 	app_settings = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
