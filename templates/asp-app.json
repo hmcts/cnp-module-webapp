@@ -8,15 +8,6 @@
         "description": "Name of the App Service Environment"
       }
     },
-    "trigger": {
-      "type": "string"
-    },
-    "hostname": {
-      "type": "string",
-      "metadata": {
-        "description": "The hostname this application should be accessible on"
-      }
-    },
     "additional_host_name": {
       "type": "string",
       "metadata": {

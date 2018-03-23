@@ -17,6 +17,7 @@ resource "azurerm_template_deployment" "tmprofile" {
     name                 = "${var.product}-${var.env}"
     additional_host_name = "${var.additional_host_name}"
     is_frontend          = "${var.is_frontend}"
+    fqdn                 = "${azurerm_public_ip.appGwPIP.fqdn}"
   }
 }
 
