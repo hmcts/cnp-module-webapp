@@ -96,3 +96,7 @@ variable "capacity" {
   default     = "2"
   description = "Maximum number of instances."
 }
+
+variable "shutterURL" {
+  default = "mojmaintenance.azurewebsites.net"
+}
