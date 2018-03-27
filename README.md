@@ -50,6 +50,11 @@ Creating a web app to host your application will create a Resource Group contain
 Each of the aforementioned resources will be named the same, using the convention product-env, so if I provide the values for product as "probate", and env
 as "dev" then the resulting resource group, app service plan and web app will be called probate-dev.
 
+If is_frontend is set to true, an application gw and traffic manager profile is created. To leverage these, and functionailty such as the shutter page, you will need to set the following dns records for your app and set the additional_hostname param:
+
+- cname pointing fqdn of your app to hmcts-<app_name>-<env>.trafficmanager.net
+- A record pointing tm<additional_hostname> to the IP of the application gw
+
 ## Testing
 There's a library of unit tests and integration tests in this repository.  In the root of this repository is a tests folder.
 Inside that are two folders named int and unit.  Folder int contains the integration tests and fixtures, the obviously named folder called unit contains
