@@ -14,17 +14,7 @@
         },
         "is_frontend": {
             "type": "string"
-        },
-        "location": {
-            "type": "string",
-            "defaultValue": "UK South",
-            "metadata": {
-                "description": "Location of the App Service Environment"
-            }
         }
-    },
-    "variables": {
-        "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]"
     },
     "resources": [
         {
@@ -75,21 +65,6 @@
                 ]
             },
             "dependsOn": []
-        },
-        {
-            "condition": "[not(equals(parameters('is_frontend'), '0'))]",
-            "name": "[concat(parameters('name'),'/', variables('trafficmanager'))]",
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2016-08-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "properties": {
-                "siteName": "[variables('trafficmanager')]",
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[parameters('name')]"
-            ]
         }
     ]
 }

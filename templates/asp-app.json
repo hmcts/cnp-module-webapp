@@ -10,7 +10,7 @@
     },
     "is_frontend": {
       "type": "string"
-  },
+    },
     "additional_host_name": {
       "type": "string",
       "defaultValue": "example",
@@ -57,7 +57,8 @@
   },
   "variables": {
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
-    "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
+    "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]",
+    "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]"
   },
   "resources": [
     {
@@ -141,8 +142,22 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]",
             "[concat('tm', parameters('additional_host_name'))]"
+          ]
+        },
+        {
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+          "name": "[variables('trafficmanager')]",
+          "type": "hostNameBindings",
+          "apiVersion": "2016-08-01",
+          "location": "[parameters('location')]",
+          "tags": {},
+          "properties": {
+            "siteName": "[variables('trafficmanager')]",
+            "hostNameType": "Verified"
+          },
+          "dependsOn": [
+            "[parameters('additional_host_name')]"
           ]
         },
         {
