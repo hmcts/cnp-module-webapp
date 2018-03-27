@@ -131,7 +131,7 @@
           ]
         },
         {
-          "condition": "[or(not(equals(parameters('additional_host_name'), 'example')), not(equals(parameters('is_frontend'), '0')))]",
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "name": "[parameters('additional_host_name')]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
