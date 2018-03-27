@@ -9,62 +9,87 @@
             "type": "string",
             "defaultValue": "default",
             "metadata": {
-              "description": "An additional hostname this application should be accessible on"
+                "description": "An additional hostname this application should be accessible on"
             }
-          },
+        },
         "is_frontend": {
             "type": "string"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "UK South",
+            "metadata": {
+                "description": "Location of the App Service Environment"
+            }
         }
     },
-"resources": [
-{
-    "condition": "[not(equals(parameters('is_frontend'), '0'))]",
-    "type": "Microsoft.Network/trafficManagerProfiles",
-    "name": "[parameters('name')]",
-    "apiVersion": "2017-05-01",
-    "location": "global",
-    "properties": {
-        "profileStatus": "Enabled",
-        "trafficRoutingMethod": "Priority",
-        "dnsConfig": {
-            "relativeName": "[concat('hmcts-', parameters('name'))]",
-            "fqdn": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
-            "ttl": 100
-        },
-        "monitorConfig": {
-            "protocol": "HTTP",
-            "port": 80,
-            "path": "/health",
-            "intervalInSeconds": 30,
-            "toleratedNumberOfFailures": 3,
-            "timeoutInSeconds": 10
-        },
-        "endpoints": [
-            {
-                "name": "shutter",
-                "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
-                "properties": {
-                    "endpointStatus": "Disabled",
-                    "target": "mojmaintenance.azurewebsites.net",
-                    "weight": 1,
-                    "priority": 1,
-                    "endpointLocation": "UK South"
-                }
-            },
-            {
-                "name": "app",
-                "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
-                "properties": {
-                    "endpointStatus": "Enabled",
-                    "target": "[concat('tm',parameters('additional_host_name'))]",
-                    "weight": 2,
-                    "priority": 2,
-                    "endpointLocation": "UK South"
-                }
-            }
-        ]
+    "variables": {
+        "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]"
     },
-    "dependsOn": []
-  }
-]
+    "resources": [
+        {
+            "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+            "type": "Microsoft.Network/trafficManagerProfiles",
+            "name": "[parameters('name')]",
+            "apiVersion": "2017-05-01",
+            "location": "global",
+            "properties": {
+                "profileStatus": "Enabled",
+                "trafficRoutingMethod": "Priority",
+                "dnsConfig": {
+                    "relativeName": "[concat('hmcts-', parameters('name'))]",
+                    "fqdn": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
+                    "ttl": 100
+                },
+                "monitorConfig": {
+                    "protocol": "HTTP",
+                    "port": 80,
+                    "path": "/health",
+                    "intervalInSeconds": 30,
+                    "toleratedNumberOfFailures": 3,
+                    "timeoutInSeconds": 10
+                },
+                "endpoints": [
+                    {
+                        "name": "shutter",
+                        "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+                        "properties": {
+                            "endpointStatus": "Disabled",
+                            "target": "mojmaintenance.azurewebsites.net",
+                            "weight": 1,
+                            "priority": 1,
+                            "endpointLocation": "UK South"
+                        }
+                    },
+                    {
+                        "name": "app",
+                        "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+                        "properties": {
+                            "endpointStatus": "Enabled",
+                            "target": "[concat('tm',parameters('additional_host_name'))]",
+                            "weight": 2,
+                            "priority": 2,
+                            "endpointLocation": "UK South"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+            "name": "[concat(parameters('name'),'/', variables('trafficmanager'))]",
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2016-08-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "siteName": "[variables('trafficmanager')]",
+                "hostNameType": "Verified"
+            },
+            "dependsOn": [
+                "[parameters('name')]"
+            ]
+        }
+    ]
 }

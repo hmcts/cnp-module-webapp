@@ -8,6 +8,9 @@
         "description": "Name of the App Service Environment"
       }
     },
+    "is_frontend": {
+      "type": "string"
+  },
     "additional_host_name": {
       "type": "string",
       "defaultValue": "example",
@@ -54,7 +57,6 @@
   },
   "variables": {
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
-    "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
     "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
   },
   "resources": [
@@ -112,28 +114,15 @@
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
-          {
-            "name": "[concat('tm', parameters('additional_host_name'))]",
-            "type": "hostNameBindings",
-            "apiVersion": "2016-08-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "properties": {
-              "siteName": "[concat('tm', parameters('additional_host_name'))]",
-              "hostNameType": "Verified"
-            },
-            "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-            ]
-          },
         {
-          "name": "[variables('trafficmanager')]",
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+          "name": "[concat('tm', parameters('additional_host_name'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[variables('trafficmanager')]",
+            "siteName": "[concat('tm', parameters('additional_host_name'))]",
             "hostNameType": "Verified"
           },
           "dependsOn": [
@@ -141,7 +130,7 @@
           ]
         },
         {
-          "condition": "[not(equals(parameters('additional_host_name'), 'example'))]",
+          "condition": "[or(not(equals(parameters('additional_host_name'), 'example')), not(equals(parameters('is_frontend'), '0')))]",
           "name": "[parameters('additional_host_name')]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
