@@ -57,8 +57,8 @@
   },
   "variables": {
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
-    "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]",
-    "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]"
+    "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
+    "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
   },
   "resources": [
     {
@@ -116,8 +116,8 @@
       },
       "resources": [
         {
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "name": "[concat('tm', parameters('additional_host_name'))]",
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
@@ -131,8 +131,8 @@
           ]
         },
         {
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "name": "[parameters('additional_host_name')]",
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
@@ -147,8 +147,8 @@
           ]
         },
         {
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "name": "[variables('trafficmanager')]",
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
