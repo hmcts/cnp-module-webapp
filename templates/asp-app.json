@@ -142,6 +142,7 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]",
             "[concat('tm', parameters('additional_host_name'))]"
           ]
         },
@@ -157,6 +158,7 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]",
             "[parameters('additional_host_name')]"
           ]
         },
