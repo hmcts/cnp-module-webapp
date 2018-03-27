@@ -42,10 +42,9 @@
         "endpoints": [
             {
                 "name": "shutter",
-                "type": "Microsoft.Network/trafficManagerProfiles/azureEndpoints",
+                "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
                 "properties": {
                     "endpointStatus": "Disabled",
-                    "targetResourceId": "[resourceId('mojmaintenancepage', 'Microsoft.Web/sites', 'mojmaintenance')]",
                     "target": "mojmaintenance.azurewebsites.net",
                     "weight": 1,
                     "priority": 1,
