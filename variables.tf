@@ -50,7 +50,7 @@ variable "application_type" {
 }
 
 variable "additional_host_name" {
-  default     = ""
+  default     = "null"
   description = "An additional hostname the app should be available on, e.g. an external hostname"
 }
 
