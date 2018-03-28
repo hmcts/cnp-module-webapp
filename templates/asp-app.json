@@ -8,6 +8,9 @@
         "description": "Name of the App Service Environment"
       }
     },
+    "is_frontend": {
+      "type": "string"
+    },
     "additional_host_name": {
       "type": "string",
       "defaultValue": "example",
@@ -112,28 +115,15 @@
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
-          {
-            "name": "[concat('tm', parameters('additional_host_name'))]",
-            "type": "hostNameBindings",
-            "apiVersion": "2016-08-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "properties": {
-              "siteName": "[concat('tm', parameters('additional_host_name'))]",
-              "hostNameType": "Verified"
-            },
-            "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-            ]
-          },
         {
-          "name": "[variables('trafficmanager')]",
+          "name": "[concat('tm', parameters('additional_host_name'))]",
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[variables('trafficmanager')]",
+            "siteName": "[concat('tm', parameters('additional_host_name'))]",
             "hostNameType": "Verified"
           },
           "dependsOn": [
@@ -141,8 +131,8 @@
           ]
         },
         {
-          "condition": "[not(equals(parameters('additional_host_name'), 'example'))]",
           "name": "[parameters('additional_host_name')]",
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
@@ -152,7 +142,24 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]",
+            "[concat('tm', parameters('additional_host_name'))]"
+          ]
+        },
+        {
+          "name": "[variables('trafficmanager')]",
+          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+          "type": "hostNameBindings",
+          "apiVersion": "2016-08-01",
+          "location": "[parameters('location')]",
+          "tags": {},
+          "properties": {
+            "siteName": "[variables('trafficmanager')]",
+            "hostNameType": "Verified"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('name'))]",
+            "[parameters('additional_host_name')]"
           ]
         },
         {

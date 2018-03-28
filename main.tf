@@ -34,7 +34,7 @@ locals {
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
   template_body       = "${data.template_file.sitetemplate.rendered}"
-  name                = "${var.product}-${var.env}"
+  name                = "${var.product}-${var.env}-webapp"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
 
@@ -47,6 +47,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     stagingSlotName      = "${var.staging_slot_name}"
     https_only           = "${var.https_only}"
     capacity             = "${var.capacity}"
+    is_frontend          = "${var.is_frontend}"
   }
 }
 
