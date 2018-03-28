@@ -44,7 +44,7 @@ variable "production_slot_app_settings" {
   type = "map"
 
   default = {
-    SLOT = "STAGING"
+    SLOT = "PRODUCTION"
   }
 }
 
