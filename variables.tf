@@ -36,7 +36,7 @@ variable "slot_app_settings" {
   type = "map"
 
   default = {
-    SLOT = "YES"
+    SLOT = "1"
   }
 }
 
