@@ -43,6 +43,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     location             = "${var.location}"
     env                  = "${var.env}"
     app_settings         = "${jsonencode(merge(var.app_settings_defaults, var.app_settings, local.app_settings_evaluated))}"
+    slot_app_settings    = "${jsonencode(merge(var.slot_app_settings, var.app_settings_defaults, var.app_settings, local.app_settings_evaluated))}"
     additional_host_name = "${var.additional_host_name}"
     stagingSlotName      = "${var.staging_slot_name}"
     https_only           = "${var.https_only}"

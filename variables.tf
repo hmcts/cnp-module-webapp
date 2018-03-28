@@ -32,6 +32,14 @@ variable "app_settings_defaults" {
   }
 }
 
+variable "slot_app_settings" {
+  type = "map"
+
+  default = {
+    SLOT = "YES"
+  }
+}
+
 variable "staging_slot_name" {
   type    = "string"
   default = "staging"
