@@ -9,6 +9,7 @@
       }
     },
     "is_frontend": {
+      "defaultValue": "0",
       "type": "string"
     },
     "additional_host_name": {
