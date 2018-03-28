@@ -171,6 +171,23 @@
           ]
         },
         {
+          "name": "slotConfigNames",
+          "type": "config",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+              "[concat('Microsoft.Web/sites/', parameters('Name'))]"
+          ],
+          "tags": {
+              "displayName": "slotConfigNames"
+          },
+          "properties": {
+              "appSettingNames": [
+                  "SLOT"
+              ]
+          }
+      },
+
+        {
           "apiVersion": "2016-08-01",
           "name": "appsettings",
           "type": "config",
