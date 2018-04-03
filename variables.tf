@@ -32,6 +32,22 @@ variable "app_settings_defaults" {
   }
 }
 
+variable "staging_slot_app_settings" {
+  type = "map"
+
+  default = {
+    SLOT = "STAGING"
+  }
+}
+
+variable "production_slot_app_settings" {
+  type = "map"
+
+  default = {
+    SLOT = "PRODUCTION"
+  }
+}
+
 variable "staging_slot_name" {
   type    = "string"
   default = "staging"
