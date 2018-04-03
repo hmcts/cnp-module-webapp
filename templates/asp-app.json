@@ -37,6 +37,9 @@
     "app_settings": {
       "type": "string"
     },
+    "staging_app_settings": {
+      "type": "string"
+    },
     "stagingSlotName": {
       "type": "string",
       "defaultValue": "staging",
@@ -58,6 +61,7 @@
   },
   "variables": {
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
+    "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
     "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
   },
@@ -164,6 +168,22 @@
           ]
         },
         {
+          "name": "slotConfigNames",
+          "type": "config",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', parameters('Name'))]"
+          ],
+          "tags": {
+            "displayName": "slotConfigNames"
+          },
+          "properties": {
+            "appSettingNames": [
+              "SLOT"
+            ]
+          }
+        },
+        {
           "apiVersion": "2016-08-01",
           "name": "appsettings",
           "type": "config",
@@ -207,7 +227,7 @@
           "dependsOn": [
             "[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
           ],
-          "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
+          "properties": "[base64ToJson(variables('base64SlotAppSettingObject'))]"
         }
       ]
     }
