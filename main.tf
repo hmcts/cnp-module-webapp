@@ -16,7 +16,7 @@ data "template_file" "sitetemplate" {
 
 # Create Application Insights for the service
 resource "azurerm_application_insights" "appinsights" {
-  count               = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
+  # count               = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
 
   name                = "${var.product}-appinsights-${var.env}"
   location            = "${var.appinsights_location}"
