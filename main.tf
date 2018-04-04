@@ -16,6 +16,8 @@ data "template_file" "sitetemplate" {
 
 # Create Application Insights for the service
 resource "azurerm_application_insights" "appinsights" {
+  count               = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
+
   name                = "${var.product}-appinsights-${var.env}"
   location            = "${var.appinsights_location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
@@ -23,11 +25,13 @@ resource "azurerm_application_insights" "appinsights" {
 }
 
 locals {
+  effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key == "" ? azurerm_application_insights.appinsights.instrumentation_key : var.appinsights_instrumentation_key}"
+
   app_settings_evaluated = {
-    APPLICATION_INSIGHTS_IKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
+    APPLICATION_INSIGHTS_IKEY = "${local.effective_app_insights_instrumentation_key}"
 
     # Support for nodejs apps (java apps to migrate to this env var in future PR)
-    APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
+    APPINSIGHTS_INSTRUMENTATIONKEY = "${local.effective_app_insights_instrumentation_key}"
   }
 }
 
