@@ -86,7 +86,7 @@ resource "azurerm_application_gateway" "waf" {
     backend_http_settings_name = "backendSettingsHTTP"
   }
   waf_configuration {
-    firewall_mode    = "Detection"
+    firewall_mode    = "Prevention"
     rule_set_type    = "OWASP"
     rule_set_version = "3.0"
     enabled          = "true"
@@ -110,4 +110,3 @@ resource "azurerm_application_gateway" "waf" {
     timeout             = "60"
   }
 }
-
