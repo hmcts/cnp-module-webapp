@@ -7,6 +7,10 @@ locals {
 resource "azurerm_resource_group" "rg" {
   name     = "${local.resource_group_name}"
   location = "${var.location}"
+
+  tags {
+    environment = "${var.env}"
+  }
 }
 
 # The ARM template that creates a web app and app service plan
