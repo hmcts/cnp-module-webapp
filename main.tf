@@ -25,6 +25,7 @@ resource "azurerm_application_insights" "appinsights" {
 }
 
 locals {
+  # https://www.terraform.io/upgrade-guides/0-11.html#referencing-attributes-from-resources-with-count-0
   service_app_insights_instrumentation_key = "${element(concat(azurerm_application_insights.appinsights.*.instrumentation_key, list("")), 0)}"
   effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key == "" ? local.service_app_insights_instrumentation_key : var.appinsights_instrumentation_key}"
 
