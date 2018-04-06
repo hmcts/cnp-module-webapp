@@ -25,7 +25,8 @@ resource "azurerm_application_insights" "appinsights" {
 }
 
 locals {
-  effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key != "" ? var.appinsights_instrumentation_key : azurerm_application_insights.appinsights.instrumentation_key}"
+  service_app_insights_instrumentation_key = "${azurerm_application_insights.appinsights.count == 0 ? "" : azurerm_application_insights.appinsights.instrumentation_key}"
+  effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key != "" ? var.appinsights_instrumentation_key : local.service_app_insights_instrumentation_key}"
 
   app_settings_evaluated = {
     APPLICATION_INSIGHTS_IKEY = "${local.effective_app_insights_instrumentation_key}"
