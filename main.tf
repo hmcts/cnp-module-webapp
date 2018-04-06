@@ -14,7 +14,7 @@ data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"
 }
 
-# Create Application Insights for the service
+# Create Application Insights for the service only if an instrumentation key to a specific instance wasn't provided
 resource "azurerm_application_insights" "appinsights" {
   count               = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
 
