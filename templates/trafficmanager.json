@@ -32,8 +32,8 @@
                     "ttl": 100
                 },
                 "monitorConfig": {
-                    "protocol": "HTTP",
-                    "port": 80,
+                    "protocol": "HTTPS",
+                    "port": 443,
                     "path": "/health",
                     "intervalInSeconds": 30,
                     "toleratedNumberOfFailures": 3,
