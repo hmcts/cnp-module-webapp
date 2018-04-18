@@ -33,7 +33,6 @@ variable "app_settings_defaults" {
   default = {
     WEBSITE_NODE_DEFAULT_VERSION                     = "8.9.4"
     NODE_PATH                                        = "D:\\home\\site\\wwwroot"
-    WEBSITE_LOCAL_CACHE_OPTION                       = "Always"
     WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION = "0"
   }
 }
@@ -50,7 +49,8 @@ variable "production_slot_app_settings" {
   type = "map"
 
   default = {
-    SLOT = "PRODUCTION"
+    SLOT                       = "PRODUCTION"
+    WEBSITE_LOCAL_CACHE_OPTION = "Always"
   }
 }
 
