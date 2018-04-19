@@ -69,9 +69,9 @@
     "aspname": "[concat(parameters('asp_name'), '-asp')]",
     "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]",
     "aspResourceGroup": "[concat('mgmt-asp-', parameters('env'))]",
-    "serverFarmName": "[if(greater(length(parameters('asp_name')), 4), variables('aspname'), parameters('name'))]",
-    "serverFarmRG": "[if(greater(length(parameters('asp_name')), 4), variables('aspResourceGroup'), parameters('name'))]",
-    "serverFarmId": "[if(greater(length(parameters('asp_name')), 4), resourceId(variables('aspResourceGroup'), 'Microsoft.Web/serverfarms', variables('serverFarmName')), resourceId('Microsoft.Web/serverfarms', variables('serverFarmName')))]"
+    "serverFarmName": "[if(contains(parameters('asp_name'), 'null'), variables('aspname'), parameters('name'))]",
+    "serverFarmRG": "[if(contains(parameters('asp_name'), 'null'), variables('aspResourceGroup'), parameters('name'))]",
+    "serverFarmId": "[if(contains(parameters('asp_name'), 'null'), resourceId(variables('aspResourceGroup'), 'Microsoft.Web/serverfarms', variables('serverFarmName')), resourceId('Microsoft.Web/serverfarms', variables('serverFarmName')))]"
   },
   "resources": [
     {
