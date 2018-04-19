@@ -59,7 +59,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     https_only           = "${var.https_only}"
     capacity             = "${var.capacity}"
     is_frontend          = "${var.is_frontend}"
-    asp_name             = "${var.asp_name}"
+    asp_name             = "${var.asp_name}-${var.env}"
   }
 }
 
