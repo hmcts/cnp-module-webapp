@@ -113,7 +113,7 @@
       "location": "[parameters('location')]",
       "apiVersion": "2016-08-01",
       "dependsOn": [
-        "[resourceId(concat('mgmt-asp-', parameters('env')), 'Microsoft.Web/serverfarms', variables('aspname'))]"
+        "[resourceId('Microsoft.Resources/deployments', 'nestedTemplate')]"
       ],
       "tags": {
         "[concat('hidden-related:', resourceId(concat('mgmt-asp-', parameters('env')),'Microsoft.Web/serverfarms', variables('aspname')))]": "Resource",
