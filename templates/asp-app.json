@@ -71,43 +71,58 @@
   },
   "resources": [
     {
-      "name": "[variables('aspname')]",
-      "type": "Microsoft.Web/serverfarms",
-      "location": "[parameters('location')]",
-      "apiVersion": "2016-09-01",
-      "tags": {
-        "displayName": "Application Service Plan",
-        "environment": "[parameters('env')]"
-      },
+      "apiVersion": "2017-05-10",
+      "name": "nestedTemplate",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[concat('mgmt-asp-', parameters('env')]",
       "properties": {
-        "name": "[variables('aspname')]",
-        "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-        "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
-      },
-      "sku": {
-        "name": "I2",
-        "tier": "Isolated",
-        "size": "I2",
-        "family": "I",
-        "capacity": "[parameters('capacity')]"
-      }
-    },
+          "mode": "Incremental",
+          "template": {
+              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+              "contentVersion": "1.0.0.0",
+              "resources": [
+                {
+                  "name": "[variables('aspname')]",
+                  "type": "Microsoft.Web/serverfarms",
+                  "location": "[parameters('location')]",
+                  "apiVersion": "2016-09-01",
+                  "tags": {
+                    "displayName": "Application Service Plan",
+                    "environment": "[parameters('env')]"
+                  },
+                  "properties": {
+                    "name": "[variables('aspname')]",
+                    "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+                    "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
+                  },
+                  "sku": {
+                    "name": "I2",
+                    "tier": "Isolated",
+                    "size": "I2",
+                    "family": "I",
+                    "capacity": "[parameters('capacity')]"
+                  }
+                }
+              ]
+            }
+          }
+        },
     {
       "name": "[parameters('name')]",
       "type": "Microsoft.Web/sites",
       "location": "[parameters('location')]",
       "apiVersion": "2016-08-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('aspname'))]"
+        "[resourceId(concat('mgmt-asp-', parameters('env')), 'Microsoft.Web/serverfarms', variables('aspname'))]"
       ],
       "tags": {
-        "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', variables('aspname')))]": "Resource",
+        "[concat('hidden-related:', resourceId(concat('mgmt-asp-', parameters('env')),'Microsoft.Web/serverfarms', variables('aspname')))]": "Resource",
         "displayName": "ASE-WEB-APP",
         "environment": "[parameters('env')]"
       },
       "properties": {
         "name": "[parameters('name')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('aspname'))]",
+        "serverFarmId": "[resourceId(concat('mgmt-asp-', parameters('env')), 'Microsoft.Web/serverfarms', variables('aspname'))]",
         "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
         "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]",
         "siteConfig": {
