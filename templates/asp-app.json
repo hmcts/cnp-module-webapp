@@ -75,14 +75,6 @@
       "name": "nestedTemplate",
       "type": "Microsoft.Resources/deployments",
       "resourceGroup": "[concat('mgmt-asp-', parameters('env'))]",
-      "parameters": {
-        "env": {
-          "type": "string",
-          "metadata": {
-            "description": "Environment Specific tag"
-          }
-        }
-      },
       "properties": {
           "mode": "Incremental",
           "template": {
