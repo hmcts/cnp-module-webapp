@@ -67,46 +67,47 @@
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
     "aspname": "[concat(parameters('asp_name'), '-asp')]",
-    "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]"
+    "additional_host_name_resource": "[concat(parameters('name'), '/', if(equals(parameters('additional_host_name'),''),'default',parameters('additional_host_name')))]",
+    "aspResourceGroup": "[concat('mgmt-asp-', parameters('env'))]"
   },
   "resources": [
     {
       "apiVersion": "2017-05-10",
       "name": "nestedTemplate",
       "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[concat('mgmt-asp-', parameters('env'))]",
+      "resourceGroup": "[variables('aspResourceGroup')]",
       "properties": {
-          "mode": "Incremental",
-          "template": {
-              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-              "contentVersion": "1.0.0.0",
-              "resources": [
-                {
-                  "name": "[variables('aspname')]",
-                  "type": "Microsoft.Web/serverfarms",
-                  "location": "[parameters('location')]",
-                  "apiVersion": "2016-09-01",
-                  "tags": {
-                    "displayName": "Application Service Plan",
-                    "environment": "[parameters('env')]"
-                  },
-                  "properties": {
-                    "name": "[variables('aspname')]",
-                    "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-                    "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
-                  },
-                  "sku": {
-                    "name": "I2",
-                    "tier": "Isolated",
-                    "size": "I2",
-                    "family": "I",
-                    "capacity": "[parameters('capacity')]"
-                  }
-                }
-              ]
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "name": "[variables('aspname')]",
+              "type": "Microsoft.Web/serverfarms",
+              "location": "[parameters('location')]",
+              "apiVersion": "2016-09-01",
+              "tags": {
+                "displayName": "Application Service Plan",
+                "environment": "[parameters('env')]"
+              },
+              "properties": {
+                "name": "[variables('aspname')]",
+                "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+                "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
+              },
+              "sku": {
+                "name": "I2",
+                "tier": "Isolated",
+                "size": "I2",
+                "family": "I",
+                "capacity": "[parameters('capacity')]"
+              }
             }
-          }
-        },
+          ]
+        }
+      }
+    },
     {
       "name": "[parameters('name')]",
       "type": "Microsoft.Web/sites",
@@ -119,9 +120,7 @@
       },
       "properties": {
         "name": "[parameters('name')]",
-        "serverFarmId": "[resourceId(concat('mgmt-asp-', parameters('env')), 'Microsoft.Web/serverfarms', variables('aspname'))]",
-        "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-        "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]",
+        "serverFarmId": "[resourceId(variables('aspResourceGroup'), 'Microsoft.Web/serverfarms', variables('aspname'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,
           "detailedErrorLoggingEnabled": true,
@@ -148,7 +147,7 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+            "[parameters('name')]"
           ]
         },
         {
@@ -163,7 +162,7 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]",
+            "[parameters('name')]",
             "[concat('tm', parameters('additional_host_name'))]"
           ]
         },
@@ -179,7 +178,7 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]",
+            "[parameters('name')]",
             "[parameters('additional_host_name')]"
           ]
         },
