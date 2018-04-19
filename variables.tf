@@ -122,4 +122,6 @@ variable "shutterURL" {
   default = "mojmaintenance.azurewebsites.net"
 }
 
-variable "asp_name" {}
+variable "asp_name" {
+  default = "null"
+}
