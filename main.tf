@@ -20,7 +20,7 @@ data "template_file" "sitetemplate" {
 
 # Create Application Insights for the service only if an instrumentation key to a specific instance wasn't provided
 resource "azurerm_application_insights" "appinsights" {
-  count               = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
+  count = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
 
   name                = "${var.product}-appinsights-${var.env}"
   location            = "${var.appinsights_location}"
@@ -30,7 +30,7 @@ resource "azurerm_application_insights" "appinsights" {
 
 locals {
   # https://www.terraform.io/upgrade-guides/0-11.html#referencing-attributes-from-resources-with-count-0
-  service_app_insights_instrumentation_key = "${element(concat(azurerm_application_insights.appinsights.*.instrumentation_key, list("")), 0)}"
+  service_app_insights_instrumentation_key   = "${element(concat(azurerm_application_insights.appinsights.*.instrumentation_key, list("")), 0)}"
   effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key == "" ? local.service_app_insights_instrumentation_key : var.appinsights_instrumentation_key}"
 
   app_settings_evaluated = {
@@ -59,6 +59,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     https_only           = "${var.https_only}"
     capacity             = "${var.capacity}"
     is_frontend          = "${var.is_frontend}"
+    asp_name             = "${var.asp_name}-${var.env}"
   }
 }
 
