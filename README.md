@@ -34,6 +34,7 @@ module "frontend" {
 	env          = "${var.env}"
 	capacity     = "${var.capacity}"
 	is_frontend  = true
+	asp_name     = ${var.product}-${var.env}-asp 
 	subscription = "${var.subscription}"
 	app_settings = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
