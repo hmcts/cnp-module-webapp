@@ -121,6 +121,9 @@
         "displayName": "ASE-WEB-APP",
         "environment": "[parameters('env')]"
       },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments','nestedTemplate')]"
+      ],
       "properties": {
         "name": "[parameters('name')]",
         "serverFarmId": "[variables('serverFarmId')]",
