@@ -37,7 +37,7 @@
                     "path": "/health",
                     "intervalInSeconds": 30,
                     "toleratedNumberOfFailures": 3,
-                    "timeoutInSeconds": 10
+                    "timeoutInSeconds": 15
                 },
                 "endpoints": [
                     {
