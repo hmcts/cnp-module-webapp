@@ -12,5 +12,9 @@ resource "azurerm_template_deployment" "tmprofile" {
     name                 = "${var.product}-${var.env}"
     additional_host_name = "${var.additional_host_name}"
     is_frontend          = "${var.is_frontend}"
+    env                  = "${var.env}"
+    team_name            = "${var.team_name}"
+    team_contact         = "${var.team_contact}"
+    destroy_me           = "${var.destroy_me}"
   }
 }
