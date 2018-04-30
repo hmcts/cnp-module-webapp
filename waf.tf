@@ -5,6 +5,13 @@ resource "azurerm_public_ip" "appGwPIP" {
   location                     = "${var.location}"
   resource_group_name          = "${azurerm_resource_group.rg.name}"
   public_ip_address_allocation = "dynamic"
+
+  tags {
+    Enviroment   = "${var.env}"
+    Team         = "${var.team_name}"
+    Contact      = "${var.team_contact}"
+    "Destroy Me" = "${var.destroy_me}"
+  }
 }
 
 # Application gateway with WAF - Only created if var.is_frontend is set to true
@@ -13,6 +20,13 @@ resource "azurerm_application_gateway" "waf" {
   name                = "${var.product}-${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   location            = "${var.location}"
+
+  tags {
+    Enviroment   = "${var.env}"
+    Team         = "${var.team_name}"
+    Contact      = "${var.team_contact}"
+    "Destroy Me" = "${var.destroy_me}"
+  }
 
   sku {
     name     = "WAF_Medium"

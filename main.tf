@@ -9,7 +9,10 @@ resource "azurerm_resource_group" "rg" {
   location = "${var.location}"
 
   tags {
-    environment = "${var.env}"
+    Environment  = "${var.env}"
+    Team         = "${var.team_name}"
+    Contact      = "${var.team_contact}"
+    "Destroy Me" = "${var.destroy_me}"
   }
 }
 
