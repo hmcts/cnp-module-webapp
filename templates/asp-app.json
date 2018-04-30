@@ -137,6 +137,7 @@
         "Environment": "[parameters('env')]",
         "Team": "[parameters('team_name')]",
         "Contact": "[parameters('team_contact')]",
+        "Tier": "[parameters('tier')]",
         "Destroy Me": "[parameters('destroy_me')]"
       },
       "dependsOn": [
