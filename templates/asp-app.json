@@ -60,6 +60,12 @@
     },
     "asp_name": {
       "type": "string"
+    },
+    "team_name": {
+      "type": "string"
+    },
+    "team_contact": {
+      "type": "string"
     }
   },
   "variables": {
@@ -91,8 +97,10 @@
               "location": "[parameters('location')]",
               "apiVersion": "2016-09-01",
               "tags": {
-                "displayName": "Application Service Plan",
-                "environment": "[parameters('env')]"
+                "Display Name": "Application Service Plan",
+                "Environment": "[parameters('env')]",
+                "Team": "[parameters('team_name')]",
+                "Contact": "[parameters('team_contact')]"
               },
               "properties": {
                 "name": "[variables('serverFarmName')]",
@@ -118,8 +126,10 @@
       "apiVersion": "2016-08-01",
       "tags": {
         "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
-        "displayName": "ASE-WEB-APP",
-        "environment": "[parameters('env')]"
+        "DisplayName": "ASE-WEB-APP",
+        "Environment": "[parameters('env')]",
+        "Team": "[parameters('team_name')]",
+        "Contact": "[parameters('team_contact')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments','nestedTemplate')]"
@@ -147,7 +157,11 @@
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
-          "tags": {},
+          "tags": {
+            "Environment": "[parameters('env')]",
+            "Team": "[parameters('team_name')]",
+            "Contact": "[parameters('team_contact')]"
+          },
           "properties": {
             "siteName": "[concat('tm', parameters('additional_host_name'))]",
             "hostNameType": "Verified"
@@ -162,7 +176,11 @@
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
-          "tags": {},
+          "tags": {
+            "Environment": "[parameters('env')]",
+            "Team": "[parameters('team_name')]",
+            "Contact": "[parameters('team_contact')]"
+          },
           "properties": {
             "siteName": "[parameters('additional_host_name')]",
             "hostNameType": "Verified"
@@ -178,7 +196,11 @@
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
-          "tags": {},
+          "tags": {
+            "Environment": "[parameters('env')]",
+            "Team": "[parameters('team_name')]",
+            "Contact": "[parameters('team_contact')]"
+          },
           "properties": {
             "siteName": "[variables('trafficmanager')]",
             "hostNameType": "Verified"
@@ -196,7 +218,10 @@
             "[concat('Microsoft.Web/sites/', parameters('Name'))]"
           ],
           "tags": {
-            "displayName": "slotConfigNames"
+            "Display Name": "slotConfigNames",
+            "Environment": "[parameters('env')]",
+            "Team": "[parameters('team_name')]",
+            "Contact": "[parameters('team_contact')]"
           },
           "properties": {
             "appSettingNames": [
@@ -223,7 +248,10 @@
         "[resourceId('Microsoft.Web/sites', parameters('name'))]"
       ],
       "tags": {
-        "displyName": "[concat(parameters('stagingSlotName'), ' Slot')]"
+        "Disply Name": "[concat(parameters('stagingSlotName'), ' Slot')]",
+        "Environment": "[parameters('env')]",
+        "Team": "[parameters('team_name')]",
+        "Contact": "[parameters('team_contact')]"
       },
       "location": "[parameters('location')]",
       "properties": {

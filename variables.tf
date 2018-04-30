@@ -125,3 +125,15 @@ variable "shutterURL" {
 variable "asp_name" {
   default = "null"
 }
+
+variable "team_name" {
+  default = "Not Supplied"
+  type = "string"
+  description = "(256 Char Max) Enter the name of your team here. This is useful to tie your different products together in the Azure Portal using Tags."
+}
+
+variable "team_contact" {
+  default = "Not Supplied"
+  type = "string"
+  description = "(256 char max) Enter contact information here for your team. Usually your team slack channel e.g. #Cloud-Native"
+}
