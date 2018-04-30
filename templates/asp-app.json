@@ -66,7 +66,13 @@
     },
     "team_contact": {
       "type": "string"
-    }
+    },
+    "tier": {
+      "type": "string"
+    },
+    "destroy_me": {
+      "type": "string"
+    }  
   },
   "variables": {
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
@@ -100,7 +106,8 @@
                 "Display Name": "Application Service Plan",
                 "Environment": "[parameters('env')]",
                 "Team": "[parameters('team_name')]",
-                "Contact": "[parameters('team_contact')]"
+                "Contact": "[parameters('team_contact')]",
+                "Destroy Me": "[parameters('destroy_me')]"
               },
               "properties": {
                 "name": "[variables('serverFarmName')]",
@@ -129,7 +136,8 @@
         "DisplayName": "ASE-WEB-APP",
         "Environment": "[parameters('env')]",
         "Team": "[parameters('team_name')]",
-        "Contact": "[parameters('team_contact')]"
+        "Contact": "[parameters('team_contact')]",
+        "Destroy Me": "[parameters('destroy_me')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments','nestedTemplate')]"
@@ -160,7 +168,9 @@
           "tags": {
             "Environment": "[parameters('env')]",
             "Team": "[parameters('team_name')]",
-            "Contact": "[parameters('team_contact')]"
+            "Contact": "[parameters('team_contact')]",
+            "Tier": "[parameters('tier')]",
+            "Destroy Me": "[parameters('destroy_me')]"
           },
           "properties": {
             "siteName": "[concat('tm', parameters('additional_host_name'))]",
@@ -179,7 +189,8 @@
           "tags": {
             "Environment": "[parameters('env')]",
             "Team": "[parameters('team_name')]",
-            "Contact": "[parameters('team_contact')]"
+            "Contact": "[parameters('team_contact')]",
+            "Destroy Me": "[parameters('destroy_me')]"
           },
           "properties": {
             "siteName": "[parameters('additional_host_name')]",
@@ -221,7 +232,8 @@
             "Display Name": "slotConfigNames",
             "Environment": "[parameters('env')]",
             "Team": "[parameters('team_name')]",
-            "Contact": "[parameters('team_contact')]"
+            "Contact": "[parameters('team_contact')]",
+            "Destroy Me": "[parameters('destroy_me')]"
           },
           "properties": {
             "appSettingNames": [
@@ -248,10 +260,11 @@
         "[resourceId('Microsoft.Web/sites', parameters('name'))]"
       ],
       "tags": {
-        "Disply Name": "[concat(parameters('stagingSlotName'), ' Slot')]",
+        "Display Name": "[concat(parameters('stagingSlotName'), ' Slot')]",
         "Environment": "[parameters('env')]",
         "Team": "[parameters('team_name')]",
-        "Contact": "[parameters('team_contact')]"
+        "Contact": "[parameters('team_contact')]",
+        "Destroy Me": "[parameters('destroy_me')]"
       },
       "location": "[parameters('location')]",
       "properties": {

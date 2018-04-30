@@ -26,9 +26,12 @@ resource "azurerm_application_insights" "appinsights" {
   location            = "${var.appinsights_location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   application_type    = "${var.application_type}"
+
   tags {
-    Team = "${var.team_name}"
-    Contact = "${var.team_contact}"
+    Enviroment   = "${var.environment}"
+    Team         = "${var.team_name}"
+    Contact      = "${var.team_contact}"
+    "Destroy Me" = "${var.destroy_me}"
   }
 }
 
@@ -66,6 +69,8 @@ resource "azurerm_template_deployment" "app_service_site" {
     asp_name             = "${var.asp_name}-${var.env}"
     team_name            = "${var.team_name}"
     team_contact         = "${var.team_contact}"
+    tier                 = "${var.tier}"
+    destroy_me           = "${var.destroy_me}"
   }
 }
 

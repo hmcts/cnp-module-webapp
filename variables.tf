@@ -137,3 +137,16 @@ variable "team_contact" {
   type = "string"
   description = "(256 char max) Enter contact information here for your team. Usually your team slack channel e.g. #Cloud-Native"
 }
+
+variable "tier" {
+  type        = "string"
+  default     = "Not Supplied"
+  description = "Choose Either Front-End, Back-End or Database. This may determine which ASE you application gets placed on."
+}
+
+variable "destroy_me" {
+  type        = "string"
+  default     = "No"
+  description = "Choose either Yes or No. This is planned to auto-cleanup resources but currently just sets a tag."
+}
+
