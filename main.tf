@@ -28,7 +28,7 @@ resource "azurerm_application_insights" "appinsights" {
   application_type    = "${var.application_type}"
 
   tags {
-    Enviroment   = "${var.environment}"
+    Enviroment   = "${var.env}"
     Team         = "${var.team_name}"
     Contact      = "${var.team_contact}"
     "Destroy Me" = "${var.destroy_me}"
