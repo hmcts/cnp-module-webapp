@@ -76,7 +76,7 @@
   "resources": [
     {
       "apiVersion": "2017-05-10",
-      "name": "nestedTemplate",
+      "name": "[concat('aspDeploy-', variables('serverFarmName'))]",
       "type": "Microsoft.Resources/deployments",
       "resourceGroup": "[variables('serverFarmRG')]",
       "properties": {
@@ -122,7 +122,7 @@
         "environment": "[parameters('env')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments','nestedTemplate')]"
+        "[concat('aspDeploy-', variables('serverFarmName'))]"
       ],
       "properties": {
         "name": "[parameters('name')]",
