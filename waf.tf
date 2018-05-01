@@ -42,7 +42,7 @@ resource "azurerm_application_gateway" "waf" {
 
   backend_address_pool {
     name            = "backendPool"
-    ip_address_list = ["${var.ilbIp}"]
+    ip_address_list = ["${var.wafBackendIP == "0.0.0.0" ? var.ilbIp : var.wafBackendIP}"]
   }
 
   backend_http_settings {
