@@ -22,7 +22,7 @@ Name | Type |  Required | Default | description
 `additional_host_name` | String | No | | A custom domain name for your web application
 `https_only` | String | No | `"false"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
 `asp_name` | String | No | | this is the name of the shared service plan to be deployed to. Name should follow ${product}-${env}-asp format
-`ilbIp` | String | No | IP of ILB for the ASE | Internal IP for the WAF to use as backend. Automatically set to the ASE. Only override if needed via an `{env}.tfvars` file
+`waf_backend_ip` | String | No | IP of ILB for the ASE | Overrides the backend IP for the WAF to use instead of the ILB for the ASE. Only override if needed via an `{env}.tfvars` file
 
 ## Usage
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
@@ -62,9 +62,9 @@ If is_frontend is set to true, an application gw and traffic manager profile is 
 
 _This applies only to frontend apps (`is_frontend = true`)._
 
-By default the WAF will use the ILB of the ASE for the backend.  This is sufficient for most apps and the `ilbIp` var does not need to be set.
+By default the WAF will use the ILB of the ASE for the backend.  This is sufficient for most apps and the `waf_backend_ip` var does not need to be set.
 
-If you need to override the WAF backend (for example to add a proxy for attachment scanning) set the `ilbIp` to the internal IP of the required backend in the apps environment specific `{env}.tfvars` file.
+If you need to override the WAF backend (for example to add a proxy for attachment scanning) set the `waf_backend_ip` to the internal IP of the required backend in the apps environment specific `{env}.tfvars` file.
 
 ## Testing
 There's a library of unit tests and integration tests in this repository.  In the root of this repository is a tests folder.
