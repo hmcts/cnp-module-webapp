@@ -35,10 +35,9 @@
             "name": "[parameters('name')]",
             "apiVersion": "2017-05-01",
             "tags": {
-                "Display Name": "Application Service Plan",
-                "Environment": "[parameters('env')]",
-                "Team": "[parameters('team_name')]",
-                "Contact": "[parameters('team_contact')]",
+                "Deployment Environment": "[parameters('env')]",
+                "Team Name": "[parameters('team_name')]",
+                "Team Contact": "[parameters('team_contact')]",
                 "Destroy Me": "[parameters('destroy_me')]"
               },
             "location": "global",

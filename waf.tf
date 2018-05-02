@@ -7,10 +7,10 @@ resource "azurerm_public_ip" "appGwPIP" {
   public_ip_address_allocation = "dynamic"
 
   tags {
-    Enviroment   = "${var.env}"
-    Team         = "${var.team_name}"
-    Contact      = "${var.team_contact}"
-    "Destroy Me" = "${var.destroy_me}"
+    "Deployment Enviroment" = "${var.env}"
+    "Team Name"             = "${var.team_name}"
+    "Team Contact"          = "${var.team_contact}"
+    "Destroy Me"            = "${var.destroy_me}"
   }
 }
 
@@ -22,10 +22,10 @@ resource "azurerm_application_gateway" "waf" {
   location            = "${var.location}"
 
   tags {
-    Enviroment   = "${var.env}"
-    Team         = "${var.team_name}"
-    Contact      = "${var.team_contact}"
-    "Destroy Me" = "${var.destroy_me}"
+    "Deployment Enviroment" = "${var.env}"
+    "Team Name"             = "${var.team_name}"
+    "Team Contact"          = "${var.team_contact}"
+    "Destroy Me"            = "${var.destroy_me}"
   }
 
   sku {
