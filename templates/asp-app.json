@@ -104,9 +104,9 @@
               "apiVersion": "2016-09-01",
               "tags": {
                 "Display Name": "Application Service Plan",
-                "Environment": "[parameters('env')]",
-                "Team": "[parameters('team_name')]",
-                "Contact": "[parameters('team_contact')]",
+                "Deployment Environment": "[parameters('env')]",
+                "Team Name": "[parameters('team_name')]",
+                "Team Contact": "[parameters('team_contact')]",
                 "Destroy Me": "[parameters('destroy_me')]"
               },
               "properties": {
@@ -134,9 +134,9 @@
       "tags": {
         "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
         "DisplayName": "ASE-WEB-APP",
-        "Environment": "[parameters('env')]",
-        "Team": "[parameters('team_name')]",
-        "Contact": "[parameters('team_contact')]",
+        "Deployment Environment": "[parameters('env')]",
+        "Team Name": "[parameters('team_name')]",
+        "Team Contact": "[parameters('team_contact')]",
         "Tier": "[parameters('tier')]",
         "Destroy Me": "[parameters('destroy_me')]"
       },
@@ -167,9 +167,9 @@
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {
-            "Environment": "[parameters('env')]",
-            "Team": "[parameters('team_name')]",
-            "Contact": "[parameters('team_contact')]",
+            "Deployment Environment": "[parameters('env')]",
+            "Team Name": "[parameters('team_name')]",
+            "Team Contact": "[parameters('team_contact')]",
             "Tier": "[parameters('tier')]",
             "Destroy Me": "[parameters('destroy_me')]"
           },
@@ -188,9 +188,9 @@
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {
-            "Environment": "[parameters('env')]",
-            "Team": "[parameters('team_name')]",
-            "Contact": "[parameters('team_contact')]",
+            "Deployment Environment": "[parameters('env')]",
+            "Team Name": "[parameters('team_name')]",
+            "Team Contact": "[parameters('team_contact')]",
             "Destroy Me": "[parameters('destroy_me')]"
           },
           "properties": {
@@ -209,9 +209,9 @@
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {
-            "Environment": "[parameters('env')]",
-            "Team": "[parameters('team_name')]",
-            "Contact": "[parameters('team_contact')]"
+            "Deployment Environment": "[parameters('env')]",
+            "Team Name": "[parameters('team_name')]",
+            "Team Contact": "[parameters('team_contact')]"
           },
           "properties": {
             "siteName": "[variables('trafficmanager')]",
@@ -231,9 +231,9 @@
           ],
           "tags": {
             "Display Name": "slotConfigNames",
-            "Environment": "[parameters('env')]",
-            "Team": "[parameters('team_name')]",
-            "Contact": "[parameters('team_contact')]",
+            "Deployment Environment": "[parameters('env')]",
+            "Team Name": "[parameters('team_name')]",
+            "Team Contact": "[parameters('team_contact')]",
             "Destroy Me": "[parameters('destroy_me')]"
           },
           "properties": {
@@ -262,9 +262,9 @@
       ],
       "tags": {
         "Display Name": "[concat(parameters('stagingSlotName'), ' Slot')]",
-        "Environment": "[parameters('env')]",
-        "Team": "[parameters('team_name')]",
-        "Contact": "[parameters('team_contact')]",
+        "Deployment Environment": "[parameters('env')]",
+        "Team Name": "[parameters('team_name')]",
+        "Team Contact": "[parameters('team_contact')]",
         "Destroy Me": "[parameters('destroy_me')]"
       },
       "location": "[parameters('location')]",
