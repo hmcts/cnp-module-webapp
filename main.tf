@@ -31,10 +31,10 @@ resource "azurerm_application_insights" "appinsights" {
   application_type    = "${var.application_type}"
 
   tags {
-    "Deployment Enviroment" = "${var.env}"
-    "Team Name"             = "${var.team_name}"
-    "Team Contact"          = "${var.team_contact}"
-    "Destroy Me"            = "${var.destroy_me}"
+    "Deployment Environment" = "${var.env}"
+    "Team Name"              = "${var.team_name}"
+    "Team Contact"           = "${var.team_contact}"
+    "Destroy Me"             = "${var.destroy_me}"
   }
 }
 

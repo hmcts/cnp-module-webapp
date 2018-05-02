@@ -211,7 +211,8 @@
           "tags": {
             "Deployment Environment": "[parameters('env')]",
             "Team Name": "[parameters('team_name')]",
-            "Team Contact": "[parameters('team_contact')]"
+            "Team Contact": "[parameters('team_contact')]",
+            "Destroy Me": "[parameters('destroy_me')]"
           },
           "properties": {
             "siteName": "[variables('trafficmanager')]",
@@ -234,6 +235,7 @@
             "Deployment Environment": "[parameters('env')]",
             "Team Name": "[parameters('team_name')]",
             "Team Contact": "[parameters('team_contact')]",
+            "Tier": "[parameters('tier')]",
             "Destroy Me": "[parameters('destroy_me')]"
           },
           "properties": {
@@ -265,6 +267,7 @@
         "Deployment Environment": "[parameters('env')]",
         "Team Name": "[parameters('team_name')]",
         "Team Contact": "[parameters('team_contact')]",
+        "Tier": "[parameters('tier')]",
         "Destroy Me": "[parameters('destroy_me')]"
       },
       "location": "[parameters('location')]",
