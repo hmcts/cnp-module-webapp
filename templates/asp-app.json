@@ -58,7 +58,7 @@
         "description": "Configures a web site to accept only https requests. Issues redirect for http requests"
       }
     },
-    "webSocketsEnabled": {
+    "web_sockets_enabled": {
       "type": "string",
       "defaultValue": "false",
       "metadata": {
@@ -144,7 +144,7 @@
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
           "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('webSocketsEnabled'))]"
+          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
@@ -245,7 +245,7 @@
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
           "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('webSocketsEnabled'))]"
+          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
