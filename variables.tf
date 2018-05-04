@@ -80,7 +80,7 @@ variable "is_frontend" {
   default     = "0"
 }
   
-variable "webSocketsEnabled" {
+variable "web_sockets_enabled" {
   description = "if set to true, tf will make websockets available on the site"
   default     = "false"
   type        = "string"
