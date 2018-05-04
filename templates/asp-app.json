@@ -244,7 +244,7 @@
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
           "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('webSocketsEnabled'))]",
+          "webSocketsEnabled": "[bool(parameters('webSocketsEnabled'))]"
         },
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
