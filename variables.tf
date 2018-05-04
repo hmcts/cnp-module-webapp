@@ -79,6 +79,12 @@ variable "is_frontend" {
   description = "if set to true, tf will create a WAF enabled application gateway"
   default     = "0"
 }
+  
+variable "webSocketsEnabled" {
+  description = "if set to true, tf will make websockets available on the site"
+  default     = "false"
+  type        = "string"
+}  
 
 variable "https_only" {
   description = "Configures a web site to accept only https requests. Issues redirect for http requests"
