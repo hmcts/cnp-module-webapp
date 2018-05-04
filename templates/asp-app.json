@@ -58,6 +58,13 @@
         "description": "Configures a web site to accept only https requests. Issues redirect for http requests"
       }
     },
+    "web_sockets_enabled": {
+      "type": "string",
+      "defaultValue": "false",
+      "metadata": {
+        "description": "Configures a web site to accept websocket connections"
+      }
+    },
     "asp_name": {
       "type": "string"
     }
@@ -136,7 +143,8 @@
           "javaVersion": "1.8",
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
-          "alwaysOn": true
+          "alwaysOn": true,
+          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
@@ -236,7 +244,8 @@
           "javaVersion": "1.8",
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
-          "alwaysOn": true
+          "alwaysOn": true,
+          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
