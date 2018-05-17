@@ -51,6 +51,7 @@ variable "production_slot_app_settings" {
   default = {
     SLOT                       = "PRODUCTION"
     WEBSITE_LOCAL_CACHE_OPTION = "Always"
+    WEBSITE_LOCAL_CACHE_SIZEINMB = "300"
   }
 }
 
