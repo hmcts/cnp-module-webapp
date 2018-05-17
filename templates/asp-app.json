@@ -210,7 +210,7 @@
             "appSettingNames": [
               "SLOT",
               "WEBSITE_LOCAL_CACHE_OPTION",
-	      "WEBSITE_LOCAL_CACHE_SIZEINMB"
+              "WEBSITE_LOCAL_CACHE_SIZEINMB"
             ]
           }
         },
