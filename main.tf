@@ -4,7 +4,7 @@ data "template_file" "sitetemplate" {
 }
 
 locals {
-  app_settings_evaluated = ""
+  app_settings_evaluated = {}
 }
 
 # Create Application Service site
