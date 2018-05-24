@@ -40,5 +40,5 @@ resource "azurerm_template_deployment" "app_service_site" {
 #  provisioner "local-exec" {
 #    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}-${var.staging_slot_name}' 'core-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
 #  }
-#}
+##}
 
