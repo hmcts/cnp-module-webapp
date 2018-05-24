@@ -7,7 +7,7 @@ data "template_file" "sitetemplate" {
 resource "azurerm_template_deployment" "app_service_site" {
   template_body       = "${data.template_file.sitetemplate.rendered}"
   name                = "${var.product}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  resource_group_name = "${var.resource_group_name}"
   deployment_mode     = "Incremental"
 
   parameters = {
