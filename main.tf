@@ -3,6 +3,10 @@ data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/appservice.json")}"
 }
 
+locals {
+  app_settings_evaluated = ""
+}
+
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
   template_body       = "${data.template_file.sitetemplate.rendered}"
