@@ -91,10 +91,6 @@ variable "https_only" {
   default     = "false"
 }
 
-variable "ilbIp" {
-  default = "0.0.0.0"
-}
-
 variable "waf_backend_ip" {
   description = "Allows for the WAF Backend IP to be different than the default ILB IP"
   default     = "0.0.0.0"
