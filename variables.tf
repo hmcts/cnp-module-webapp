@@ -129,4 +129,4 @@ variable "asp_id" {}
 
 variable "subscription" {}
 
-variable "ipbIP" {}
+variable "ilbIP" {}
