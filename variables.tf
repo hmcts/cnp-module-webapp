@@ -79,25 +79,21 @@ variable "is_frontend" {
   description = "if set to true, tf will create a WAF enabled application gateway"
   default     = "0"
 }
-  
+
 variable "web_sockets_enabled" {
   description = "if set to true, tf will make websockets available on the site"
   default     = "false"
   type        = "string"
-}  
+}
 
 variable "https_only" {
   description = "Configures a web site to accept only https requests. Issues redirect for http requests"
   default     = "false"
 }
 
-variable "ilbIp" {
-  default = "0.0.0.0"
-}
-
 variable "waf_backend_ip" {
   description = "Allows for the WAF Backend IP to be different than the default ILB IP"
-  default = "0.0.0.0"
+  default     = "0.0.0.0"
 }
 
 variable "healthCheck" {
@@ -120,10 +116,6 @@ variable "infra_location" {
   default = "core-infra"
 }
 
-variable "subscription" {
-  type = "string"
-}
-
 variable "capacity" {
   default     = "2"
   description = "Maximum number of instances."
@@ -133,6 +125,13 @@ variable "shutterURL" {
   default = "mojmaintenance.azurewebsites.net"
 }
 
-variable "asp_name" {
+variable "asp_id" {}
+
+variable "subscription" {}
+
+variable "ilbIp" {}
+
+variable "deploymentTag" {
+  type    = "string"
   default = "null"
 }
