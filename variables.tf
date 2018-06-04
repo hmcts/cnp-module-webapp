@@ -130,3 +130,8 @@ variable "asp_id" {}
 variable "subscription" {}
 
 variable "ilbIp" {}
+
+variable "deploymentTag" {
+  type    = "string"
+  default = "null"
+}

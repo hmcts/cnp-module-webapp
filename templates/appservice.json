@@ -59,6 +59,12 @@
     },
     "asp_id": {
       "type": "string"
+    },
+    "deploymentTag": {
+      "type": "string",
+      "metadata": {
+        "description": "This tag is used to decide what component of the code should be deployed on it"
+      }
     }
   },
   "variables": {
@@ -74,7 +80,8 @@
       "tags": {
         "[concat('hidden-related:', parameters('asp_id'))]": "Resource",
         "displayName": "ASE-WEB-APP",
-        "environment": "[parameters('env')]"
+        "environment": "[parameters('env')]",
+        "deploymentTag": "[parameters('deploymentTag')]"
       },
       "dependsOn": [],
       "properties": {
