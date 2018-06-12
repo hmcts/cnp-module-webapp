@@ -9,7 +9,8 @@ resource "azurerm_resource_group" "rg" {
   location = "${var.location}"
 
   tags {
-    environment = "${var.env}"
+    environment = "${var.env}",
+    lastUpdated = "${timestamp()}"
   }
 }
 
