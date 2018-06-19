@@ -15,7 +15,7 @@ resource "azurerm_application_gateway" "waf" {
   location            = "${var.location}"
   
   lifecycle {
-    ignore_changes = ["http_listener", "request_routing_rule", "probe"]
+    ignore_changes = ["http_listener", "request_routing_rule", "probe", "backend_http_settings"]
   }
 
   sku {
