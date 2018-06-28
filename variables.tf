@@ -136,3 +136,8 @@ variable "shutterURL" {
 variable "asp_name" {
   default = "null"
 }
+variable "change_url" {
+  type = "string"
+  description = "Change request URL.  Can be a branch or PR."
+  default = "null"
+}

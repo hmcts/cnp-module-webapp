@@ -11,6 +11,7 @@ resource "azurerm_resource_group" "rg" {
   tags {
     environment = "${var.env}",
     lastUpdated = "${timestamp()}"
+    changeUrl   = "${var.change_url}"
   }
 }
 
