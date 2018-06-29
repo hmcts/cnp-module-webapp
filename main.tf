@@ -8,10 +8,9 @@ resource "azurerm_resource_group" "rg" {
   name     = "${local.resource_group_name}"
   location = "${var.location}"
 
-  tags {
-    environment = "${var.env}",
-    lastUpdated = "${timestamp()}"
-  }
+  tags = "${merge(var.common_tags,
+    map("lastUpdated", "${timestamp()}")
+    )}"
 }
 
 # The ARM template that creates a web app and app service plan

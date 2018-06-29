@@ -136,3 +136,8 @@ variable "shutterURL" {
 variable "asp_name" {
   default = "null"
 }
+
+variable "common_tags" {
+  type = "map"
+  default = {}
+}
