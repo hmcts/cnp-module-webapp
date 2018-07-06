@@ -72,7 +72,7 @@ resource "random_integer" "makeDNSupdateRunEachTime" {
 resource "null_resource" "consul" {
   triggers {
     trigger = "${azurerm_template_deployment.app_service_site.name}",
-    forceRun = "${random_integer.makeDNSupdateRunEachTime}"
+    forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
   }
 
   # register 'production' slot dns
