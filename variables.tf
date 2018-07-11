@@ -139,5 +139,4 @@ variable "asp_name" {
 
 variable "common_tags" {
   type = "map"
-  default = {}
 }
