@@ -23,6 +23,7 @@ Name | Type |  Required | Default | description
 `https_only` | String | No | `"false"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
 `asp_name` | String | No | | this is the name of the shared service plan to be deployed to. Name should follow ${product}-${env}-asp format
 `waf_backend_ip` | String | No | IP of ILB for the ASE | Overrides the backend IP for the WAF to use instead of the ILB for the ASE. Only override if needed via an `{env}.tfvars` file
+`common_tags` | Map | Yes | | tags that need to be applied to every resource group, passed through by the jenkins-library
 
 ## Usage
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
@@ -37,6 +38,7 @@ module "frontend" {
 	is_frontend  = true
 	asp_name     = ${var.product}-${var.env}-asp 
 	subscription = "${var.subscription}"
+	common_tags  = "${var.common_tags}"
 	app_settings = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
