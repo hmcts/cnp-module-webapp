@@ -45,14 +45,9 @@ variable "staging_slot_app_settings" {
   }
 }
 
-variable "production_slot_app_settings" {
-  type = "map"
-
-  default = {
-    SLOT                       = "PRODUCTION"
-    WEBSITE_LOCAL_CACHE_OPTION = "Always"
-    WEBSITE_LOCAL_CACHE_SIZEINMB = "300"
-  }
+variable "website_local_cache_sizeinmb" {
+  type    = "string"
+  default = "0"
 }
 
 variable "staging_slot_name" {
@@ -81,12 +76,12 @@ variable "is_frontend" {
   description = "if set to true, tf will create a WAF enabled application gateway"
   default     = "0"
 }
-  
+
 variable "web_sockets_enabled" {
   description = "if set to true, tf will make websockets available on the site"
   default     = "false"
   type        = "string"
-}  
+}
 
 variable "https_only" {
   description = "Configures a web site to accept only https requests. Issues redirect for http requests"
@@ -99,7 +94,7 @@ variable "ilbIp" {
 
 variable "waf_backend_ip" {
   description = "Allows for the WAF Backend IP to be different than the default ILB IP"
-  default = "0.0.0.0"
+  default     = "0.0.0.0"
 }
 
 variable "healthCheck" {
@@ -140,5 +135,6 @@ variable "asp_name" {
 }
 
 variable "common_tags" {
-  type = "map"
+  type    = "map"
+  default = {}
 }
