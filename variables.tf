@@ -47,7 +47,7 @@ variable "staging_slot_app_settings" {
 
 variable "website_local_cache_sizeinmb" {
   type    = "string"
-  default = "0"
+  default = "300"
 }
 
 variable "staging_slot_name" {
