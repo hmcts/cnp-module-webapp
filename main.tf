@@ -1,6 +1,12 @@
 locals {
   default_resource_group_name = "${var.product}-${var.env}"
   resource_group_name         = "${var.resource_group_name != "" ? var.resource_group_name : local.default_resource_group_name}"
+
+  production_slot_app_settings = {
+    SLOT                         = "PRODUCTION"
+    WEBSITE_LOCAL_CACHE_OPTION   = "${var.website_local_cache_sizeinmb == "0" ? "Never" : "Always"}"
+    WEBSITE_LOCAL_CACHE_SIZEINMB = "${var.website_local_cache_sizeinmb}"
+  }
 }
 
 # Create a resource group
@@ -52,7 +58,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     name                 = "${var.product}-${var.env}"
     location             = "${var.location}"
     env                  = "${var.env}"
-    app_settings         = "${jsonencode(merge(var.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
+    app_settings         = "${jsonencode(merge(local.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     staging_app_settings = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     additional_host_name = "${var.additional_host_name}"
     stagingSlotName      = "${var.staging_slot_name}"
