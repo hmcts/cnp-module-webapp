@@ -208,7 +208,9 @@
           },
           "properties": {
             "appSettingNames": [
-              "SLOT"
+              "SLOT",
+              "WEBSITE_LOCAL_CACHE_OPTION",
+              "WEBSITE_LOCAL_CACHE_SIZEINMB"
             ]
           }
         },

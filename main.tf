@@ -1,6 +1,12 @@
 locals {
   default_resource_group_name = "${var.product}-${var.env}"
   resource_group_name         = "${var.resource_group_name != "" ? var.resource_group_name : local.default_resource_group_name}"
+
+  production_slot_app_settings = {
+    SLOT                         = "PRODUCTION"
+    WEBSITE_LOCAL_CACHE_OPTION   = "${var.website_local_cache_sizeinmb == "0" ? "Never" : "Always"}"
+    WEBSITE_LOCAL_CACHE_SIZEINMB = "${var.website_local_cache_sizeinmb}"
+  }
 }
 
 # Create a resource group
@@ -8,10 +14,9 @@ resource "azurerm_resource_group" "rg" {
   name     = "${local.resource_group_name}"
   location = "${var.location}"
 
-  tags {
-    environment = "${var.env}",
-    lastUpdated = "${timestamp()}"
-  }
+  tags = "${merge(var.common_tags,
+    map("lastUpdated", "${timestamp()}")
+    )}"
 }
 
 # The ARM template that creates a web app and app service plan
@@ -53,7 +58,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     name                 = "${var.product}-${var.env}"
     location             = "${var.location}"
     env                  = "${var.env}"
-    app_settings         = "${jsonencode(merge(var.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
+    app_settings         = "${jsonencode(merge(local.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     staging_app_settings = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     additional_host_name = "${var.additional_host_name}"
     stagingSlotName      = "${var.staging_slot_name}"
@@ -65,9 +70,15 @@ resource "azurerm_template_deployment" "app_service_site" {
   }
 }
 
+resource "random_integer" "makeDNSupdateRunEachTime" {
+  min     = 1
+  max     = 99999
+}
+
 resource "null_resource" "consul" {
   triggers {
-    trigger = "${azurerm_template_deployment.app_service_site.name}"
+    trigger = "${azurerm_template_deployment.app_service_site.name}",
+    forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
   }
 
   # register 'production' slot dns
