@@ -72,11 +72,6 @@ variable "additional_host_name" {
   description = "An additional hostname the app should be available on, e.g. an external hostname"
 }
 
-variable "is_frontend" {
-  description = "if set to true, tf will create a WAF enabled application gateway"
-  default     = "0"
-}
-
 variable "web_sockets_enabled" {
   description = "if set to true, tf will make websockets available on the site"
   default     = "false"
