@@ -126,7 +126,7 @@ variable "capacity" {
   description = "Maximum number of instances."
 }
 
-varible "instance_size" {
+variable "instance_size" {
   type = "string"
   default = "I2"
   description = "The SKU size for app service plan instances"
