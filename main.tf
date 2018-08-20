@@ -66,6 +66,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     capacity             = "${var.capacity}"
     web_sockets_enabled  = "${var.web_sockets_enabled}"
     asp_name             = "${var.asp_name}-${var.env}"
+    shared_infra_rg      = "${var.shared_infra_rg}"
   }
 }
 

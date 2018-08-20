@@ -132,3 +132,7 @@ variable "asp_name" {
 variable "common_tags" {
   type    = "map"
 }
+
+variable "shared_infra_rg" {
+  
+}
