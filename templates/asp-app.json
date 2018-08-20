@@ -76,7 +76,7 @@
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
-    "aspname": "parameters('asp_name')]",
+    "aspname": "[parameters('asp_name')]",
     "aspResourceGroup": "[parameters('shared_infra_rg')]",
     "serverFarmName": "[if(contains(parameters('asp_name'), 'null'), parameters('name'), variables('aspname'))]",
     "serverFarmRG": "[if(contains(parameters('asp_name'), 'null'),  parameters('name'), variables('aspResourceGroup'))]",
