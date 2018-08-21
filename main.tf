@@ -66,7 +66,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     https_only           = "${var.https_only}"
     capacity             = "${var.capacity}"
     web_sockets_enabled  = "${var.web_sockets_enabled}"
-    asp_name             = "${var.asp_name}-${var.env}"
+    asp_name             = "${var.asp_name}"
     asp_rg               = "${var.asp_rg}"
   }
 }
