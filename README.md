@@ -21,9 +21,10 @@ Name | Type |  Required | Default | description
 `is_frontend` | Boolean | No | False | Indicates that this app could be routable from the public internet
 `additional_host_name` | String | No | | A custom domain name for your web application
 `https_only` | String | No | `"false"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
-`asp_name` | String | No | | this is the name of the shared service plan to be deployed to. Name should follow ${product}-${env}-asp format
+`asp_name` | String | Yes | | this is the name of the shared service plan to be deployed to. Name should follow ${product}-${env} format
 `waf_backend_ip` | String | No | IP of ILB for the ASE | Overrides the backend IP for the WAF to use instead of the ILB for the ASE. Only override if needed via an `{env}.tfvars` file
 `common_tags` | Map | Yes | | tags that need to be applied to every resource group, passed through by the jenkins-library
+`asp_rg` | String | Yes | | Name of resource group where app service plan resides
 
 ## Usage
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
@@ -36,7 +37,8 @@ module "frontend" {
 	env          = "${var.env}"
 	capacity     = "${var.capacity}"
 	is_frontend  = true
-	asp_name     = ${var.product}-${var.env}-asp 
+	asp_name     = "${var.product}-${var.env}"
+	asp_rg       = "${var.product}-shared-infrastructure-${var.env}"
 	subscription = "${var.subscription}"
 	common_tags  = "${var.common_tags}"
 	app_settings = {
