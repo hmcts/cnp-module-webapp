@@ -69,7 +69,8 @@
       "type": "string"
     },
     "shared_infra_rg":{
-      "type": "string"
+      "type": "string",
+      "defaultValue": "[parameters('name')]"
     }
   },
   "variables": {
