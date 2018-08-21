@@ -136,3 +136,7 @@ variable "common_tags" {
 variable "asp_rg" {
   
 }
+
+variable "is_frontend" {
+  default = "0"
+}
