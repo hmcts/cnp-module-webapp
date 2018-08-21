@@ -133,6 +133,6 @@ variable "common_tags" {
   type    = "map"
 }
 
-variable "shared_infra_rg" {
+variable "asp_rg" {
   
 }
