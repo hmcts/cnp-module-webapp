@@ -126,7 +126,7 @@ variable "shutterURL" {
 }
 
 variable "asp_name" {
-  default = "null"
+  description = "Name of the app service plan to deploy to. If asp does not already exist, the module will create it in the rg specified in asp_rg"
 }
 
 variable "common_tags" {
@@ -134,7 +134,7 @@ variable "common_tags" {
 }
 
 variable "asp_rg" {
-  
+  description = "Name of the resource group where the asp specified in asp_name resides"
 }
 
 variable "is_frontend" {
