@@ -14,16 +14,18 @@ This module lets you host Java 8, Spring Boot, and NodeJs applications.
 Name | Type |  Required | Default | description
 --- | --- | --- | --- | ---
 `source` | String | Yes | | this is the location source for the moj-module-webapp, the example implies a github repo containing the moj-module-webapp source
-`product` | String | Yes | |  this is the name of the product or project i.e. probate, divorce etc.
+`product` | String | Yes | | this is the name of the product or project i.e. probate, divorce etc.
 `location` | String | No | UK South | this is the azure region for this service
 `env` | String | Yes | | this is used to differentiate the environments e.g dev, prod, test etc
-`app_settings` String | | Yes | | this is the key valued pairs of application settings used by the application at runtime
+`app_settings` | String | Yes | | this is the key valued pairs of application settings used by the application at runtime
 `is_frontend` | Boolean | No | False | Indicates that this app could be routable from the public internet
 `additional_host_name` | String | No | | A custom domain name for your web application
 `https_only` | String | No | `"false"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
 `asp_name` | String | No | | this is the name of the shared service plan to be deployed to. Name should follow ${product}-${env}-asp format
 `waf_backend_ip` | String | No | IP of ILB for the ASE | Overrides the backend IP for the WAF to use instead of the ILB for the ASE. Only override if needed via an `{env}.tfvars` file
 `common_tags` | Map | Yes | | tags that need to be applied to every resource group, passed through by the jenkins-library
+`capacity` | Integer | No | 2 | Target number of instances of the application to run. Note that there may be more or fewer instances actually running. This should not be used to guarantee singleton (capacity=1) instances 
+`instance_size` | String | No | `I2` | The SKU size for app service plan instances. Valid values are `I1` (small), `I2` (medium) and `I3` (large). Larger instances cost more - specs for Isolated Service Plan instances can be found here https://azure.microsoft.com/en-gb/pricing/details/app-service/windows/. 
 
 ## Usage
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
