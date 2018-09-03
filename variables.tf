@@ -72,11 +72,6 @@ variable "additional_host_name" {
   description = "An additional hostname the app should be available on, e.g. an external hostname"
 }
 
-variable "is_frontend" {
-  description = "if set to true, tf will create a WAF enabled application gateway"
-  default     = "0"
-}
-
 variable "web_sockets_enabled" {
   description = "if set to true, tf will make websockets available on the site"
   default     = "false"
@@ -137,9 +132,20 @@ variable "shutterURL" {
 }
 
 variable "asp_name" {
+  description = "Name of the app service plan to deploy to. If asp does not already exist, the module will create it in the rg specified in asp_rg"
   default = "null"
 }
 
 variable "common_tags" {
   type    = "map"
+}
+
+variable "asp_rg" {
+  description = "Name of the resource group where the asp specified in asp_name resides"
+  default = "null"
+}
+
+variable "is_frontend" {
+  description = "if set to true, tf will create a WAF enabled application gateway"
+  default = "0"
 }

@@ -7,6 +7,9 @@ locals {
     WEBSITE_LOCAL_CACHE_OPTION   = "${var.website_local_cache_sizeinmb == "0" ? "Never" : "Always"}"
     WEBSITE_LOCAL_CACHE_SIZEINMB = "${var.website_local_cache_sizeinmb}"
   }
+
+  asp_name = "${var.env != "preview" ? var.asp_name : local.default_resource_group_name}"
+  asp_rg = "${var.env != "preview" ? var.asp_rg : local.default_resource_group_name}"
 }
 
 # Create a resource group
@@ -62,12 +65,13 @@ resource "azurerm_template_deployment" "app_service_site" {
     staging_app_settings = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     additional_host_name = "${var.additional_host_name}"
     stagingSlotName      = "${var.staging_slot_name}"
+    is_frontend          = "${var.is_frontend}"
     https_only           = "${var.https_only}"
     capacity             = "${var.capacity}"
     instance_size        = "${var.instance_size}"
-    is_frontend          = "${var.is_frontend}"
     web_sockets_enabled  = "${var.web_sockets_enabled}"
-    asp_name             = "${var.asp_name}-${var.env}"
+    asp_name             = "${local.asp_name}"
+    asp_rg               = "${local.asp_rg}"
   }
 }
 
