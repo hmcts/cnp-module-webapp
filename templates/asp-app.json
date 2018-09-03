@@ -72,7 +72,6 @@
     "asp_rg":{
       "type": "string",
       "defaultValue": "[parameters('name')]"
-      "type": "string"
     },
     "instance_size": {
       "type": "string",
