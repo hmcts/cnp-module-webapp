@@ -7,6 +7,9 @@ locals {
     WEBSITE_LOCAL_CACHE_OPTION   = "${var.website_local_cache_sizeinmb == "0" ? "Never" : "Always"}"
     WEBSITE_LOCAL_CACHE_SIZEINMB = "${var.website_local_cache_sizeinmb}"
   }
+
+  asp_name = "${var.env != "preview" ? var.asp_name : local.default_resource_group_name}"
+  rg_name = "${var.env != "preview" ? var.rg_name : local.default_resource_group_name}"
 }
 
 # Create a resource group
@@ -67,8 +70,8 @@ resource "azurerm_template_deployment" "app_service_site" {
     capacity             = "${var.capacity}"
     instance_size        = "${var.instance_size}"
     web_sockets_enabled  = "${var.web_sockets_enabled}"
-    asp_name             = "${var.asp_name}"
-    asp_rg               = "${var.asp_rg}"
+    asp_name             = "${local.asp_name}"
+    asp_rg               = "${local.asp_rg}"
   }
 }
 
