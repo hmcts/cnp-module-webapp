@@ -44,6 +44,14 @@ locals {
 
     # Support for nodejs apps (java apps to migrate to this env var in future PR)
     APPINSIGHTS_INSTRUMENTATIONKEY = "${local.effective_app_insights_instrumentation_key}"
+
+    // docker settings
+    DOCKER_CUSTOM_IMAGE_NAME = "${var.docker_custom_image_name}"
+    DOCKER_REGISTRY_SERVER_URL = "${var.docker_registry_server_url}"
+    DOCKER_REGISTRY_SERVER_USERNAME = "${var.docker_registry_server_username}"
+    DOCKER_REGISTRY_SERVER_PASSWORD = "${var.docker_registry_server_password}"
+    WEBSITE_HTTPLOGGING_RETENTION_DAYS = "7"
+
   }
 }
 
@@ -58,6 +66,8 @@ resource "azurerm_template_deployment" "app_service_site" {
     name                 = "${var.product}-${var.env}"
     location             = "${var.location}"
     env                  = "${var.env}"
+    kind                 = "${var.linux == "true" ? "app,linux,container" : "app"}"
+    reserved             = "${var.linux == "true" ? "true" : "false"}"
     app_settings         = "${jsonencode(merge(local.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     staging_app_settings = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     additional_host_name = "${var.additional_host_name}"

@@ -67,6 +67,12 @@
     },
     "asp_name": {
       "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "reserved": {
+      "type": "string"
     }
   },
   "variables": {
@@ -121,6 +127,7 @@
     {
       "name": "[parameters('name')]",
       "type": "Microsoft.Web/sites",
+      "kind": "[parameters('kind')]",
       "location": "[parameters('location')]",
       "apiVersion": "2016-08-01",
       "tags": {
@@ -144,7 +151,8 @@
           "javaContainer": "TOMCAT",
           "javaContainerVersion": "8.0",
           "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
+          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]",
+          "reserved": "[bool(parameters('reserved'))]"
         },
         "httpsOnly": "[bool(parameters('https_only'))]"
       },

@@ -137,3 +137,29 @@ variable "asp_name" {
 variable "common_tags" {
   type    = "map"
 }
+
+variable "linux" {
+  type = "string"
+  default = "false"
+  description = "whether to deploy using a docker container, use the string 'true' to enable"
+}
+
+variable "docker_custom_image_name" {
+  default = ""
+  description = "docker image name, added by jenkins library if feature enabled"
+}
+
+variable "docker_registry_server_url" {
+  default = ""
+  description = "docker registry server url, added by jenkins library if feature enabled"
+}
+
+variable "docker_registry_server_username" {
+  default = ""
+  description = "docker registry server username, added by jenkins library if feature enabled"
+}
+
+variable "docker_registry_server_password" {
+  default = ""
+  description = "docker registry server password, added by jenkins library if feature enabled"
+}
