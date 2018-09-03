@@ -9,7 +9,7 @@ locals {
   }
 
   asp_name = "${var.env != "preview" ? var.asp_name : local.default_resource_group_name}"
-  rg_name = "${var.env != "preview" ? var.rg_name : local.default_resource_group_name}"
+  asp_rg = "${var.env != "preview" ? var.asp_rg : local.default_resource_group_name}"
 }
 
 # Create a resource group
