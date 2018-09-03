@@ -157,7 +157,7 @@
         "name": "[parameters('name')]",
         "serverFarmId": "[variables('serverFarmId')]",
         "siteConfig": null,
-        "reserved": "[bool(parameters('reserved'))]"
+        "reserved": "[bool(parameters('reserved'))]",
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
