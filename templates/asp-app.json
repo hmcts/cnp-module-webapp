@@ -132,7 +132,8 @@
                 "size": "[parameters('instance_size')]",
                 "family": "I",
                 "capacity": "[parameters('capacity')]"
-              }
+              },
+              "kind": "[parameters('kind')]"
             }
           ]
         }
@@ -155,19 +156,8 @@
       "properties": {
         "name": "[parameters('name')]",
         "serverFarmId": "[variables('serverFarmId')]",
-        "siteConfig": {
-          "use32BitWorkerProcess": false,
-          "detailedErrorLoggingEnabled": true,
-          "scmType": "LocalGit",
-          "httpLoggingEnabled": true,
-          "logsDirectorySizeLimit": 35,
-          "javaVersion": "1.8",
-          "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
-          "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]",
-          "reserved": "[bool(parameters('reserved'))]"
-        },
+        "siteConfig": null,
+        "reserved": "[bool(parameters('reserved'))]"
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
@@ -251,6 +241,7 @@
       "apiVersion": "2016-08-01",
       "name": "[concat(parameters('name'), '/', parameters('stagingSlotName'))]",
       "type": "Microsoft.Web/sites/slots",
+      "kind": "[parameters('kind')]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', parameters('name'))]"
       ],
@@ -259,18 +250,8 @@
       },
       "location": "[parameters('location')]",
       "properties": {
-        "siteConfig": {
-          "use32BitWorkerProcess": false,
-          "detailedErrorLoggingEnabled": true,
-          "scmType": "LocalGit",
-          "httpLoggingEnabled": true,
-          "logsDirectorySizeLimit": 35,
-          "javaVersion": "1.8",
-          "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
-          "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
-        },
+        "siteConfig": null,
+        "reserved": "[bool(parameters('reserved'))]",
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
