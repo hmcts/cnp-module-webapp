@@ -146,5 +146,6 @@ variable "asp_rg" {
 }
 
 variable "is_frontend" {
+  description = "if set to true, tf will create a WAF enabled application gateway"
   default = "0"
 }
