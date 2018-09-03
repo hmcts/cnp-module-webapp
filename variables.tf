@@ -140,6 +140,10 @@ variable "asp_name" {
   default = "null"
 }
 
+variable "asp_rg" {
+  default = "null"
+}
+
 variable "common_tags" {
   type    = "map"
 }
