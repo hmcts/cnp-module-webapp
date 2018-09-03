@@ -126,6 +126,12 @@ variable "capacity" {
   description = "Maximum number of instances."
 }
 
+variable "instance_size" {
+  type = "string"
+  default = "I2"
+  description = "The SKU size for app service plan instances"
+}
+
 variable "shutterURL" {
   default = "mojmaintenance.azurewebsites.net"
 }
