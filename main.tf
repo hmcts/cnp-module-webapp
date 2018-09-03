@@ -65,6 +65,8 @@ resource "azurerm_template_deployment" "app_service_site" {
     is_frontend          = "${var.is_frontend}"
     https_only           = "${var.https_only}"
     capacity             = "${var.capacity}"
+    instance_size        = "${var.instance_size}"
+    is_frontend          = "${var.is_frontend}"
     web_sockets_enabled  = "${var.web_sockets_enabled}"
     asp_name             = "${var.asp_name}"
     asp_rg               = "${var.asp_rg}"

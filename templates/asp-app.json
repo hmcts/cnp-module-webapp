@@ -72,6 +72,16 @@
     "asp_rg":{
       "type": "string",
       "defaultValue": "[parameters('name')]"
+      "type": "string"
+    },
+    "instance_size": {
+      "type": "string",
+      "allowedValues": [
+        "I1", "I2", "I3"
+      ],
+      "metadata": {
+        "description": "The SKU size for app service plan instances"
+      }
     }
   },
   "variables": {
@@ -109,9 +119,9 @@
                 "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
               },
               "sku": {
-                "name": "I2",
+                "name": "[parameters('instance_size')]",
                 "tier": "Isolated",
-                "size": "I2",
+                "size": "[parameters('instance_size')]",
                 "family": "I",
                 "capacity": "[parameters('capacity')]"
               }
