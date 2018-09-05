@@ -83,6 +83,11 @@ variable "https_only" {
   default     = "false"
 }
 
+variable "security_enabled" {
+  description = "Configures a web site to have access security enabled"
+  default     = "false"
+}
+  
 variable "ilbIp" {
   default = "0.0.0.0"
 }
