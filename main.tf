@@ -67,6 +67,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     additional_host_name = "${var.additional_host_name}"
     stagingSlotName      = "${var.staging_slot_name}"
     is_frontend          = "${var.is_frontend}"
+    security_enabled     = "${var.security_enabled}"
     https_only           = "${var.https_only}"
     capacity             = "${var.capacity}"
     instance_size        = "${var.instance_size}"
