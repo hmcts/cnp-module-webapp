@@ -100,14 +100,14 @@ resource "null_resource" "consul" {
 
 resource "null_resource" "app_service_security" {
   triggers {
+    trigger = "${var.security_aad_tenantId}",
     trigger = "${var.security_aad_clientId}",
-    trigger = "${var.security_aad_clientSecret}",
+    trigger = "${var.security_aad_clientSecret}"
   }
 
   # configure App Service security
   provisioner "local-exec" {
     command = "bash -e ${path.module}/configureSecurity.sh '${var.product}-${var.env}' '${azurerm_resource_group.rg.name}' '${var.security_aad_tenantId}' '${var.security_aad_clientId}' '${var.security_aad_clientSecret}'"
   }
-
   depends_on = ["azurerm_template_deployment.app_service_site"]
 }

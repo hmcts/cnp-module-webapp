@@ -83,13 +83,18 @@ variable "https_only" {
   default     = "false"
 }
 
+variable "security_aad_tenantId" {
+  description = "The Azure Active Directory Tenant Id to use for securing access to the application"
+  default     = ""
+}
+
 variable "security_aad_clientId" {
-  description = "The clientId to use for securing access to the application"
+  description = "The Application Id to use for securing access to the application"
   default     = ""
 }
 
 variable "security_aad_clientSecret" {
-  description = "The secretId to use for securing access to the application"
+  description = "The Application Secret to use for securing access to the application"
   default     = ""
 }
   
