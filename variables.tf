@@ -83,9 +83,14 @@ variable "https_only" {
   default     = "false"
 }
 
-variable "security_enabled" {
-  description = "Configures a web site to have access security enabled"
-  default     = "false"
+variable "security_aad_clientId" {
+  description = "The clientId to use for securing access to the application"
+  default     = ""
+}
+
+variable "security_aad_clientSecret" {
+  description = "The secretId to use for securing access to the application"
+  default     = ""
 }
   
 variable "ilbIp" {
