@@ -108,7 +108,7 @@ resource "null_resource" "app_service_security" {
 
   # configure App Service security
   provisioner "local-exec" {
-    command = "bash -e ${path.module}/configureSecurity.sh '${var.product}-${var.env}' '${azurerm_resource_group.rg.name}' '${var.security_aad_tenantId}' '${var.security_aad_clientId}' '${var.security_aad_clientSecret}'"
+    command = "bash -e ${path.module}/configureSecurity.sh '${var.subscription}' '${var.product}-${var.env}' '${azurerm_resource_group.rg.name}' '${var.security_aad_tenantId}' '${var.security_aad_clientId}' '${var.security_aad_clientSecret}'"
   }
   depends_on = ["azurerm_template_deployment.app_service_site"]
 }
