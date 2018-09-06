@@ -34,7 +34,7 @@ Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled w
 
 ```terraform
 module "frontend" {
-	source       = "git@github.com:contino/moj-module-webapp?ref=master"
+	source       = "git@github.com:contino/cnp-module-webapp?ref=master"
 	product      = "${var.product}-frontend"
 	location     = "${var.location}"
 	env          = "${var.env}"
