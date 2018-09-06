@@ -98,6 +98,7 @@ resource "null_resource" "consul" {
   }
 }
 
+# No way we can apply the required properties as part of the ARM template so have to use Azure CLI
 resource "null_resource" "app_service_security" {
   triggers {
     trigger = "${var.security_aad_tenantId}",
