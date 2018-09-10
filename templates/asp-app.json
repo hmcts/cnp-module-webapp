@@ -153,7 +153,7 @@
               },
               "azureBlobStorage": {
                 "level": "Error",
-                "sasUrl": "url",
+                "sasUrl": "https://mojwebappsandbox.blob.core.windows.net/",
                 "retentionInDays": 14
               },
               "httpLogs": {
@@ -163,7 +163,7 @@
                   "enabled": false
                 },
                 "azureBlobStorage": {
-                  "sasUrl": "url",
+                  "sasUrl": "https://mojwebappsandbox.blob.core.windows.net/",
                   "retentionInDays": 14,
                   "enabled": true
                 }
