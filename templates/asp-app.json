@@ -81,6 +81,9 @@
       "metadata": {
         "description": "The SKU size for app service plan instances"
       }
+    },
+    "teamName":{
+      "type": "string"
     }
   },
   "variables": {
@@ -137,7 +140,8 @@
       "tags": {
         "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
         "displayName": "ASE-WEB-APP",
-        "environment": "[parameters('env')]"
+        "environment": "[parameters('env')]",
+        "Team Name": "[parameters('teamName')]"
       },
       "dependsOn": [
         "[concat('aspDeploy-', variables('serverFarmName'))]"
