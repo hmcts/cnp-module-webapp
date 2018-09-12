@@ -161,7 +161,7 @@
       "resources": [
         {
           "name": "logs",
-          "type": "config",
+          "type": "confgig",
           "apiVersion": "2015-08-01",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites',parameters('name'))]"
@@ -170,15 +170,6 @@
             "applicationLogs": {
               "fileSystem": {
                 "level": "Off"
-              },
-              "azureTableStorage": {
-                "level": "Off",
-                "sasUrl": null
-              },
-              "azureBlobStorage": {
-                "level": "Error",
-                "sasUrl": "https://mojwebappsandbox.blob.core.windows.net/",
-                "retentionInDays": 14
               },
               "httpLogs": {
                 "fileSystem": {
