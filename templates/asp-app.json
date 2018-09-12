@@ -161,7 +161,7 @@
       "resources": [
         {
           "name": "logs",
-          "type": "confgig",
+          "type": "Microsoft.Web/sites/config",
           "apiVersion": "2015-08-01",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites',parameters('name'))]"
@@ -171,16 +171,25 @@
               "fileSystem": {
                 "level": "Off"
               },
+              "azureTableStorage": {
+                "level": "Off",
+                "sasUrl": null
+              },
+              "azureBlobStorage": {
+                "level": "Error",
+                "sasUrl": "https;AccountName=mojwebappsandbox;AccountKey=mIjl8sD9QXI4jo/VvwWtaRxtL6+0f+Ufsj+ABM3vo2cn1GPblYWb1CrOUi7tryc1F2JO+lF48eL9bnECl5VahA==;EndpointSuffix=core.windows.net",
+                "retentionInDays": 30
+              },
               "httpLogs": {
                 "fileSystem": {
-                  "retentionInMb": 35,
-                  "retentionInDays": 7,
-                  "enabled": false
+                  "retentionInMb": 100,
+                  "retentionInDays": null,
+                  "enabled": true
                 },
                 "azureBlobStorage": {
-                  "sasUrl": "https://mojwebappsandbox.blob.core.windows.net/",
-                  "retentionInDays": 14,
-                  "enabled": true
+                  "sasUrl": "null",
+                  "retentionInDays": null,
+                  "enabled": false
                 }
               },
               "failedRequestsTracing": {
