@@ -69,7 +69,7 @@
       "type": "string",
       "defaultValue": "null"
     },
-    "asp_rg":{
+    "asp_rg": {
       "type": "string",
       "defaultValue": "[parameters('name')]"
     },
@@ -91,8 +91,7 @@
     "serverFarmRG": "[if(contains(parameters('asp_rg'), 'null'),  parameters('name'), parameters('asp_rg'))]",
     "serverFarmId": "[if(contains(parameters('asp_name'), 'null'), resourceId('Microsoft.Web/serverfarms', variables('serverFarmName')), resourceId(parameters('asp_rg'), 'Microsoft.Web/serverfarms', variables('serverFarmName')))]"
   },
-  "resources": [
-    {
+  "resources": [{
       "apiVersion": "2017-05-10",
       "name": "[concat('aspDeploy-', variables('serverFarmName'))]",
       "type": "Microsoft.Resources/deployments",
@@ -102,30 +101,28 @@
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
-          "resources": [
-            {
+          "resources": [{
+            "name": "[variables('serverFarmName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "apiVersion": "2016-09-01",
+            "tags": {
+              "displayName": "Application Service Plan",
+              "environment": "[parameters('env')]"
+            },
+            "properties": {
               "name": "[variables('serverFarmName')]",
-              "type": "Microsoft.Web/serverfarms",
-              "location": "[parameters('location')]",
-              "apiVersion": "2016-09-01",
-              "tags": {
-                "displayName": "Application Service Plan",
-                "environment": "[parameters('env')]"
-              },
-              "properties": {
-                "name": "[variables('serverFarmName')]",
-                "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-                "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
-              },
-              "sku": {
-                "name": "[parameters('instance_size')]",
-                "tier": "Isolated",
-                "size": "[parameters('instance_size')]",
-                "family": "I",
-                "capacity": "[parameters('capacity')]"
-              }
+              "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+              "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
+            },
+            "sku": {
+              "name": "[parameters('instance_size')]",
+              "tier": "Isolated",
+              "size": "[parameters('instance_size')]",
+              "family": "I",
+              "capacity": "[parameters('capacity')]"
             }
-          ]
+          }]
         }
       }
     },
@@ -134,6 +131,33 @@
       "type": "Microsoft.Web/sites",
       "location": "[parameters('location')]",
       "apiVersion": "2016-08-01",
+
+      "tags": {
+        "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
+        "displayName": "ASE-WEB-APP",
+        "environment": "[parameters('env')]"
+      },
+
+      "dependsOn": [
+        "[concat('aspDeploy-', variables('serverFarmName'))]"
+      ],
+      "properties": {
+        "name": "[parameters('name')]",
+        "serverFarmId": "[variables('serverFarmId')]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false,
+          "detailedErrorLoggingEnabled": true,
+          "scmType": "LocalGit",
+          "httpLoggingEnabled": true,
+          "logsDirectorySizeLimit": 35,
+          "javaVersion": "1.8",
+          "javaContainer": "TOMCAT",
+          "javaContainerVersion": "8.0",
+          "alwaysOn": true,
+          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
+        },
+        "httpsOnly": "[bool(parameters('https_only'))]"
+      },
       "resources": [
         {
           "name": "logs",
@@ -174,38 +198,10 @@
               "detailedErrorMessages": {
                 "enabled": false
               }
-            }          
+            }
           }
-        }
-      ],
-      "tags": {
-        "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
-        "displayName": "ASE-WEB-APP",
-        "environment": "[parameters('env')]"
-      },
-
-      "dependsOn": [
-        "[concat('aspDeploy-', variables('serverFarmName'))]"
-      ],
-      "properties": {
-        "name": "[parameters('name')]",
-        "serverFarmId": "[variables('serverFarmId')]",
-        "siteConfig": {
-          "use32BitWorkerProcess": false,
-          "detailedErrorLoggingEnabled": true,
-          "scmType": "LocalGit",
-          "httpLoggingEnabled": true,
-          "logsDirectorySizeLimit": 35,
-          "javaVersion": "1.8",
-          "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
-          "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
-        "httpsOnly": "[bool(parameters('https_only'))]"
-      },
-      "resources": [
-        {
+         {
           "name": "[concat('tm', parameters('additional_host_name'))]",
           "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "type": "hostNameBindings",
@@ -307,17 +303,15 @@
         },
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
-      "resources": [
-        {
-          "apiVersion": "2016-08-01",
-          "name": "appsettings",
-          "type": "config",
-          "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
-          ],
-          "properties": "[base64ToJson(variables('base64SlotAppSettingObject'))]"
-        }
-      ]
+      "resources": [{
+        "apiVersion": "2016-08-01",
+        "name": "appsettings",
+        "type": "config",
+        "dependsOn": [
+          "[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
+        ],
+        "properties": "[base64ToJson(variables('base64SlotAppSettingObject'))]"
+      }]
     }
   ]
 }
