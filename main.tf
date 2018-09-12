@@ -73,7 +73,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     env                  = "${var.env}"
     kind                 = "${local.is_linux ? "app,linux,container" : "app"}"
     reserved             = "${local.is_linux ? "true" : "false"}"
-    linuxFxVersion       = "${local.is_linux ? local.linuxFxVersion : null}"
+    linuxFxVersion       = "${local.is_linux ? local.linuxFxVersion : ""}"
 
     app_settings         = "${jsonencode(merge(local.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     staging_app_settings = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
