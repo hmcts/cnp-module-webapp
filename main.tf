@@ -51,8 +51,13 @@ locals {
     DOCKER_REGISTRY_SERVER_USERNAME = "${var.docker_registry_server_username}"
     DOCKER_REGISTRY_SERVER_PASSWORD = "${var.docker_registry_server_password}"
     WEBSITE_HTTPLOGGING_RETENTION_DAYS = "7"
+    WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
 
   }
+
+  is_linux = "${var.linux == "true"}"
+
+  linuxFxVersion = "DOCKER|${var.docker_custom_image_name}"
 }
 
 # Create Application Service site
@@ -66,10 +71,10 @@ resource "azurerm_template_deployment" "app_service_site" {
     name                 = "${var.product}-${var.env}"
     location             = "${var.location}"
     env                  = "${var.env}"
-    kind                 = "app,linux,container"
-//    kind                 = "${var.linux == "true" ? "app,linux,container" : "app"}"
-    reserved             = "true"
-//    reserved             = "${var.linux == "true" ? "true" : "false"}"
+    kind                 = "${local.is_linux ? "app,linux,container" : "app"}"
+    reserved             = "${local.is_linux ? "true" : "false"}"
+    linuxFxVersion       = "${local.is_linux ? local.linuxFxVersion : null}"
+
     app_settings         = "${jsonencode(merge(local.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     staging_app_settings = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     additional_host_name = "${var.additional_host_name}"

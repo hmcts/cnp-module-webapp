@@ -84,10 +84,30 @@
       }
     },
     "kind": {
-      "type": "string"
+      "type": "string",
+      "allowedValues": [
+        "app,linux,container",
+        "app"
+      ],
+      "metadata": {
+        "description": "The type of app service"
+      }
     },
     "reserved": {
-      "type": "string"
+      "type": "string",
+      "allowedValues": [
+        "true",
+        "false"
+      ],
+      "metadata": {
+        "description": "Whether the app service should be reserved"
+      }
+    },
+    "linuxFxVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "The docker image to use, prefixed with DOCKER|"
+      }
     }
   },
   "variables": {
@@ -156,9 +176,13 @@
       "properties": {
         "name": "[parameters('name')]",
         "serverFarmId": "[variables('serverFarmId')]",
-        "siteConfig": null,
+        "siteConfig": {
+          "appCommandLine": "",
+          "linuxFxVersion": "[parameters('linuxFxVersion')]"
+        },
         "reserved": "[bool(parameters('reserved'))]",
-        "httpsOnly": "[bool(parameters('https_only'))]"
+        "httpsOnly": "[bool(parameters('https_only'))]",
+        "clientAffinityEnabled": false
       },
       "resources": [
         {
