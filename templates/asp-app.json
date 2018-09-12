@@ -145,7 +145,7 @@
           "properties": {
             "applicationLogs": {
               "fileSystem": {
-                "level": "Error"
+                "level": "Off"
               },
               "azureTableStorage": {
                 "level": "Off",
