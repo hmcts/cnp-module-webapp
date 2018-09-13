@@ -36,6 +36,10 @@ resource "azurerm_application_insights" "appinsights" {
   location            = "${var.appinsights_location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   application_type    = "${var.application_type}"
+
+  tags = "${merge(var.common_tags,
+    map("lastUpdated", "${timestamp()}")
+    )}"
 }
 
 locals {
@@ -58,7 +62,7 @@ resource "azurerm_template_deployment" "app_service_site" {
   resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
 
-  parameters = {
+  parameters             = {
     name                 = "${var.product}-${var.env}"
     location             = "${var.location}"
     env                  = "${var.env}"
@@ -73,6 +77,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     web_sockets_enabled  = "${var.web_sockets_enabled}"
     asp_name             = "${local.sp_name}"
     asp_rg               = "${local.sp_rg}"
+    teamName             = "${lookup(var.common_tags, "Team Name")}"
   }
 }
 
