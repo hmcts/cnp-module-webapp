@@ -23,9 +23,6 @@
             "name": "[parameters('name')]",
             "apiVersion": "2017-05-01",
             "location": "global",
-            "tags": {
-              "Team Name": "[parameters('teamName')]"
-            },
             "properties": {
                 "profileStatus": "Enabled",
                 "trafficRoutingMethod": "Priority",
