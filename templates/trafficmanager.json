@@ -14,6 +14,9 @@
         },
         "is_frontend": {
             "type": "string"
+        },
+        "teamName":{
+          "type": "string"
         }
     },
     "resources": [
