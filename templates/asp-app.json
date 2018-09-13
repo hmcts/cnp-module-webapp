@@ -179,23 +179,10 @@
         "siteConfig": {
           "appCommandLine": "",
           "alwaysOn": true,
-          "appSettings": [
-            {
-              "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
-              "value": "false"
-            }
-          ],
           "linuxFxVersion": "[parameters('linuxFxVersion')]"
         },
         "reserved": "[bool(parameters('reserved'))]",
         "httpsOnly": "[bool(parameters('https_only'))]",
-        "httpLogs": {
-          "fileSystem": {
-            "retentionInMb": 100,
-            "retentionInDays": 7,
-            "enabled": true
-          }
-        },
         "clientAffinityEnabled": false
       },
       "resources": [
@@ -272,6 +259,23 @@
             "[resourceId('Microsoft.Web/sites', parameters('name'))]"
           ],
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "logs",
+          "type": "config",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+          ],
+          "properties": {
+            "httpLogs": {
+              "fileSystem": {
+                "retentionInMb": 100,
+                "retentionInDays": 7,
+                "enabled": true
+              }
+            }
+          }
         }
       ]
     },
