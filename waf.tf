@@ -5,6 +5,10 @@ resource "azurerm_public_ip" "appGwPIP" {
   location                     = "${var.location}"
   resource_group_name          = "${azurerm_resource_group.rg.name}"
   public_ip_address_allocation = "dynamic"
+
+  tags = "${merge(var.common_tags,
+    map("lastUpdated", "${timestamp()}")
+    )}"
 }
 
 # Application gateway with WAF - Only created if var.is_frontend is set to true
@@ -13,7 +17,13 @@ resource "azurerm_application_gateway" "waf" {
   name                = "${var.product}-${var.env}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   location            = "${var.location}"
-  
+
+# Tags are not supported for this resource type until the following issue gets resolved:
+# https://github.com/terraform-providers/terraform-provider-azurerm/issues/1576#issuecomment-406302735
+#  tags = "${merge(var.common_tags,
+#    map("lastUpdated", "${timestamp()}")
+#    )}"
+
   lifecycle {
     ignore_changes = ["http_listener", "request_routing_rule", "probe", "backend_http_settings"]
   }

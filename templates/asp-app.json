@@ -81,6 +81,9 @@
       "metadata": {
         "description": "The SKU size for app service plan instances"
       }
+    },
+    "teamName":{
+      "type": "string"
     }
   },
   "variables": {
@@ -110,7 +113,8 @@
               "apiVersion": "2016-09-01",
               "tags": {
                 "displayName": "Application Service Plan",
-                "environment": "[parameters('env')]"
+                "environment": "[parameters('env')]",
+                "Team Name": "[parameters('teamName')]"
               },
               "properties": {
                 "name": "[variables('serverFarmName')]",
@@ -137,7 +141,8 @@
       "tags": {
         "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
         "displayName": "ASE-WEB-APP",
-        "environment": "[parameters('env')]"
+        "environment": "[parameters('env')]",
+        "Team Name": "[parameters('teamName')]"
       },
       "dependsOn": [
         "[concat('aspDeploy-', variables('serverFarmName'))]"
@@ -215,7 +220,8 @@
             "[concat('Microsoft.Web/sites/', parameters('Name'))]"
           ],
           "tags": {
-            "displayName": "slotConfigNames"
+            "displayName": "slotConfigNames",
+            "Team Name": "[parameters('teamName')]"
           },
           "properties": {
             "appSettingNames": [
@@ -244,7 +250,8 @@
         "[resourceId('Microsoft.Web/sites', parameters('name'))]"
       ],
       "tags": {
-        "displyName": "[concat(parameters('stagingSlotName'), ' Slot')]"
+        "displyName": "[concat(parameters('stagingSlotName'), ' Slot')]",
+        "Team Name": "[parameters('teamName')]"
       },
       "location": "[parameters('location')]",
       "properties": {
