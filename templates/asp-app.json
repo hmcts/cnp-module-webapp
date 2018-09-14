@@ -177,7 +177,7 @@
               },
               "azureBlobStorage": {
                 "level": "Error",
-                "sasUrl": "",
+                "sasUrl": "https://mojwebappsandbox.blob.core.windows.net/webappblob/?sv=2017-11-09&ss=bfqt&srt=sco&sp=rwdlacup&se=2018-09-14T17:59:03Z&st=2018-09-14T09:59:03Z&spr=https&sig=t%2BvXYWbKsRotoROobvRR56%2BXo5O7VufgsxRfQQkC0JA%3D",
                 "retentionInDays": 30
               },
               "httpLogs": {
@@ -187,8 +187,8 @@
                   "enabled": true
                 },
                 "azureBlobStorage": {
-                  "sasUrl": "null",
-                  "retentionInDays": null,
+                  "sasUrl": "https://mojwebappsandbox.blob.core.windows.net/webappblob/?sv=2017-11-09&ss=bfqt&srt=sco&sp=rwdlacup&se=2018-09-14T17:59:03Z&st=2018-09-14T09:59:03Z&spr=https&sig=t%2BvXYWbKsRotoROobvRR56%2BXo5O7VufgsxRfQQkC0JA%3D",
+                  "retentionInDays": 30,
                   "enabled": false
                 }
               },
