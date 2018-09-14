@@ -177,7 +177,7 @@
               },
               "azureBlobStorage": {
                 "level": "Error",
-                "sasUrl": "https;AccountName=mojwebappsandbox;AccountKey=mIjl8sD9QXI4jo/VvwWtaRxtL6+0f+Ufsj+ABM3vo2cn1GPblYWb1CrOUi7tryc1F2JO+lF48eL9bnECl5VahA==;EndpointSuffix=core.windows.net",
+                "sasUrl": "",
                 "retentionInDays": 30
               },
               "httpLogs": {
