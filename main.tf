@@ -75,8 +75,8 @@ resource "azurerm_template_deployment" "app_service_site" {
     capacity             = "${var.capacity}"
     instance_size        = "${var.instance_size}"
     web_sockets_enabled  = "${var.web_sockets_enabled}"
-    asp_name             = "${local.sp_name}"
-    asp_rg               = "${local.sp_rg}"
+    asp_name             = "${local.asp_name}"
+    asp_rg               = "${local.asp_rg}"
     teamName             = "${lookup(var.common_tags, "Team Name")}"
   }
 }
