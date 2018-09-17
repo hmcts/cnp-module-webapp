@@ -116,7 +116,6 @@
         "capacity": "[parameters('capacity')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('asp_rg'))]"
       ]
     }
   ]
