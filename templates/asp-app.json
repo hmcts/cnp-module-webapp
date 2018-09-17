@@ -106,7 +106,7 @@
       "apiVersion": "2017-05-10",
       "name": "[concat('aspDeploy-', variables('serverFarmName'))]",
       "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[variables('serverFarmRG')]",
+      "resourceGroup": "[parameters('asp_rg')]",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -136,7 +136,7 @@
                 "capacity": "[parameters('capacity')]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('serverFarmRG'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('asp_rg'))]"
               ]
             }
           ]
