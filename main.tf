@@ -59,7 +59,7 @@ locals {
 resource "azurerm_template_deployment" "app_service_site" {
   template_body       = "${data.template_file.sitetemplate.rendered}"
   name                = "${var.product}-${var.env}-webapp"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  resource_group_name = "${local.asp_rg}"
   deployment_mode     = "Incremental"
 
   parameters             = {
