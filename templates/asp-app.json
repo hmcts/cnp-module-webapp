@@ -96,6 +96,13 @@
   },
   "resources": [
     {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2018-05-01",
+      "location": "[parameters('location')]",
+      "name": "[variables('serverFarmRG')]",
+      "properties": {}
+    },
+    {
       "apiVersion": "2017-05-10",
       "name": "[concat('aspDeploy-', variables('serverFarmName'))]",
       "type": "Microsoft.Resources/deployments",
