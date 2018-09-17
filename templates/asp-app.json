@@ -134,7 +134,10 @@
                 "size": "[parameters('instance_size')]",
                 "family": "I",
                 "capacity": "[parameters('capacity')]"
-              }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('serverFarmRG'))]"
+              ]
             }
           ]
         }
