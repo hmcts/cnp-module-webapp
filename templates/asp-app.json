@@ -94,6 +94,18 @@
   },
   "resources": [
     {
+      "apiVersion": "2017-05-10",
+      "name": "[concat('aspDeploy-', parameters('asp_name'))]",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[parameters('asp_rg')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+
+  "resources": [
+    {
       "name": "[parameters('asp_name')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[parameters('location')]",
@@ -117,6 +129,10 @@
       },
       "dependsOn": [
       ]
+    }
+  ]
+}
+}
     }
   ]
 }
