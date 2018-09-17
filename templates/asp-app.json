@@ -90,9 +90,7 @@
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
-    "serverFarmName": "[if(contains(parameters('asp_name'), 'null'), parameters('name'), parameters('asp_name'))]",
-    "serverFarmRG": "[if(contains(parameters('asp_rg'), 'null'),  parameters('name'), parameters('asp_rg'))]",
-    "serverFarmId": "[if(contains(parameters('asp_name'), 'null'), resourceId('Microsoft.Web/serverfarms', variables('serverFarmName')), resourceId(parameters('asp_rg'), 'Microsoft.Web/serverfarms', variables('serverFarmName')))]"
+    "serverFarmId": "[ResourceId('Microsoft.Web/serverfarms', parameters('asp_name'))]"
   },
   "resources": [
     {
@@ -103,31 +101,31 @@
       "properties": {}
     },
     {
-              "name": "[variables('serverFarmName')]",
-              "type": "Microsoft.Web/serverfarms",
-              "location": "[parameters('location')]",
-              "apiVersion": "2016-09-01",
-              "tags": {
-                "displayName": "Application Service Plan",
-                "environment": "[parameters('env')]",
-                "Team Name": "[parameters('teamName')]"
-              },
-              "properties": {
-                "name": "[variables('serverFarmName')]",
-                "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-                "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
-              },
-              "sku": {
-                "name": "[parameters('instance_size')]",
-                "tier": "Isolated",
-                "size": "[parameters('instance_size')]",
-                "family": "I",
-                "capacity": "[parameters('capacity')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('asp_rg'))]"
-              ]
-            },
+      "name": "[parameters('asp_name')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[parameters('location')]",
+      "apiVersion": "2016-09-01",
+      "tags": {
+        "displayName": "Application Service Plan",
+        "environment": "[parameters('env')]",
+        "Team Name": "[parameters('teamName')]"
+      },
+      "properties": {
+      "name": "[parameters('asp_name')]",
+      "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+      "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
+      },
+      "sku": {
+        "name": "[parameters('instance_size')]",
+        "tier": "Isolated",
+        "size": "[parameters('instance_size')]",
+        "family": "I",
+        "capacity": "[parameters('capacity')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('asp_rg'))]"
+      ]
+    },
     {
       "name": "[parameters('name')]",
       "type": "Microsoft.Web/sites",
@@ -140,7 +138,7 @@
         "Team Name": "[parameters('teamName')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('serverFarmName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('asp_name'))]"
       ],
       "properties": {
         "name": "[parameters('name')]",
