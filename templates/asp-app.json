@@ -104,143 +104,139 @@
           "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
 
-  "resources": [
+          "resources": [
+          {
+          "name": "[parameters('asp_name')]",
+          "type": "Microsoft.Web/serverfarms",
+          "location": "[parameters('location')]",
+          "apiVersion": "2016-09-01",
+          "tags": {
+            "displayName": "Application Service Plan",
+            "environment": "[parameters('env')]",
+            "Team Name": "[parameters('teamName')]"
+          },
+          "properties": {
+          "name": "[parameters('asp_name')]",
+          "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
+          },
+          "sku": {
+            "name": "[parameters('instance_size')]",
+            "tier": "Isolated",
+            "size": "[parameters('instance_size')]",
+            "family": "I",
+            "capacity": "[parameters('capacity')]"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "[parameters('name')]",
+    "type": "Microsoft.Web/sites",
+    "location": "[parameters('location')]",
+    "apiVersion": "2016-08-01",
+    "tags": {
+      "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
+      "displayName": "ASE-WEB-APP",
+      "environment": "[parameters('env')]",
+      "Team Name": "[parameters('teamName')]"
+    },
+    "properties": {
+      "name": "[parameters('name')]",
+      "serverFarmId": "[variables('serverFarmId')]",
+      "siteConfig": {
+        "use32BitWorkerProcess": false,
+        "detailedErrorLoggingEnabled": true,
+        "scmType": "LocalGit",
+        "httpLoggingEnabled": true,
+        "logsDirectorySizeLimit": 35,
+        "javaVersion": "1.8",
+        "javaContainer": "TOMCAT",
+        "javaContainerVersion": "8.0",
+        "alwaysOn": true,
+        "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
+      },
+      "httpsOnly": "[bool(parameters('https_only'))]"
+    },
+    "resources": [
     {
-      "name": "[parameters('asp_name')]",
-      "type": "Microsoft.Web/serverfarms",
-      "location": "[parameters('location')]",
-      "apiVersion": "2016-09-01",
-      "tags": {
-        "displayName": "Application Service Plan",
-        "environment": "[parameters('env')]",
-        "Team Name": "[parameters('teamName')]"
-      },
-      "properties": {
-      "name": "[parameters('asp_name')]",
-      "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-      "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
-      },
-      "sku": {
-        "name": "[parameters('instance_size')]",
-        "tier": "Isolated",
-        "size": "[parameters('instance_size')]",
-        "family": "I",
-        "capacity": "[parameters('capacity')]"
-      },
-      "dependsOn": [
-      ]
+       "name": "[concat('tm', parameters('additional_host_name'))]",
+       "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+       "type": "hostNameBindings",
+       "apiVersion": "2016-08-01",
+       "location": "[parameters('location')]",
+       "tags": {},
+       "properties": {
+          "siteName": "[concat('tm', parameters('additional_host_name'))]",
+          "hostNameType": "Verified"
+        },
+       "dependsOn": [
+         "[parameters('name')]"
+        ]
+    },
+    {
+       "name": "[parameters('additional_host_name')]",
+       "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+       "type": "hostNameBindings",
+       "apiVersion": "2016-08-01",
+       "location": "[parameters('location')]",
+       "tags": {},
+       "properties": {
+          "siteName": "[parameters('additional_host_name')]",
+          "hostNameType": "Verified"
+       },
+       "dependsOn": [
+       "[parameters('name')]",
+       "[concat('tm', parameters('additional_host_name'))]"
+       ]  
+    },
+    {
+       "name": "[variables('trafficmanager')]",
+       "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+       "type": "hostNameBindings",
+       "apiVersion": "2016-08-01",
+       "location": "[parameters('location')]",
+       "tags": {},
+       "properties": {
+          "siteName": "[variables('trafficmanager')]",
+          "hostNameType": "Verified"
+        },
+       "dependsOn": [
+          "[parameters('name')]",
+          "[parameters('additional_host_name')]"
+        ]
+    },
+    {
+       "name": "slotConfigNames",
+       "type": "config",
+       "apiVersion": "2015-08-01",
+       "dependsOn": [
+          "[concat('Microsoft.Web/sites/', parameters('Name'))]"
+       ],
+       "tags": {
+          "displayName": "slotConfigNames",
+          "Team Name": "[parameters('teamName')]"
+        },
+       "properties": {
+       "appSettingNames": [
+          "SLOT",
+          "WEBSITE_LOCAL_CACHE_OPTION",
+          "WEBSITE_LOCAL_CACHE_SIZEINMB"
+        ]
+        }
+    },
+    {
+       "apiVersion": "2016-08-01",
+       "name": "appsettings",
+       "type": "config",
+       "dependsOn": [
+           "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+        ],
+       "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
     }
   ]
-}
-}
-    },
-{
-"name": "[parameters('name')]",
-"type": "Microsoft.Web/sites",
-"location": "[parameters('location')]",
-"apiVersion": "2016-08-01",
-"tags": {
-"[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
-"displayName": "ASE-WEB-APP",
-"environment": "[parameters('env')]",
-"Team Name": "[parameters('teamName')]"
-},
-"dependsOn": [
-],
-"properties": {
-"name": "[parameters('name')]",
-"serverFarmId": "[variables('serverFarmId')]",
-"siteConfig": {
-"use32BitWorkerProcess": false,
-"detailedErrorLoggingEnabled": true,
-"scmType": "LocalGit",
-"httpLoggingEnabled": true,
-"logsDirectorySizeLimit": 35,
-"javaVersion": "1.8",
-"javaContainer": "TOMCAT",
-"javaContainerVersion": "8.0",
-"alwaysOn": true,
-"webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
-},
-"httpsOnly": "[bool(parameters('https_only'))]"
-},
-"resources": [
-{
-"name": "[concat('tm', parameters('additional_host_name'))]",
-"condition": "[not(equals(parameters('is_frontend'), '0'))]",
-"type": "hostNameBindings",
-"apiVersion": "2016-08-01",
-"location": "[parameters('location')]",
-"tags": {},
-"properties": {
-"siteName": "[concat('tm', parameters('additional_host_name'))]",
-"hostNameType": "Verified"
-},
-"dependsOn": [
-"[parameters('name')]"
-]
-},
-{
-"name": "[parameters('additional_host_name')]",
-"condition": "[not(equals(parameters('is_frontend'), '0'))]",
-"type": "hostNameBindings",
-"apiVersion": "2016-08-01",
-"location": "[parameters('location')]",
-"tags": {},
-"properties": {
-"siteName": "[parameters('additional_host_name')]",
-"hostNameType": "Verified"
-},
-"dependsOn": [
-"[parameters('name')]",
-"[concat('tm', parameters('additional_host_name'))]"
-]
-},
-{
-"name": "[variables('trafficmanager')]",
-"condition": "[not(equals(parameters('is_frontend'), '0'))]",
-"type": "hostNameBindings",
-"apiVersion": "2016-08-01",
-"location": "[parameters('location')]",
-"tags": {},
-"properties": {
-"siteName": "[variables('trafficmanager')]",
-"hostNameType": "Verified"
-},
-"dependsOn": [
-"[parameters('name')]",
-"[parameters('additional_host_name')]"
-]
-},
-{
-"name": "slotConfigNames",
-"type": "config",
-"apiVersion": "2015-08-01",
-"dependsOn": [
-"[concat('Microsoft.Web/sites/', parameters('Name'))]"
-],
-"tags": {
-"displayName": "slotConfigNames",
-"Team Name": "[parameters('teamName')]"
-},
-"properties": {
-"appSettingNames": [
-"SLOT",
-"WEBSITE_LOCAL_CACHE_OPTION",
-"WEBSITE_LOCAL_CACHE_SIZEINMB"
-]
-}
-},
-{
-"apiVersion": "2016-08-01",
-"name": "appsettings",
-"type": "config",
-"dependsOn": [
-"[resourceId('Microsoft.Web/sites', parameters('name'))]"
-],
-"properties": "[base64ToJson(variables('base64AppSettingObject'))]"
-}
-]
 },
 {
 "apiVersion": "2016-08-01",

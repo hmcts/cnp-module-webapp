@@ -11,6 +11,8 @@ locals {
   asp_rg = "${var.asp_rg != "null" ? var.asp_rg : local.default_resource_group_name}"
   sp_name = "${var.env != "preview" ? local.asp_name : local.default_resource_group_name}"
   sp_rg = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
+
+  preview = "${var.env != "preview" ? 0 : 1}"
 }
 
 # Create a resource group
@@ -25,6 +27,7 @@ resource "azurerm_resource_group" "rg" {
 
 
 resource "azurerm_resource_group" "rg2" {
+  count    = "${local.preview}"
   name     = "${var.asp_rg}"
   location = "${var.location}"
 
