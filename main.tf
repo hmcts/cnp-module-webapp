@@ -23,6 +23,15 @@ resource "azurerm_resource_group" "rg" {
     )}"
 }
 
+
+resource "azurerm_resource_group" "rg2" {
+  name     = "${var.asp_rg}"
+  location = "${var.location}"
+
+  tags = "${merge(var.common_tags,
+    map("lastUpdated", "${timestamp()}")
+    )}"
+}
 # The ARM template that creates a web app and app service plan
 data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"

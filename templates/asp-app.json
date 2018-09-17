@@ -94,13 +94,6 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Resources/resourceGroups",
-      "apiVersion": "2018-05-01",
-      "location": "[parameters('location')]",
-      "name": "[parameters('asp_rg')]",
-      "properties": {}
-    },
-    {
       "name": "[parameters('asp_name')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[parameters('location')]",
