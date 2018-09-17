@@ -99,21 +99,10 @@
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2018-05-01",
       "location": "[parameters('location')]",
-      "name": "[variables('serverFarmRG')]",
+      "name": "[parameters('asp_rg')]",
       "properties": {}
     },
     {
-      "apiVersion": "2017-05-10",
-      "name": "[concat('aspDeploy-', variables('serverFarmName'))]",
-      "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[parameters('asp_rg')]",
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
               "name": "[variables('serverFarmName')]",
               "type": "Microsoft.Web/serverfarms",
               "location": "[parameters('location')]",
@@ -138,11 +127,7 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', parameters('asp_rg'))]"
               ]
-            }
-          ]
-        }
-      }
-    },
+            },
     {
       "name": "[parameters('name')]",
       "type": "Microsoft.Web/sites",
