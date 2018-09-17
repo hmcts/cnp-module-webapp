@@ -140,7 +140,7 @@
         "Team Name": "[parameters('teamName')]"
       },
       "dependsOn": [
-        "[concat('aspDeploy-', variables('serverFarmName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('serverFarmName'))]"
       ],
       "properties": {
         "name": "[parameters('name')]",
