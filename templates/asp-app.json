@@ -224,6 +224,9 @@
           "SLOT",
           "WEBSITE_LOCAL_CACHE_OPTION",
           "WEBSITE_LOCAL_CACHE_SIZEINMB"
+        ],
+        "dependsOn":[
+          "[concat('Microsoft.Web/sites/', parameters('Name'))]"
         ]
         }
     },
