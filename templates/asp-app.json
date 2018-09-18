@@ -232,7 +232,7 @@
        "name": "appsettings",
        "type": "config",
        "dependsOn": [
-           "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+           "[resourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]"
         ],
        "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
     }
