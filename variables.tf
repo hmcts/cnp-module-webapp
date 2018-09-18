@@ -85,7 +85,7 @@ variable "https_only" {
 
 variable "security_aad_tenantId" {
   description = "The Azure Active Directory Tenant Id to use for securing access to the application"
-  default     = "21ae17a1-694c-4005-8e0f-6a0e51c35a5f"
+  default     = ""
 }
 
 variable "security_aad_clientId" {
