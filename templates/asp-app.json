@@ -235,7 +235,8 @@
        "name": "appsettings",
        "type": "config",
        "dependsOn": [
-           "[resourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]"
+           "[resourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]",
+           "[concat('Microsoft.Web/sites/', parameters('Name'))]"
         ],
        "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
     }
