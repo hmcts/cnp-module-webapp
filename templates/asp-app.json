@@ -90,196 +90,195 @@
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
-    "serverFarmName": "[if(contains(parameters('asp_name'), 'null'), parameters('name'), parameters('asp_name'))]",
-    "serverFarmRG": "[if(contains(parameters('asp_rg'), 'null'),  parameters('name'), parameters('asp_rg'))]",
-    "serverFarmId": "[if(contains(parameters('asp_name'), 'null'), resourceId('Microsoft.Web/serverfarms', variables('serverFarmName')), resourceId(parameters('asp_rg'), 'Microsoft.Web/serverfarms', variables('serverFarmName')))]"
+    "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]"
   },
   "resources": [
     {
       "apiVersion": "2017-05-10",
-      "name": "[concat('aspDeploy-', variables('serverFarmName'))]",
+      "name": "[concat('aspDeploy-', parameters('asp_name'))]",
       "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[variables('serverFarmRG')]",
+      "resourceGroup": "[parameters('asp_rg')]",
       "properties": {
         "mode": "Incremental",
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
+
           "resources": [
-            {
-              "name": "[variables('serverFarmName')]",
-              "type": "Microsoft.Web/serverfarms",
-              "location": "[parameters('location')]",
-              "apiVersion": "2016-09-01",
-              "tags": {
-                "displayName": "Application Service Plan",
-                "environment": "[parameters('env')]",
-                "Team Name": "[parameters('teamName')]"
-              },
-              "properties": {
-                "name": "[variables('serverFarmName')]",
-                "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-                "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
-              },
-              "sku": {
-                "name": "[parameters('instance_size')]",
-                "tier": "Isolated",
-                "size": "[parameters('instance_size')]",
-                "family": "I",
-                "capacity": "[parameters('capacity')]"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "[parameters('name')]",
-      "type": "Microsoft.Web/sites",
-      "location": "[parameters('location')]",
-      "apiVersion": "2016-08-01",
-      "tags": {
-        "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
-        "displayName": "ASE-WEB-APP",
-        "environment": "[parameters('env')]",
-        "Team Name": "[parameters('teamName')]"
-      },
-      "dependsOn": [
-        "[concat('aspDeploy-', variables('serverFarmName'))]"
-      ],
-      "properties": {
-        "name": "[parameters('name')]",
-        "serverFarmId": "[variables('serverFarmId')]",
-        "siteConfig": {
-          "use32BitWorkerProcess": false,
-          "detailedErrorLoggingEnabled": true,
-          "scmType": "LocalGit",
-          "httpLoggingEnabled": true,
-          "logsDirectorySizeLimit": 35,
-          "javaVersion": "1.8",
-          "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
-          "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
-        },
-        "httpsOnly": "[bool(parameters('https_only'))]"
-      },
-      "resources": [
-        {
-          "name": "[concat('tm', parameters('additional_host_name'))]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
-          "type": "hostNameBindings",
-          "apiVersion": "2016-08-01",
+          {
+          "name": "[parameters('asp_name')]",
+          "type": "Microsoft.Web/serverfarms",
           "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[concat('tm', parameters('additional_host_name'))]",
-            "hostNameType": "Verified"
-          },
-          "dependsOn": [
-            "[parameters('name')]"
-          ]
-        },
-        {
-          "name": "[parameters('additional_host_name')]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
-          "type": "hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[parameters('additional_host_name')]",
-            "hostNameType": "Verified"
-          },
-          "dependsOn": [
-            "[parameters('name')]",
-            "[concat('tm', parameters('additional_host_name'))]"
-          ]
-        },
-        {
-          "name": "[variables('trafficmanager')]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
-          "type": "hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[variables('trafficmanager')]",
-            "hostNameType": "Verified"
-          },
-          "dependsOn": [
-            "[parameters('name')]",
-            "[parameters('additional_host_name')]"
-          ]
-        },
-        {
-          "name": "slotConfigNames",
-          "type": "config",
-          "apiVersion": "2015-08-01",
-          "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('Name'))]"
-          ],
+          "apiVersion": "2016-09-01",
           "tags": {
-            "displayName": "slotConfigNames",
+            "displayName": "Application Service Plan",
+            "environment": "[parameters('env')]",
             "Team Name": "[parameters('teamName')]"
           },
           "properties": {
-            "appSettingNames": [
-              "SLOT",
-              "WEBSITE_LOCAL_CACHE_OPTION",
-              "WEBSITE_LOCAL_CACHE_SIZEINMB"
-            ]
+          "name": "[parameters('asp_name')]",
+          "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+          "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
+          },
+          "sku": {
+            "name": "[parameters('instance_size')]",
+            "tier": "Isolated",
+            "size": "[parameters('instance_size')]",
+            "family": "I",
+            "capacity": "[parameters('capacity')]"
+            }
           }
+        ]
+      }
+    }
+  },
+  {
+    "name": "[parameters('name')]",
+    "type": "Microsoft.Web/sites",
+    "location": "[parameters('location')]",
+    "apiVersion": "2016-08-01",
+    "tags": {
+      "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
+      "displayName": "ASE-WEB-APP",
+      "environment": "[parameters('env')]",
+      "Team Name": "[parameters('teamName')]"
+    },
+    "properties": {
+      "name": "[parameters('name')]",
+      "serverFarmId": "[variables('serverFarmId')]",
+      "siteConfig": {
+        "use32BitWorkerProcess": false,
+        "detailedErrorLoggingEnabled": true,
+        "scmType": "LocalGit",
+        "httpLoggingEnabled": true,
+        "logsDirectorySizeLimit": 35,
+        "javaVersion": "1.8",
+        "javaContainer": "TOMCAT",
+        "javaContainerVersion": "8.0",
+        "alwaysOn": true,
+        "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
+      },
+      "httpsOnly": "[bool(parameters('https_only'))]"
+    },
+    "resources": [
+    {
+       "name": "[concat('tm', parameters('additional_host_name'))]",
+       "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+       "type": "hostNameBindings",
+       "apiVersion": "2016-08-01",
+       "location": "[parameters('location')]",
+       "tags": {},
+       "properties": {
+          "siteName": "[concat('tm', parameters('additional_host_name'))]",
+          "hostNameType": "Verified"
         },
-        {
-          "apiVersion": "2016-08-01",
-          "name": "appsettings",
-          "type": "config",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-          ],
-          "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
-        }
-      ]
+       "dependsOn": [
+         "[parameters('name')]"
+        ]
     },
     {
-      "apiVersion": "2016-08-01",
-      "name": "[concat(parameters('name'), '/', parameters('stagingSlotName'))]",
-      "type": "Microsoft.Web/sites/slots",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-      ],
-      "tags": {
-        "displyName": "[concat(parameters('stagingSlotName'), ' Slot')]",
-        "Team Name": "[parameters('teamName')]"
-      },
-      "location": "[parameters('location')]",
-      "properties": {
-        "siteConfig": {
-          "use32BitWorkerProcess": false,
-          "detailedErrorLoggingEnabled": true,
-          "scmType": "LocalGit",
-          "httpLoggingEnabled": true,
-          "logsDirectorySizeLimit": 35,
-          "javaVersion": "1.8",
-          "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
-          "alwaysOn": true,
-          "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
+       "name": "[parameters('additional_host_name')]",
+       "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+       "type": "hostNameBindings",
+       "apiVersion": "2016-08-01",
+       "location": "[parameters('location')]",
+       "tags": {},
+       "properties": {
+          "siteName": "[parameters('additional_host_name')]",
+          "hostNameType": "Verified"
+       },
+       "dependsOn": [
+       "[parameters('name')]",
+       "[concat('tm', parameters('additional_host_name'))]"
+       ]  
+    },
+    {
+       "name": "[variables('trafficmanager')]",
+       "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+       "type": "hostNameBindings",
+       "apiVersion": "2016-08-01",
+       "location": "[parameters('location')]",
+       "tags": {},
+       "properties": {
+          "siteName": "[variables('trafficmanager')]",
+          "hostNameType": "Verified"
         },
-        "httpsOnly": "[bool(parameters('https_only'))]"
-      },
-      "resources": [
-        {
-          "apiVersion": "2016-08-01",
-          "name": "appsettings",
-          "type": "config",
-          "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
-          ],
-          "properties": "[base64ToJson(variables('base64SlotAppSettingObject'))]"
+       "dependsOn": [
+          "[parameters('name')]",
+          "[parameters('additional_host_name')]"
+        ]
+    },
+    {
+       "name": "slotConfigNames",
+       "type": "config",
+       "apiVersion": "2015-08-01",
+       "dependsOn": [
+          "[concat('Microsoft.Web/sites/', parameters('Name'))]"
+       ],
+       "tags": {
+          "displayName": "slotConfigNames",
+          "Team Name": "[parameters('teamName')]"
+        },
+       "properties": {
+       "appSettingNames": [
+          "SLOT",
+          "WEBSITE_LOCAL_CACHE_OPTION",
+          "WEBSITE_LOCAL_CACHE_SIZEINMB"
+        ],
+        "dependsOn":[
+          "[concat('Microsoft.Web/sites/', parameters('Name'))]"
+        ]
         }
-      ]
+    },
+    {
+       "apiVersion": "2016-08-01",
+       "name": "appsettings",
+       "type": "config",
+       "dependsOn": [
+           "[concat('Microsoft.Web/sites/', parameters('Name'))]"
+        ],
+       "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
     }
+  ]
+},
+{
+"apiVersion": "2016-08-01",
+"name": "[concat(parameters('name'), '/', parameters('stagingSlotName'))]",
+"type": "Microsoft.Web/sites/slots",
+"dependsOn": [
+"[resourceId('Microsoft.Web/sites', parameters('name'))]"
+],
+"tags": {
+"displyName": "[concat(parameters('stagingSlotName'), ' Slot')]",
+"Team Name": "[parameters('teamName')]"
+},
+"location": "[parameters('location')]",
+"properties": {
+"siteConfig": {
+"use32BitWorkerProcess": false,
+"detailedErrorLoggingEnabled": true,
+"scmType": "LocalGit",
+"httpLoggingEnabled": true,
+"logsDirectorySizeLimit": 35,
+"javaVersion": "1.8",
+"javaContainer": "TOMCAT",
+"javaContainerVersion": "8.0",
+"alwaysOn": true,
+"webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
+},
+"httpsOnly": "[bool(parameters('https_only'))]"
+},
+"resources": [
+{
+"apiVersion": "2016-08-01",
+"name": "appsettings",
+"type": "config",
+"dependsOn": [
+"[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
+],
+"properties": "[base64ToJson(variables('base64SlotAppSettingObject'))]"
+}
+]
+}
   ]
 }
