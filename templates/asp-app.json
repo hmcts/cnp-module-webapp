@@ -159,6 +159,7 @@
           "alwaysOn": true,
           "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
+        "clientAffinityEnabled": false,
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
@@ -267,6 +268,7 @@
           "alwaysOn": true,
           "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
+        "clientAffinityEnabled": false,
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
