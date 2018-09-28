@@ -1,4 +1,4 @@
-# moj-module-webapp
+# cnp-module-webapp
 A module that lets you create a Web App and its associated App Service Plan, and depending on the environment you are targeting, the module will automatically deploy to the correct Application Service Environment.
 Refer to the following links for a detailed explanation of an App Service Plan, Web App and Application Service Environment in Azure.
 
