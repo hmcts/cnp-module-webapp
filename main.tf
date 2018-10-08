@@ -68,11 +68,11 @@ locals {
   #effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key == "" ? data.service_app_insights_instrumentation_key : var.appinsights_instrumentation_key}"
   #effective_app_insights_instrumentation_key = "${data.service_app_insights_instrumentation_key}"
   app_settings_evaluated = {
-   # APPLICATION_INSIGHTS_IKEY = "${local.effective_app_insights_instrumentation_key}"
-   APPLICATION_INSIGHTS_IKEY = "${local.service_app_insights_instrumentation_key}"
+    # APPLICATION_INSIGHTS_IKEY = "${local.effective_app_insights_instrumentation_key}"
+    APPLICATION_INSIGHTS_IKEY = "${local.service_app_insights_instrumentation_key}"
 
     # Support for nodejs apps (java apps to migrate to this env var in future PR)
-    APPINSIGHTS_INSTRUMENTATIONKEY = "${local.effective_app_insights_instrumentation_key}"
+    APPINSIGHTS_INSTRUMENTATIONKEY = "${local.service_app_insights_instrumentation_key}"
   }
 }
 
