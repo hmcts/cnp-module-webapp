@@ -40,24 +40,32 @@ data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"
 }
 
-# Create Application Insights for the service only if an instrumentation key to a specific instance wasn't provided
-resource "azurerm_application_insights" "appinsights" {
-  count = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
+# # Create Application Insights for the service only if an instrumentation key to a specific instance wasn't provided
+# resource "azurerm_application_insights" "appinsights" {
+#   count = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
 
-  name                = "${var.product}-appinsights-${var.env}"
-  location            = "${var.appinsights_location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  application_type    = "${var.application_type}"
+#   name                = "${var.product}-appinsights-${var.env}"
+#   location            = "${var.appinsights_location}"
+#   resource_group_name = "${azurerm_resource_group.rg.name}"
+#   application_type    = "${var.application_type}"
 
-  tags = "${merge(var.common_tags,
-    map("lastUpdated", "${timestamp()}")
-    )}"
+#   tags = "${merge(var.common_tags,
+#     map("lastUpdated", "${timestamp()}")
+#     )}"
+# }
+
+data "azurerm_key_vault_secret" "appInsights-InstrumentationKey" {
+  name      = "appInsights-InstrumentationKey"
+  vault_uri = "${var.vault_uri}"
 }
 
 locals {
   # https://www.terraform.io/upgrade-guides/0-11.html#referencing-attributes-from-resources-with-count-0
-  service_app_insights_instrumentation_key   = "${element(concat(azurerm_application_insights.appinsights.*.instrumentation_key, list("")), 0)}"
-  effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key == "" ? local.service_app_insights_instrumentation_key : var.appinsights_instrumentation_key}"
+  #service_app_insights_instrumentation_key   = "${element(concat(azurerm_application_insights.appinsights.*.instrumentation_key, list("")), 0)}"
+  service_app_insights_instrumentation_key   = "data.appInsights-InstrumentationKey}"
+  
+  #effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key == "" ? local.service_app_insights_instrumentation_key : var.appinsights_instrumentation_key}"
+  effective_app_insights_instrumentation_key = "${var.appinsights_instrumentation_key == "" ? data.service_app_insights_instrumentation_key : var.appinsights_instrumentation_key}"
 
   app_settings_evaluated = {
     APPLICATION_INSIGHTS_IKEY = "${local.effective_app_insights_instrumentation_key}"
