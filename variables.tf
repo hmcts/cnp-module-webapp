@@ -150,7 +150,7 @@ variable "is_frontend" {
   default = "0"
 }
 
-variable "additional_hostnames" {
+variable "additional_host_names" {
   type = "list"
   default = [""]
 }
