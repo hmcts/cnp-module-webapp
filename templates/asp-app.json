@@ -12,9 +12,8 @@
       "defaultValue": "0",
       "type": "string"
     },
-    "additional_host_name": {
-      "type": "string",
-      "defaultValue": "example",
+    "additional_host_names": {
+      "type": "array",
       "metadata": {
         "description": "The hostname this application should be accessible on"
       }
@@ -164,37 +163,6 @@
       },
       "resources": [
         {
-          "name": "[concat('tm', parameters('additional_host_name'))]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
-          "type": "hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[concat('tm', parameters('additional_host_name'))]",
-            "hostNameType": "Verified"
-          },
-          "dependsOn": [
-            "[parameters('name')]"
-          ]
-        },
-        {
-          "name": "[parameters('additional_host_name')]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
-          "type": "hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[parameters('additional_host_name')]",
-            "hostNameType": "Verified"
-          },
-          "dependsOn": [
-            "[parameters('name')]",
-            "[concat('tm', parameters('additional_host_name'))]"
-          ]
-        },
-        {
           "name": "[variables('trafficmanager')]",
           "condition": "[not(equals(parameters('is_frontend'), '0'))]",
           "type": "hostNameBindings",
@@ -206,8 +174,7 @@
             "hostNameType": "Verified"
           },
           "dependsOn": [
-            "[parameters('name')]",
-            "[parameters('additional_host_name')]"
+            "[parameters('name')]"
           ]
         },
         {
