@@ -18,6 +18,10 @@
         "description": "The hostname this application should be accessible on"
       }
     },
+    "additional_host_name":{
+      "type": "string",
+      "defaultValue": "null"
+    },
     "location": {
       "type": "string",
       "allowedValues": [
@@ -164,18 +168,34 @@
       },
       "resources": [
         {
-          "name": "[variables('trafficmanager')]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+          "name": "[concat('tm', parameters('additional_host_name'))]",
+          "condition": "[not(equals(parameters('additional_host_name'), 'null'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
           "tags": {},
           "properties": {
-            "siteName": "[variables('trafficmanager')]",
+            "siteName": "[concat('tm', parameters('additional_host_name'))]",
             "hostNameType": "Verified"
           },
           "dependsOn": [
             "[parameters('name')]"
+          ]
+        },
+        {
+          "name": "[parameters('additional_host_name')]",
+          "condition": "[not(equals(parameters('additional_host_name'), 'null'))]",
+          "type": "hostNameBindings",
+          "apiVersion": "2016-08-01",
+          "location": "[parameters('location')]",
+          "tags": {},
+          "properties": {
+            "siteName": "[parameters('additional_host_name')]",
+            "hostNameType": "Verified"
+          },
+          "dependsOn": [
+            "[parameters('name')]",
+            "[concat('tm', parameters('additional_host_name'))]"
           ]
         },
         {
