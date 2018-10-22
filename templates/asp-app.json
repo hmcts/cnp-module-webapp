@@ -13,7 +13,7 @@
       "type": "string"
     },
     "additional_host_names": {
-      "type": "array",
+      "type": "string",
       "metadata": {
         "description": "The hostname this application should be accessible on"
       }
