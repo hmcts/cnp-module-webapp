@@ -223,7 +223,7 @@
         "hostNameType": "Verified"
       },
       "copy": [{
-        "name" : "[concat('hostname', copyIndex())]",
+        "name" : "hostnamecopy",
         "count": "[length(variables('additional_host_names'))]"
       }],
       "dependsOn": [
