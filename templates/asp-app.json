@@ -212,7 +212,7 @@
       ]
     },
     {
-      "name": "[concat(parameters('name'), '/', 'hostname', substring(uniquestring(parameters('name')),0,4))]",
+      "name": "[concat(parameters('name'), '/', 'hostname', copyIndex())]",
       "condition": "[not(equals(parameters('additional_host_names'), 'null'))]",
       "type": "Microsoft.Web/sites/hostNameBindings",
       "apiVersion": "2016-08-01",
@@ -222,11 +222,10 @@
         "siteName": "[variables('additional_host_names')[copyIndex()]]",
         "hostNameType": "Verified"
       },
-      "copy": {
+      "copy": [{
         "name" : "[concat('hostname',copyIndex())]",
         "count": "[length(variables('additional_host_names'))]"
-
-      },
+      }],
       "dependsOn": [
         "[concat('Microsoft.Web/sites/', parameters('Name'))]"
       ]
