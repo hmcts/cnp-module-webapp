@@ -212,7 +212,7 @@
       ]
     },
     {
-      "name": "[concat(parameters('name'), '/', 'hostname', copyIndex())]",
+      "name": "[concat(parameters('name'), '/', variables('additional_host_names')[copyIndex()])]",
       "condition": "[not(equals(parameters('additional_host_names'), 'null'))]",
       "type": "Microsoft.Web/sites/hostNameBindings",
       "apiVersion": "2016-08-01",
