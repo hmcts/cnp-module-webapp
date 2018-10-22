@@ -222,10 +222,10 @@
         "siteName": "[variables('additional_host_names')[copyIndex()]]",
         "hostNameType": "Verified"
       },
-      "copy": [{
+      "copy": {
         "name" : "hostnamecopy",
         "count": "[length(variables('additional_host_names'))]"
-      }],
+      },
       "dependsOn": [
         "[concat('Microsoft.Web/sites/', parameters('Name'))]"
       ]
