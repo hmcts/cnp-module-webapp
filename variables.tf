@@ -152,5 +152,5 @@ variable "is_frontend" {
 
 variable "additional_host_names" {
   type = "string"
-  default = ""
+  default = "null"
 }
