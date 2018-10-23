@@ -69,34 +69,37 @@
       "type": "string",
       "defaultValue": "null"
     },
-    "asp_rg":{
+    "asp_rg": {
       "type": "string",
       "defaultValue": "[parameters('name')]"
     },
     "instance_size": {
       "type": "string",
       "allowedValues": [
-        "I1", "I2", "I3"
+        "I1",
+        "I2",
+        "I3"
       ],
       "metadata": {
         "description": "The SKU size for app service plan instances"
       }
+    },
+    "teamName": {
+      "type": "string"
     }
   },
   "variables": {
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
-    "serverFarmName": "[if(contains(parameters('asp_name'), 'null'), parameters('name'), parameters('asp_name'))]",
-    "serverFarmRG": "[if(contains(parameters('asp_rg'), 'null'),  parameters('name'), parameters('asp_rg'))]",
-    "serverFarmId": "[if(contains(parameters('asp_name'), 'null'), resourceId('Microsoft.Web/serverfarms', variables('serverFarmName')), resourceId(parameters('asp_rg'), 'Microsoft.Web/serverfarms', variables('serverFarmName')))]"
+    "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]"
   },
   "resources": [
     {
       "apiVersion": "2017-05-10",
-      "name": "[concat('aspDeploy-', variables('serverFarmName'))]",
+      "name": "[concat('aspDeploy-', parameters('asp_name'))]",
       "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[variables('serverFarmRG')]",
+      "resourceGroup": "[parameters('asp_rg')]",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -104,16 +107,17 @@
           "contentVersion": "1.0.0.0",
           "resources": [
             {
-              "name": "[variables('serverFarmName')]",
+              "name": "[parameters('asp_name')]",
               "type": "Microsoft.Web/serverfarms",
               "location": "[parameters('location')]",
               "apiVersion": "2016-09-01",
               "tags": {
                 "displayName": "Application Service Plan",
-                "environment": "[parameters('env')]"
+                "environment": "[parameters('env')]",
+                "Team Name": "[parameters('teamName')]"
               },
               "properties": {
-                "name": "[variables('serverFarmName')]",
+                "name": "[parameters('asp_name')]",
                 "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
                 "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
               },
@@ -137,11 +141,9 @@
       "tags": {
         "[concat('hidden-related:', variables('serverFarmId'))]": "Resource",
         "displayName": "ASE-WEB-APP",
-        "environment": "[parameters('env')]"
+        "environment": "[parameters('env')]",
+        "Team Name": "[parameters('teamName')]"
       },
-      "dependsOn": [
-        "[concat('aspDeploy-', variables('serverFarmName'))]"
-      ],
       "properties": {
         "name": "[parameters('name')]",
         "serverFarmId": "[variables('serverFarmId')]",
@@ -157,6 +159,7 @@
           "alwaysOn": true,
           "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
+        "clientAffinityEnabled": false,
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
@@ -215,13 +218,17 @@
             "[concat('Microsoft.Web/sites/', parameters('Name'))]"
           ],
           "tags": {
-            "displayName": "slotConfigNames"
+            "displayName": "slotConfigNames",
+            "Team Name": "[parameters('teamName')]"
           },
           "properties": {
             "appSettingNames": [
               "SLOT",
               "WEBSITE_LOCAL_CACHE_OPTION",
               "WEBSITE_LOCAL_CACHE_SIZEINMB"
+            ],
+            "dependsOn": [
+              "[concat('Microsoft.Web/sites/', parameters('Name'))]"
             ]
           }
         },
@@ -230,7 +237,7 @@
           "name": "appsettings",
           "type": "config",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+            "[concat('Microsoft.Web/sites/', parameters('Name'))]"
           ],
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
         }
@@ -244,7 +251,8 @@
         "[resourceId('Microsoft.Web/sites', parameters('name'))]"
       ],
       "tags": {
-        "displyName": "[concat(parameters('stagingSlotName'), ' Slot')]"
+        "displyName": "[concat(parameters('stagingSlotName'), ' Slot')]",
+        "Team Name": "[parameters('teamName')]"
       },
       "location": "[parameters('location')]",
       "properties": {
@@ -260,6 +268,7 @@
           "alwaysOn": true,
           "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
+        "clientAffinityEnabled": false,
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [

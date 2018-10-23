@@ -11,6 +11,8 @@ locals {
   asp_rg = "${var.asp_rg != "null" ? var.asp_rg : local.default_resource_group_name}"
   sp_name = "${var.env != "preview" ? local.asp_name : local.default_resource_group_name}"
   sp_rg = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
+
+  preview = "${var.env != "preview" ? 0 : 1}"
 }
 
 # Create a resource group
@@ -23,6 +25,16 @@ resource "azurerm_resource_group" "rg" {
     )}"
 }
 
+
+resource "azurerm_resource_group" "rg2" {
+  count    = "${local.preview}"
+  name     = "${var.asp_rg}"
+  location = "${var.location}"
+
+  tags = "${merge(var.common_tags,
+    map("lastUpdated", "${timestamp()}")
+    )}"
+}
 # The ARM template that creates a web app and app service plan
 data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"
@@ -36,6 +48,10 @@ resource "azurerm_application_insights" "appinsights" {
   location            = "${var.appinsights_location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   application_type    = "${var.application_type}"
+
+  tags = "${merge(var.common_tags,
+    map("lastUpdated", "${timestamp()}")
+    )}"
 }
 
 locals {
@@ -58,7 +74,7 @@ resource "azurerm_template_deployment" "app_service_site" {
   resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
 
-  parameters = {
+  parameters             = {
     name                 = "${var.product}-${var.env}"
     location             = "${var.location}"
     env                  = "${var.env}"
@@ -71,8 +87,9 @@ resource "azurerm_template_deployment" "app_service_site" {
     capacity             = "${var.capacity}"
     instance_size        = "${var.instance_size}"
     web_sockets_enabled  = "${var.web_sockets_enabled}"
-    asp_name             = "${local.sp_name}"
-    asp_rg               = "${local.sp_rg}"
+    asp_name             = "${local.asp_name}"
+    asp_rg               = "${local.asp_rg}"
+    teamName             = "${lookup(var.common_tags, "Team Name")}"
   }
 }
 
