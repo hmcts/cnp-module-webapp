@@ -152,5 +152,5 @@ variable "is_frontend" {
 
 variable "additional_host_names" {
   type = "list"
-  default = "null"
+  default = []
 }
