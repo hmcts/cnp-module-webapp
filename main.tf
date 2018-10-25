@@ -13,6 +13,7 @@ locals {
   sp_rg = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
 
   preview = "${var.env != "preview" ? 0 : 1}"
+  hmctsdemo = "${var.env != "hmctsdemo" ? 0 : 1}"
 }
 
 # Create a resource group
@@ -117,15 +118,35 @@ resource "null_resource" "consul" {
 
 # No way we can apply the required properties as part of the ARM template so have to use Azure CLI
 resource "null_resource" "app_service_security" {
+  count    = "${local.hmctsdemo}"
   triggers {
-    trigger = "${var.security_aad_tenantId}",
-    trigger = "${var.security_aad_clientId}",
-    trigger = "${var.security_aad_clientSecret}"
+    trigger = "${data.azurerm_key_vault_secret.security_aad_tenantId.value}",
+    trigger = "${data.azurerm_key_vault_secret.security_aad_clientId.value}",
+    trigger = "${data.azurerm_key_vault_secret.security_aad_clientSecret.value}"
   }
-
+  
   # configure App Service security
   provisioner "local-exec" {
-    command = "bash -e ${path.module}/configureSecurity.sh '${var.subscription}' '${var.product}-${var.env}' '${azurerm_resource_group.rg.name}' '${var.security_aad_tenantId}' '${var.security_aad_clientId}' '${var.security_aad_clientSecret}'"
+    command = "bash -e ${path.module}/configureSecurity.sh '${var.subscription}' '${var.product}-${var.env}' '${azurerm_resource_group.rg.name}' '${data.azurerm_key_vault_secret.security_aad_tenantId.value}' '${data.azurerm_key_vault_secret.security_aad_clientId.value}' '${data.azurerm_key_vault_secret.security_aad_clientSecret.value}'"
   }
   depends_on = ["azurerm_template_deployment.app_service_site"]
 }
+
+data "azurerm_key_vault_secret" "security_aad_tenantId" {
+  count    = "${local.hmctsdemo}"
+  name      = "security_aad_tenantId"
+  vault_uri = "https://infra-vault-hmctsdemo.vault.azure.net/"
+}
+
+data "azurerm_key_vault_secret" "security_aad_clientId" {
+  count    = "${local.hmctsdemo}"
+  name      = "security_aad_clientId-${var.product}"
+  vault_uri = "https://infra-vault-hmctsdemo.vault.azure.net/"
+}
+
+data "azurerm_key_vault_secret" "security_aad_clientSecret" {
+  count    = "${local.hmctsdemo}"
+  name      = "security_aad_clientSecret-${var.product}"
+  vault_uri = "https://infra-vault-hmctsdemo.vault.azure.net/"
+}
+
