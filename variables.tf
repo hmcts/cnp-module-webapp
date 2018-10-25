@@ -82,21 +82,6 @@ variable "https_only" {
   description = "Configures a web site to accept only https requests. Issues redirect for http requests"
   default     = "false"
 }
-
-variable "security_aad_tenantId" {
-  description = "The Azure Active Directory Tenant Id to use for securing access to the application"
-  default     = ""
-}
-
-variable "security_aad_clientId" {
-  description = "The Application Id to use for securing access to the application"
-  default     = ""
-}
-
-variable "security_aad_clientSecret" {
-  description = "The Application Secret to use for securing access to the application"
-  default     = ""
-}
   
 variable "ilbIp" {
   default = "0.0.0.0"
