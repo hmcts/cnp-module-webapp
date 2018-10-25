@@ -20,7 +20,7 @@ Name | Type |  Required | Default | description
 `app_settings` | String | Yes | | this is the key valued pairs of application settings used by the application at runtime
 `is_frontend` | Boolean | No | False | Indicates that this app could be routable from the public internet
 `additional_host_name` | String | No | | A custom domain name for your web application
-`additional_host_names` | String | No | | A comma seperated string of custom domains for your web application
+`additional_host_names` | List | No | | A list of custom domains for your web application
 `https_only` | String | No | `"false"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
 `waf_backend_ip` | String | No | IP of ILB for the ASE | Overrides the backend IP for the WAF to use instead of the ILB for the ASE. Only override if needed via an `{env}.tfvars` file
 `common_tags` | Map | Yes | | tags that need to be applied to every resource group, passed through by the jenkins-library
@@ -45,7 +45,7 @@ module "frontend" {
 	asp_rg       = "${var.product}-shared-infrastructure-${var.env}"
 	subscription = "${var.subscription}"
 	common_tags  = "${var.common_tags}"
-	additional_host_names = "example.com,example.co.uk"
+	additional_host_names = ["example.com","example.co.uk"]
 	app_settings = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
