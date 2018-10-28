@@ -12,12 +12,15 @@
       "defaultValue": "0",
       "type": "string"
     },
-    "additional_host_name": {
+    "additional_host_names": {
       "type": "string",
-      "defaultValue": "example",
       "metadata": {
         "description": "The hostname this application should be accessible on"
       }
+    },
+    "additional_host_name":{
+      "type": "string",
+      "defaultValue": "null"
     },
     "location": {
       "type": "string",
@@ -92,7 +95,8 @@
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
-    "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]"
+    "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]",
+    "additional_host_names": "[split(parameters('additional_host_names'),',')]"
   },
   "resources": [
     {
@@ -165,7 +169,7 @@
       "resources": [
         {
           "name": "[concat('tm', parameters('additional_host_name'))]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+          "condition": "[not(equals(parameters('additional_host_name'), 'null'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
@@ -180,7 +184,7 @@
         },
         {
           "name": "[parameters('additional_host_name')]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
+          "condition": "[not(equals(parameters('additional_host_name'), 'null'))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
@@ -192,22 +196,6 @@
           "dependsOn": [
             "[parameters('name')]",
             "[concat('tm', parameters('additional_host_name'))]"
-          ]
-        },
-        {
-          "name": "[variables('trafficmanager')]",
-          "condition": "[not(equals(parameters('is_frontend'), '0'))]",
-          "type": "hostNameBindings",
-          "apiVersion": "2016-08-01",
-          "location": "[parameters('location')]",
-          "tags": {},
-          "properties": {
-            "siteName": "[variables('trafficmanager')]",
-            "hostNameType": "Verified"
-          },
-          "dependsOn": [
-            "[parameters('name')]",
-            "[parameters('additional_host_name')]"
           ]
         },
         {
@@ -243,6 +231,25 @@
         }
       ]
     },
+    {
+      "name": "[concat(parameters('name'), '/', variables('additional_host_names')[copyIndex()])]",
+      "condition": "[not(equals(parameters('additional_host_names'), 'null'))]",
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2016-08-01",
+      "location": "[parameters('location')]",
+      "tags": {},
+      "properties": {
+        "siteName": "[variables('additional_host_names')[copyIndex()]]",
+        "hostNameType": "Verified"
+      },
+      "copy": {
+        "name" : "hostnamecopy",
+        "count": "[length(variables('additional_host_names'))]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', parameters('Name'))]"
+      ]
+    },    
     {
       "apiVersion": "2016-08-01",
       "name": "[concat(parameters('name'), '/', parameters('stagingSlotName'))]",
