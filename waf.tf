@@ -123,4 +123,6 @@ resource "azurerm_application_gateway" "waf" {
     unhealthy_threshold = "${var.unhealthyThreshold}"
     timeout             = "60"
   }
+
+  common_tags = "${var.common_tags}"
 }
