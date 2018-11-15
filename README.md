@@ -21,7 +21,6 @@ Name | Type |  Required | Default | description
 `is_frontend` | Boolean | No | False | Indicates that this app could be routable from the public internet
 `additional_host_name` | String | No | | A custom domain name for your web application
 `https_only` | String | No | `"false"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
-`waf_backend_ip` | String | No | IP of ILB for the ASE | Overrides the backend IP for the WAF to use instead of the ILB for the ASE. Only override if needed via an `{env}.tfvars` file
 `common_tags` | Map | Yes | | tags that need to be applied to every resource group, passed through by the jenkins-library
 `asp_rg` | String | Yes | | Name of resource group where app service plan resides
 `asp_name` | String | Yes | | this is the name of the shared service plan to be deployed to. Name should follow ${product}-${env} format
@@ -67,14 +66,6 @@ If is_frontend is set to true, an application gw and traffic manager profile is 
 
 ### Prerequisites
 Before deploying you webapp, ensure you have created a shared infrastructure repo with an app service plan as demonstrated  in https://github.com/hmcts/cnp-rhubarb-shared-infrastructure
-
-### Using a custom backend for WAF
-
-_This applies only to frontend apps (`is_frontend = true`)._
-
-By default the WAF will use the ILB of the ASE for the backend.  This is sufficient for most apps and the `waf_backend_ip` var does not need to be set.
-
-If you need to override the WAF backend (for example to add a proxy for attachment scanning) set the `waf_backend_ip` to the internal IP of the required backend in the apps environment specific `{env}.tfvars` file.
 
 ## Testing
 There's a library of unit tests and integration tests in this repository.  In the root of this repository is a tests folder.
