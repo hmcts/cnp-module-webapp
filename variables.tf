@@ -87,26 +87,6 @@ variable "ilbIp" {
   default = "0.0.0.0"
 }
 
-variable "waf_backend_ip" {
-  description = "Allows for the WAF Backend IP to be different than the default ILB IP"
-  default     = "0.0.0.0"
-}
-
-variable "healthCheck" {
-  default     = "/health"
-  description = "endpoint for healthcheck"
-}
-
-variable "healthCheckInterval" {
-  default     = "60"
-  description = "interval between healthchecks in seconds"
-}
-
-variable "unhealthyThreshold" {
-  default     = "3"
-  description = "unhealthy threshold applied to healthprobe"
-}
-
 variable "infra_location" {
   type    = "string"
   default = "core-infra"
