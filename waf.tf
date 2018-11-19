@@ -25,7 +25,7 @@ resource "azurerm_application_gateway" "waf" {
 #    )}"
 
   lifecycle {
-    ignore_changes = ["http_listener", "request_routing_rule", "probe", "backend_http_settings"]
+    ignore_changes = ["http_listener", "request_routing_rule", "probe", "backend_http_settings","ssl_certificate","authentication_certificate"]
   }
 
   sku {
