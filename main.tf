@@ -134,19 +134,19 @@ resource "null_resource" "app_service_security" {
 
 data "azurerm_key_vault_secret" "security_aad_tenantId" {
   count    = "${local.hmctsdemo}"
-  name      = "security_aad_tenantId"
+  name      = "security-aad-tenantId"
   vault_uri = "https://infra-vault-hmctsdemo.vault.azure.net/"
 }
 
 data "azurerm_key_vault_secret" "security_aad_clientId" {
   count    = "${local.hmctsdemo}"
-  name      = "security_aad_clientId-${var.product}"
+  name      = "security-aad-clientId-${var.product}"
   vault_uri = "https://infra-vault-hmctsdemo.vault.azure.net/"
 }
 
 data "azurerm_key_vault_secret" "security_aad_clientSecret" {
   count    = "${local.hmctsdemo}"
-  name      = "security_aad_clientSecret-${var.product}"
+  name      = "security-aad-clientSecret-${var.product}"
   vault_uri = "https://infra-vault-hmctsdemo.vault.azure.net/"
 }
 
