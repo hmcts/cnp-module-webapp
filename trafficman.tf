@@ -7,6 +7,7 @@ resource "azurerm_template_deployment" "tmprofile" {
   name                = "${var.product}-${var.env}-tm"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
+  count = "${var.shared_infra ? 0 : 1}"
 
   parameters = {
     name                 = "${var.product}-${var.env}"
