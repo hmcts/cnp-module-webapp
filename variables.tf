@@ -135,3 +135,7 @@ variable "shared_infra" {
   description = "if set to true, tf will not create the TM profile"
   default = false
 }
+variable deployment_target {
+  type = "string"
+  default = ""
+}
