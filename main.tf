@@ -13,6 +13,7 @@ locals {
   sp_rg = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
 
   preview = "${var.env != "preview" ? 0 : 1}"
+  envcore = "${var.deployment_target != "" ? "env" : "core" }"
 }
 
 # Create a resource group
@@ -106,11 +107,11 @@ resource "null_resource" "consul" {
 
   # register 'production' slot dns
   provisioner "local-exec" {
-    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}${var.deployment_target}' 'env-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
+    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}${var.deployment_target}' '${local.envcore}-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
   }
 
   # register 'staging' slot dns
   provisioner "local-exec" {
-    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}${var.deployment_target}-${var.staging_slot_name}' 'env-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
+    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}${var.deployment_target}-${var.staging_slot_name}' '${local.envcore}-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
   }
 }
