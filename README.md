@@ -27,6 +27,7 @@ Name | Type |  Required | Default | description
 `capacity` | Integer | No | 2 | Target number of instances of the application to run. Note that there may be more or fewer instances actually running. This should not be used to guarantee singleton (capacity=1) instances 
 `instance_size` | String | No | `I2` | The SKU size for app service plan instances. Valid values are `I1` (small), `I2` (medium) and `I3` (large). Larger instances cost more - specs for Isolated Service Plan instances can be found here https://azure.microsoft.com/en-gb/pricing/details/app-service/windows/. 
 `shared_infra` | String | No | false | If set to true, it will not create the TM profile
+`deployment_target` | String | No | | Name of the Deployment Target. If deployment_target is empty (legacy mode) the  `env/core-infra-{env}` will be: `core-infra-{env}` otherwise will be: `env-infra-{env}`
 
 ## Usage
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'

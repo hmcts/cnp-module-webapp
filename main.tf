@@ -1,5 +1,5 @@
 locals {
-  default_resource_group_name = "${var.product}-${var.env}"
+  default_resource_group_name = "${var.product}-${var.env}${var.deployment_target}"
   resource_group_name         = "${var.resource_group_name != "" ? var.resource_group_name : local.default_resource_group_name}"
 
   production_slot_app_settings = {
@@ -13,6 +13,7 @@ locals {
   sp_rg = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
 
   preview = "${var.env != "preview" ? 0 : 1}"
+  envcore = "${var.deployment_target != "" ? "env" : "core" }"
 }
 
 # Create a resource group
@@ -44,7 +45,7 @@ data "template_file" "sitetemplate" {
 resource "azurerm_application_insights" "appinsights" {
   count = "${var.appinsights_instrumentation_key == "" ? 1 : 0}"
 
-  name                = "${var.product}-appinsights-${var.env}"
+  name                = "${var.product}-appinsights-${var.env}${var.deployment_target}"
   location            = "${var.appinsights_location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   application_type    = "${var.application_type}"
@@ -70,14 +71,14 @@ locals {
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
   template_body       = "${data.template_file.sitetemplate.rendered}"
-  name                = "${var.product}-${var.env}-webapp"
+  name                = "${var.product}-${var.env}${var.deployment_target}-webapp"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
 
   parameters             = {
-    name                 = "${var.product}-${var.env}"
+    name                 = "${var.product}-${var.env}${var.deployment_target}"
     location             = "${var.location}"
-    env                  = "${var.env}"
+    env                  = "${var.env}${var.deployment_target}"
     app_settings         = "${jsonencode(merge(local.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     staging_app_settings = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
     additional_host_name = "${var.additional_host_name}"
@@ -106,11 +107,11 @@ resource "null_resource" "consul" {
 
   # register 'production' slot dns
   provisioner "local-exec" {
-    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}' 'core-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
+    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}${var.deployment_target}' '${local.envcore}-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
   }
 
   # register 'staging' slot dns
   provisioner "local-exec" {
-    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}-${var.staging_slot_name}' 'core-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
+    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}${var.deployment_target}-${var.staging_slot_name}' '${local.envcore}-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
   }
 }
