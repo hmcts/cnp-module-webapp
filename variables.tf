@@ -138,4 +138,5 @@ variable "shared_infra" {
 variable deployment_target {
   type = "string"
   default = ""
+  description = "Name of the Deployment Target"
 }
