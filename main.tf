@@ -65,7 +65,7 @@ locals {
 
     # Support for nodejs apps (java apps to migrate to this env var in future PR)
     APPINSIGHTS_INSTRUMENTATIONKEY = "${local.effective_app_insights_instrumentation_key}"
-    # Added for migration to spring starter for App Insights module to avoid any re-mapping across all apps.
+    # Value used in the spring boot starter.
     AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY = "${local.effective_app_insights_instrumentation_key}"
   }
 }
