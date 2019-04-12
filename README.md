@@ -34,17 +34,18 @@ Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled w
 
 ```terraform
 module "frontend" {
-	source       = "git@github.com:contino/cnp-module-webapp?ref=master"
-	product      = "${var.product}-frontend"
-	location     = "${var.location}"
-	env          = "${var.env}"
-	capacity     = "${var.capacity}"
-	is_frontend  = true
-	asp_name     = "${var.product}-${var.env}"
-	asp_rg       = "${var.product}-shared-infrastructure-${var.env}"
-	subscription = "${var.subscription}"
-	common_tags  = "${var.common_tags}"
-	app_settings = {
+	source               = "git@github.com:contino/cnp-module-webapp?ref=master"
+	product              = "${var.product}-frontend"
+	location             = "${var.location}"
+	appinsights_location = "${var.location}"
+	env                  = "${var.env}"
+	capacity             = "${var.capacity}"
+	is_frontend          = true
+	asp_name             = "${var.product}-${var.env}"
+	asp_rg               = "${var.product}-shared-infrastructure-${var.env}"
+	subscription         = "${var.subscription}"
+	common_tags          = "${var.common_tags}"
+	app_settings         = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
 }
