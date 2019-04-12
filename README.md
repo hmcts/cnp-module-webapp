@@ -16,6 +16,7 @@ Name | Type |  Required | Default | description
 `source` | String | Yes | | this is the location source for the moj-module-webapp, the example implies a github repo containing the moj-module-webapp source
 `product` | String | Yes | | this is the name of the product or project i.e. probate, divorce etc.
 `location` | String | No | UK South | this is the azure region for this service
+`appinsights_location` | String | No | West Europe | the Azure region for App Insights instance, previously limited to 'West Europe' but now avaiable in 'UK South'.  Current default is kept simply to prevent data loss.  New instances should set 'UK South'.
 `env` | String | Yes | | this is used to differentiate the environments e.g dev, prod, test etc
 `app_settings` | String | Yes | | this is the key valued pairs of application settings used by the application at runtime
 `is_frontend` | Boolean | No | False | Indicates that this app could be routable from the public internet
@@ -34,17 +35,18 @@ Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled w
 
 ```terraform
 module "frontend" {
-	source       = "git@github.com:contino/cnp-module-webapp?ref=master"
-	product      = "${var.product}-frontend"
-	location     = "${var.location}"
-	env          = "${var.env}"
-	capacity     = "${var.capacity}"
-	is_frontend  = true
-	asp_name     = "${var.product}-${var.env}"
-	asp_rg       = "${var.product}-shared-infrastructure-${var.env}"
-	subscription = "${var.subscription}"
-	common_tags  = "${var.common_tags}"
-	app_settings = {
+	source               = "git@github.com:contino/cnp-module-webapp?ref=master"
+	product              = "${var.product}-frontend"
+	location             = "${var.location}"
+	appinsights_location = "${var.location}"
+	env                  = "${var.env}"
+	capacity             = "${var.capacity}"
+	is_frontend          = true
+	asp_name             = "${var.product}-${var.env}"
+	asp_rg               = "${var.product}-shared-infrastructure-${var.env}"
+	subscription         = "${var.subscription}"
+	common_tags          = "${var.common_tags}"
+	app_settings         = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
 }
