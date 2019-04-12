@@ -7,3 +7,5 @@
 *.iml
 .idea
 
+local.tfvars
+tfplan
