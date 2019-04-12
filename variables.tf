@@ -140,3 +140,18 @@ variable deployment_target {
   default = ""
   description = "Name of the Deployment Target"
 }
+
+variable "java_version" {
+  default = "1.8"
+  description = "The Azul OpenJDK version to run on, currently 1.8 or 11"
+}
+
+variable "java_container_type" {
+  default = "TOMCAT"
+  description = "TOMCAT or JETTY"
+}
+
+variable "java_container_version" {
+  default = "8.0"
+  description = "See the portal for the available versions, 8.0 or 9.0 mean latest in their respective series (autoupdate)"
+}

@@ -86,6 +86,15 @@
     },
     "teamName": {
       "type": "string"
+    },
+    "java_version": {
+      "type": "string"
+    },
+    "java_container_type": {
+      "type": "string"
+    },
+    "java_container_version": {
+      "type": "string"
     }
   },
   "variables": {
@@ -153,9 +162,9 @@
           "scmType": "LocalGit",
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
-          "javaVersion": "1.8",
-          "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
+          "javaVersion": "[parameters('java_version')]",
+          "javaContainer": "[parameters('java_container_type')]",
+          "javaContainerVersion": "[parameters('java_container_version')]",
           "alwaysOn": true,
           "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
@@ -262,9 +271,9 @@
           "scmType": "LocalGit",
           "httpLoggingEnabled": true,
           "logsDirectorySizeLimit": 35,
-          "javaVersion": "1.8",
-          "javaContainer": "TOMCAT",
-          "javaContainerVersion": "8.0",
+          "javaVersion": "[parameters('java_version')]",
+          "javaContainer": "[parameters('java_container_type')]",
+          "javaContainerVersion": "[parameters('java_container_version')]",
           "alwaysOn": true,
           "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },

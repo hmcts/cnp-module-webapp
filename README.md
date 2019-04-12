@@ -31,7 +31,7 @@ Name | Type |  Required | Default | description
 `deployment_target` | String | No | | Name of the Deployment Target. If deployment_target is empty (legacy mode) the  `env/core-infra-{env}` will be: `core-infra-{env}` otherwise will be: `env-infra-{env}`
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the moj-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
+Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the cnp-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
 
 ```terraform
 module "frontend" {
@@ -47,6 +47,27 @@ module "frontend" {
 	subscription         = "${var.subscription}"
 	common_tags          = "${var.common_tags}"
 	app_settings         = {
+		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
+	}
+}
+```
+
+```terraform
+module "backend" {
+	source                 = "git@github.com:contino/cnp-module-webapp?ref=master"
+	product                = "${var.product}-api"
+	location               = "${var.location}"
+	appinsights_location   = "${var.location}"
+	env                    = "${var.env}"
+	capacity               = "${var.capacity}"
+	asp_name               = "${var.product}-${var.env}"
+	asp_rg                 = "${var.product}-shared-infrastructure-${var.env}"
+	subscription           = "${var.subscription}"
+	common_tags            = "${var.common_tags}"
+	java_version           = "11"
+	java_container_type    = "TOMCAT"
+	java_container_version = "9.0"
+	app_settings           = {
 		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
 	}
 }
