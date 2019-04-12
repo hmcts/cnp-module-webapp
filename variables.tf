@@ -7,7 +7,7 @@ variable "location" {
   default = "UK South"
 }
 
-// previously, UK South was unavailable for Application Insights, keep default to prevent uneeded App Insight migrations and data loss
+// previously, UK South was unavailable for Application Insights, keep default to prevent unneeded App Insight migrations and data loss
 variable "appinsights_location" {
   type        = "string"
   default     = "West Europe"
