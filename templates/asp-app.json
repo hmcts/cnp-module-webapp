@@ -174,7 +174,7 @@
       "resources": [
         {
           "name": "[concat('tm', parameters('additional_host_name'))]",
-          "condition": "[not(contains(createArray('', 'null', 'false', 'localhost'), parameters('additional_host_name')))]",
+          "condition": "[not(contains(createArray('', 'null', 'false', 'localhost', 'debugparam'), parameters('additional_host_name')))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
@@ -189,7 +189,7 @@
         },
         {
           "name": "[parameters('additional_host_name')]",
-          "condition": "[not(contains(createArray('', 'null', 'false', 'localhost'), parameters('additional_host_name')))]",
+          "condition": "[not(contains(createArray('', 'null', 'false', 'localhost', 'debugparam'), parameters('additional_host_name')))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
@@ -205,7 +205,7 @@
         },
         {
           "name": "[variables('trafficmanager')]",
-          "condition": "[not(contains(createArray('', 'null', 'false', 'localhost'), parameters('additional_host_name')))]",
+          "condition": "[not(contains(createArray('', 'null', 'false', 'localhost', 'debugparam'), parameters('additional_host_name')))]",
           "type": "hostNameBindings",
           "apiVersion": "2016-08-01",
           "location": "[parameters('location')]",
