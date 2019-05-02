@@ -246,7 +246,8 @@
           "name": "appsettings",
           "type": "config",
           "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('Name'))]"
+            "[concat('Microsoft.Web/sites/', parameters('Name'))]",
+            "[concat('Microsoft.Web/sites/', parameters('name'), '/config/slotConfigNames')]"
           ],
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
         }
@@ -257,7 +258,8 @@
       "name": "[concat(parameters('name'), '/', parameters('stagingSlotName'))]",
       "type": "Microsoft.Web/sites/slots",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+        "[concat('Microsoft.Web/sites/', parameters('Name'))]",
+        "[concat('Microsoft.Web/sites/', parameters('name'), '/config/appsettings')]"
       ],
       "tags": {
         "displyName": "[concat(parameters('stagingSlotName'), ' Slot')]",
