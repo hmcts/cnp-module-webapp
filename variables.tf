@@ -102,8 +102,8 @@ variable "capacity" {
 }
 
 variable "instance_size" {
-  type = "string"
-  default = "I2"
+  type        = "string"
+  default     = "I2"
   description = "The SKU size for app service plan instances"
 }
 
@@ -113,45 +113,45 @@ variable "shutterURL" {
 
 variable "asp_name" {
   description = "Name of the app service plan to deploy to. If asp does not already exist, the module will create it in the rg specified in asp_rg"
-  default = "null"
+  default     = "null"
 }
 
 variable "common_tags" {
-  type    = "map"
+  type = "map"
 }
 
 variable "asp_rg" {
   description = "Name of the resource group where the asp specified in asp_name resides"
-  default = "null"
+  default     = "null"
 }
 
 variable "is_frontend" {
   description = "if set to true, tf will create a WAF enabled application gateway"
-  default = "0"
+  default     = "0"
 }
-
 
 variable "shared_infra" {
   description = "if set to true, tf will not create the TM profile"
-  default = false
+  default     = false
 }
+
 variable deployment_target {
-  type = "string"
-  default = ""
+  type        = "string"
+  default     = ""
   description = "Name of the Deployment Target"
 }
 
 variable "java_version" {
-  default = "1.8"
+  default     = "1.8"
   description = "The Azul OpenJDK version to run on, currently 1.8 or 11"
 }
 
 variable "java_container_type" {
-  default = "TOMCAT"
+  default     = "TOMCAT"
   description = "TOMCAT or JETTY"
 }
 
 variable "java_container_version" {
-  default = "8.0"
+  default     = "8.0"
   description = "See the portal for the available versions, 8.0 or 9.0 mean latest in their respective series (autoupdate)"
 }

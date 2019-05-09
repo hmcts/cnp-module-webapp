@@ -7,10 +7,11 @@ locals {
     WEBSITE_LOCAL_CACHE_OPTION   = "${var.website_local_cache_sizeinmb == "0" ? "Never" : "Always"}"
     WEBSITE_LOCAL_CACHE_SIZEINMB = "${var.website_local_cache_sizeinmb}"
   }
+
   asp_name = "${var.asp_name != "null" ? var.asp_name : local.default_resource_group_name}"
-  asp_rg = "${var.asp_rg != "null" ? var.asp_rg : local.default_resource_group_name}"
-  sp_name = "${var.env != "preview" ? local.asp_name : local.default_resource_group_name}"
-  sp_rg = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
+  asp_rg   = "${var.asp_rg != "null" ? var.asp_rg : local.default_resource_group_name}"
+  sp_name  = "${var.env != "preview" ? local.asp_name : local.default_resource_group_name}"
+  sp_rg    = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
 
   preview = "${var.env != "preview" ? 0 : 1}"
   envcore = "${var.deployment_target != "" ? "env" : "core" }"
@@ -26,7 +27,6 @@ resource "azurerm_resource_group" "rg" {
     )}"
 }
 
-
 resource "azurerm_resource_group" "rg2" {
   count    = "${local.preview}"
   name     = "${var.asp_rg}"
@@ -36,6 +36,7 @@ resource "azurerm_resource_group" "rg2" {
     map("lastUpdated", "${timestamp()}")
     )}"
 }
+
 # The ARM template that creates a web app and app service plan
 data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"
@@ -65,6 +66,7 @@ locals {
 
     # Support for nodejs apps (java apps to migrate to this env var in future PR)
     APPINSIGHTS_INSTRUMENTATIONKEY = "${local.effective_app_insights_instrumentation_key}"
+
     # Value used in the spring boot starter.
     AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY = "${local.effective_app_insights_instrumentation_key}"
   }
@@ -77,7 +79,7 @@ resource "azurerm_template_deployment" "app_service_site" {
   resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
 
-  parameters               = {
+  parameters = {
     name                   = "${var.product}-${var.env}${var.deployment_target}"
     location               = "${var.location}"
     env                    = "${var.env}${var.deployment_target}"
@@ -100,13 +102,13 @@ resource "azurerm_template_deployment" "app_service_site" {
 }
 
 resource "random_integer" "makeDNSupdateRunEachTime" {
-  min     = 1
-  max     = 99999
+  min = 1
+  max = 99999
 }
 
 resource "null_resource" "consul" {
   triggers {
-    trigger = "${azurerm_template_deployment.app_service_site.name}",
+    trigger  = "${azurerm_template_deployment.app_service_site.name}"
     forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
   }
 
