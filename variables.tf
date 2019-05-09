@@ -149,3 +149,11 @@ variable "is_frontend" {
   description = "if set to true, tf will create a WAF enabled application gateway"
   default = "0"
 }
+
+variable "certificate_key_vault_id" {
+  default = ""
+}
+
+variable "certificate_name" {
+  default = ""
+}
