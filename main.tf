@@ -101,6 +101,32 @@ resource "azurerm_template_deployment" "app_service_site" {
   }
 }
 
+data "template_file" "ssltemplate" {
+  template = "${file("${path.module}/templates/app-ssl.json")}"
+}
+
+resource "azurerm_template_deployment" "app_service_ssl" {
+  count = "${var.certificate_name == "" ? 0 : 1}"
+
+  template_body       = "${data.template_file.ssltemplate.rendered}"
+  name                = "${var.product}-${var.env}${var.deployment_target}-webapp"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  deployment_mode     = "Incremental"
+
+  parameters = {
+    name = "${var.product}-${var.env}${var.deployment_target}"
+
+    asp_name = "${local.asp_name}"
+    asp_rg   = "${local.asp_rg}"
+
+    certificate_name = "${var.certificate_name}"
+    key_vault_id     = "${var.certificate_key_vault_id}"
+    hostname         = "${var.additional_host_name}"
+  }
+
+  depends_on = ["azurerm_template_deployment.app_service_site"]
+}
+
 resource "random_integer" "makeDNSupdateRunEachTime" {
   min = 1
   max = 99999
