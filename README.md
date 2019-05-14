@@ -29,6 +29,8 @@ Name | Type |  Required | Default | description
 `instance_size` | String | No | `I2` | The SKU size for app service plan instances. Valid values are `I1` (small), `I2` (medium) and `I3` (large). Larger instances cost more - specs for Isolated Service Plan instances can be found here https://azure.microsoft.com/en-gb/pricing/details/app-service/windows/. 
 `shared_infra` | String | No | false | If set to true, it will not create the TM profile
 `deployment_target` | String | No | | Name of the Deployment Target. If deployment_target is empty (legacy mode) the  `env/core-infra-{env}` will be: `core-infra-{env}` otherwise will be: `env-infra-{env}`
+`certificate_key_vault_id` | String | No | | The id of the key vault to retrieve the ssl certificate for
+`certificate_name` | String | No | | The name of the certificate in key vault to use
 
 ## Usage
 Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the cnp-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
@@ -76,8 +78,6 @@ module "backend" {
 In the example above, you can set the variables using terraform variables, so you can set these values in a .tfvars file,
 or pass them in from a Jenkins file.
 
-For a complete example of provisioning NodeJs, Java or Springboot application infrastructure, please refer to the repo moj-probate-infrastructure.
-
 Creating a web app to host your application will create a Resource Group containing a Web App and Deployment Slot.
 
 Each of the aforementioned resources will be named the same, using the convention product-env, so if I provide the values for product as "probate", and env
@@ -87,6 +87,28 @@ If is_frontend is set to true, an application gw and traffic manager profile is 
 
 - cname pointing fqdn of your app to hmcts-<app_name>-<env>.trafficmanager.net
 - A record pointing tm<additional_hostname> to the IP of the application gw
+
+### SSL
+
+If you wish to have a custom SSL certificate on your app you will need some additional configuration:
+
+```terraform
+data "azurerm_key_vault" "cert_vault" {
+  name = "infra-vault-${var.subscription}"
+  resource_group_name = "${var.env == "prod" ? "core-infra-prod" : "cnp-core-infra"}"
+}
+
+variable "certificate_name" {
+  default = "STAR-sandbox-platform-hmcts-net"
+}
+
+module "backend" {
+	# ... copy other values from above
+	certificate_name 		 = "${var.certificate_name}"
+	certificate_key_vault_id = "${data.azurerm_key_vault.cert_vault.id}"
+}
+
+```
 
 ### Prerequisites
 Before deploying you webapp, ensure you have created a shared infrastructure repo with an app service plan as demonstrated  in https://github.com/hmcts/cnp-rhubarb-shared-infrastructure
@@ -102,7 +124,7 @@ TODO. write about sandbox and other dependencies for tests to work
 Consider the following code fragment:-
 
 ```terraform
-source   = "git::https://yourgithubrepo/moj-module-webapp?ref=0.0.67"
+source   = "git::https://yourgithubrepo/cnp-module-webapp?ref=0.0.67"
 ```
 
 the 'ref=0.0.67' in the example code fragment suggests that it is using version 0.0.67 of the moj-module-webapp.
