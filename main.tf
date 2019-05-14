@@ -109,7 +109,7 @@ resource "azurerm_template_deployment" "app_service_ssl" {
   count = "${var.certificate_name == "" ? 0 : 1}"
 
   template_body       = "${data.template_file.ssltemplate.rendered}"
-  name                = "${var.product}-${var.env}${var.deployment_target}-webapp"
+  name                = "${var.product}-${var.env}${var.deployment_target}-cert"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
 
