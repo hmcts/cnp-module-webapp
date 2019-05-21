@@ -104,6 +104,7 @@ resource "azurerm_application_gateway" "waf" {
     rule_set_type    = "OWASP"
     rule_set_version = "3.0"
     enabled          = "true"
+    file_upload_limit_mb = "100"
   }
   probe {
     name                = "http"
