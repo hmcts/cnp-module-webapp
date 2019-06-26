@@ -152,7 +152,7 @@ variable "java_container_type" {
 }
 
 variable "java_container_version" {
-  default     = "8.0"
+  default     = "9.0"
   description = "See the portal for the available versions, 8.0 or 9.0 mean latest in their respective series (autoupdate)"
 }
 
