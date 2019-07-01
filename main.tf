@@ -127,15 +127,10 @@ resource "azurerm_template_deployment" "app_service_ssl" {
   depends_on = ["azurerm_template_deployment.app_service_site"]
 }
 
-resource "random_integer" "makeDNSupdateRunEachTime" {
-  min = 1
-  max = 99999
-}
-
 resource "null_resource" "consul" {
   triggers {
     trigger  = "${azurerm_template_deployment.app_service_site.name}"
-    forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
+    forceRun = "${timestamp()}"
   }
 
   # register 'production' slot dns
