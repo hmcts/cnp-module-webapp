@@ -95,16 +95,78 @@
     },
     "java_container_version": {
       "type": "string"
+    },
+    "storageAccountSkuName": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "metadata": {
+        "description": "The name of the App Service Plan."
+      }
+    },
+    "storageAccountKind": {
+      "type": "string",
+      "defaultValue": "StorageV2",
+      "metadata": {
+        "description": "The name of the Storage Account Type."
+      }
+    },
+    "diagnosticsLogsLevel": {
+      "type": "string",
+      "defaultValue": "Error",
+      "allowedValues": [
+        "Verbose",
+        "Information",
+        "Warning",
+        "Error"
+      ],
+      "metadata": {
+        "description": "The degree of severity for diagnostics logs."
+      }
+    },
+    "diagnosticsLogsRetentionInDays": {
+      "type": "int",
+      "defaultValue": 90,
+      "metadata": {
+        "description": "Number of days for which the diagnostics logs will be retained."
+      }
     }
   },
   "variables": {
     "base64AppSettingObject": "[base64(parameters('app_settings'))]",
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
-    "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]"
+    "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]",
+    "blobContainerName": "[concat(parameters('name'),'-blob')]",
+    "storageAccountName": "[concat('webapplogs', uniqueString(resourceGroup().id))]",
+    "listAccountSasRequestContent": {
+      "signedServices": "bfqt",
+      "signedPermission": "rwdlacup",
+      "signedStart": "2018-10-01T00:00:00Z",
+      "signedExpiry": "2218-10-30T00:00:00Z",
+      "signedResourceTypes": "sco"
+    }
   },
-  "resources": [
-    {
+  "resources": [{
+      "apiVersion": "2018-02-01",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('storageAccountSkuName')]"
+      },
+      "kind": "[parameters('storageAccountKind')]",
+      "resources": [{
+        "name": "[concat('default/', variables('blobContainerName'))]",
+        "type": "blobServices/containers",
+        "apiVersion": "2018-02-01",
+        "dependsOn": [
+          "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+        ],
+        "properties": {
+          "publicAccess": "Blob"
+        }
+      }]
+    }, {
       "apiVersion": "2017-05-10",
       "name": "[concat('aspDeploy-', parameters('asp_name'))]",
       "type": "Microsoft.Resources/deployments",
@@ -114,31 +176,29 @@
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
-          "resources": [
-            {
+          "resources": [{
+            "name": "[parameters('asp_name')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "apiVersion": "2016-09-01",
+            "tags": {
+              "displayName": "Application Service Plan",
+              "environment": "[parameters('env')]",
+              "Team Name": "[parameters('teamName')]"
+            },
+            "properties": {
               "name": "[parameters('asp_name')]",
-              "type": "Microsoft.Web/serverfarms",
-              "location": "[parameters('location')]",
-              "apiVersion": "2016-09-01",
-              "tags": {
-                "displayName": "Application Service Plan",
-                "environment": "[parameters('env')]",
-                "Team Name": "[parameters('teamName')]"
-              },
-              "properties": {
-                "name": "[parameters('asp_name')]",
-                "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
-                "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
-              },
-              "sku": {
-                "name": "[parameters('instance_size')]",
-                "tier": "Isolated",
-                "size": "[parameters('instance_size')]",
-                "family": "I",
-                "capacity": "[parameters('capacity')]"
-              }
+              "hostingEnvironment": "[concat('core-compute-', parameters('env'))]",
+              "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', concat('core-compute-', parameters('env')))]"
+            },
+            "sku": {
+              "name": "[parameters('instance_size')]",
+              "tier": "Isolated",
+              "size": "[parameters('instance_size')]",
+              "family": "I",
+              "capacity": "[parameters('capacity')]"
             }
-          ]
+          }]
         }
       }
     },
@@ -171,8 +231,7 @@
         "clientAffinityEnabled": false,
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
-      "resources": [
-        {
+      "resources": [{
           "name": "[concat('tm', parameters('additional_host_name'))]",
           "condition": "[not(contains(createArray('', 'null', 'false'), parameters('additional_host_name')))]",
           "type": "hostNameBindings",
@@ -250,6 +309,31 @@
             "[concat('Microsoft.Web/sites/', parameters('name'), '/config/slotConfigNames')]"
           ],
           "properties": "[base64ToJson(variables('base64AppSettingObject'))]"
+        },
+        {
+          "apiVersion": "2018-02-01",
+          "type": "config",
+          "name": "logs",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', parameters('Name'))]",
+            "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+          ],
+          "properties": {
+            "applicationLogs": {
+              "azureBlobStorage": {
+                "level": "[parameters('diagnosticsLogsLevel')]",
+                "sasUrl": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob, variables('blobContainerName'), '?', listAccountSas(variables('storageAccountName'), '2018-02-01', variables('listAccountSasRequestContent')).accountSasToken)]",
+                "retentionInDays": "[parameters('diagnosticsLogsRetentionInDays')]"
+              }
+            },
+            "httpLogs": {
+              "azureBlobStorage": {
+                "enabled": true,
+                "retentionInDays": "[parameters('diagnosticsLogsRetentionInDays')]",
+                "sasUrl": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob, variables('blobContainerName'), '?', listAccountSas(variables('storageAccountName'), '2018-02-01', variables('listAccountSasRequestContent')).accountSasToken)]"
+              }
+            }
+          }
         }
       ]
     },
@@ -282,17 +366,15 @@
         "clientAffinityEnabled": false,
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
-      "resources": [
-        {
-          "apiVersion": "2016-08-01",
-          "name": "appsettings",
-          "type": "config",
-          "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
-          ],
-          "properties": "[base64ToJson(variables('base64SlotAppSettingObject'))]"
-        }
-      ]
+      "resources": [{
+        "apiVersion": "2016-08-01",
+        "name": "appsettings",
+        "type": "config",
+        "dependsOn": [
+          "[concat('Microsoft.Web/sites/', parameters('name'), '/slots/', parameters('stagingSlotName'))]"
+        ],
+        "properties": "[base64ToJson(variables('base64SlotAppSettingObject'))]"
+      }]
     }
   ]
 }
