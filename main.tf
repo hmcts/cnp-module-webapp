@@ -126,11 +126,3 @@ resource "azurerm_template_deployment" "app_service_ssl" {
 
   depends_on = ["azurerm_template_deployment.app_service_site"]
 }
-
-resource "null_resource" "consul" {
-  triggers {
-    trigger  = "${azurerm_template_deployment.app_service_site.name}"
-    forceRun = "${timestamp()}"
-  }
-
-}
