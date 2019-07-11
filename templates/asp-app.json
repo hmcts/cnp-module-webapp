@@ -136,7 +136,7 @@
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
     "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]",
-    "blobContainerName": "[concat('applogs',parameters('name'))]",
+    "blobContainerName": "[concat('applogs-',parameters('name'))]",
     "httpLogsBlobContainerName": "[concat('httplogs-',parameters('name'))]",
     "storageAccountName": "[concat('webapplogs', uniqueString(resourceGroup().id))]",
     "serviceSasProperties": {
