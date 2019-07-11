@@ -138,12 +138,12 @@
     "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]",
     "blobContainerName": "[concat(parameters('name'),'-blob')]",
     "storageAccountName": "[concat('webapplogs', uniqueString(resourceGroup().id))]",
-    "listAccountSasRequestContent": {
-      "signedServices": "bfqt",
-      "signedPermission": "rwdlacup",
-      "signedStart": "2018-10-01T00:00:00Z",
-      "signedExpiry": "2218-10-30T00:00:00Z",
-      "signedResourceTypes": "sco"
+    "serviceSasProperties": {
+      "canonicalizedResource": "[concat('/blob/', variables('storageAccountName'),'/',variables('blobContainerName'))]",
+      "signedResource": "c",
+      "signedPermission": "rwdl",
+      "signedstart": "2017-08-20T11:00:00Z",
+      "signedExpiry": "2020-08-20T11:00:00Z"
     }
   },
   "resources": [{
@@ -322,15 +322,15 @@
             "applicationLogs": {
               "azureBlobStorage": {
                 "level": "[parameters('diagnosticsLogsLevel')]",
-                "sasUrl": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob, variables('blobContainerName'), '?', listAccountSas(variables('storageAccountName'), '2018-02-01', variables('listAccountSasRequestContent')).accountSasToken)]",
+                "sasUrl": "[concat('https://',variables('storageAccountName'),'.blob.core.windows.net/',variables('blobContainerName'),'?',listServiceSas(variables('storageAccountName'), '2018-07-01', variables('serviceSasProperties')).serviceSasToken)]",
                 "retentionInDays": "[parameters('diagnosticsLogsRetentionInDays')]"
               }
             },
             "httpLogs": {
               "azureBlobStorage": {
                 "enabled": true,
-                "retentionInDays": "[parameters('diagnosticsLogsRetentionInDays')]",
-                "sasUrl": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob, variables('blobContainerName'), '?', listAccountSas(variables('storageAccountName'), '2018-02-01', variables('listAccountSasRequestContent')).accountSasToken)]"
+                "sasUrl": "[concat('https://',variables('storageAccountName'),'.blob.core.windows.net/',variables('blobContainerName'),'?',listServiceSas(variables('storageAccountName'), '2018-07-01', variables('serviceSasProperties')).serviceSasToken)]",
+                "retentionInDays": "[parameters('diagnosticsLogsRetentionInDays')]"
               }
             }
           }
