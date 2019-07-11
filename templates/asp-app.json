@@ -136,7 +136,8 @@
     "base64SlotAppSettingObject": "[base64(parameters('staging_app_settings'))]",
     "trafficmanager": "[concat('hmcts-', parameters('name'),'.trafficmanager.net')]",
     "serverFarmId": "[ResourceId(parameters('asp_rg'),'Microsoft.Web/serverfarms', parameters('asp_name'))]",
-    "blobContainerName": "[concat(parameters('name'),'-blob')]",
+    "blobContainerName": "[concat(parameters('name'),'-applogs')]",
+    "httpLogsBlobContainerName": "[concat('httplogs-',parameters('name'))]",
     "storageAccountName": "[concat('webapplogs', uniqueString(resourceGroup().id))]",
     "serviceSasProperties": {
       "canonicalizedResource": "[concat('/blob/', variables('storageAccountName'),'/',variables('blobContainerName'))]",
@@ -155,17 +156,29 @@
         "name": "[parameters('storageAccountSkuName')]"
       },
       "kind": "[parameters('storageAccountKind')]",
-      "resources": [{
-        "name": "[concat('default/', variables('blobContainerName'))]",
-        "type": "blobServices/containers",
-        "apiVersion": "2018-02-01",
-        "dependsOn": [
-          "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
-        ],
-        "properties": {
-          "publicAccess": "Blob"
+      "resources": [
+        {
+          "name": "[concat('default/', variables('blobContainerName'))]",
+          "type": "blobServices/containers",
+          "apiVersion": "2018-02-01",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+          ],
+          "properties": {
+            "publicAccess": "Blob"
+          }
+        }, {
+          "name": "[concat('default/', variables('httpLogsBlobContainerName'))]",
+          "type": "blobServices/containers",
+          "apiVersion": "2018-02-01",
+          "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+          ],
+          "properties": {
+            "publicAccess": "Blob"
+          }
         }
-      }]
+      ]
     }, {
       "apiVersion": "2017-05-10",
       "name": "[concat('aspDeploy-', parameters('asp_name'))]",
@@ -315,8 +328,7 @@
           "type": "config",
           "name": "logs",
           "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('Name'))]",
-            "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+            "[concat('Microsoft.Web/sites/', parameters('Name'))]"
           ],
           "properties": {
             "applicationLogs": {
@@ -329,7 +341,7 @@
             "httpLogs": {
               "azureBlobStorage": {
                 "enabled": true,
-                "sasUrl": "[concat('https://',variables('storageAccountName'),'.blob.core.windows.net/',variables('blobContainerName'),'?',listServiceSas(variables('storageAccountName'), '2018-07-01', variables('serviceSasProperties')).serviceSasToken)]",
+                "sasUrl": "[concat('https://',variables('storageAccountName'),'.blob.core.windows.net/',variables('httpLogsBlobContainerName'),'?',listServiceSas(variables('storageAccountName'), '2018-07-01', variables('serviceSasProperties')).serviceSasToken)]",
                 "retentionInDays": "[parameters('diagnosticsLogsRetentionInDays')]"
               }
             }
