@@ -98,6 +98,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     java_version           = "${var.java_version}"
     java_container_type    = "${var.java_container_type}"
     java_container_version = "${var.java_container_version}"
+    sasStartDate           = "${timeadd(timestamp(), "-1h")}"
     sasExpiryDate          = "${timeadd(timestamp(), "10h")}"
   }
 }

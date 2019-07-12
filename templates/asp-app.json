@@ -135,6 +135,12 @@
       "metadata": {
         "description": "End date of the sasUrl token"
       }
+    },
+    "sasStartDate": {
+      "type": "string",
+      "metadata": {
+        "description": "Start date of the sasUrl token"
+      }
     }
   },
   "variables": {
@@ -149,7 +155,7 @@
       "canonicalizedResource": "[concat('/blob/', variables('storageAccountName'),'/',variables('blobContainerName'))]",
       "signedResource": "c",
       "signedPermission": "rwdl",
-      "signedstart": "2017-08-20T11:00:00Z",
+      "signedstart": "[parameters('sasStartDate')]",
       "signedExpiry": "[parameters('sasExpiryDate')]"
     }
   },
@@ -162,29 +168,27 @@
         "name": "[parameters('storageAccountSkuName')]"
       },
       "kind": "[parameters('storageAccountKind')]",
-      "resources": [
-        {
-          "name": "[concat('default/', variables('blobContainerName'))]",
-          "type": "blobServices/containers",
-          "apiVersion": "2018-02-01",
-          "dependsOn": [
-            "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
-          ],
-          "properties": {
-            "publicAccess": "Blob"
-          }
-        }, {
-          "name": "[concat('default/', variables('httpLogsBlobContainerName'))]",
-          "type": "blobServices/containers",
-          "apiVersion": "2018-02-01",
-          "dependsOn": [
-            "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
-          ],
-          "properties": {
-            "publicAccess": "Blob"
-          }
+      "resources": [{
+        "name": "[concat('default/', variables('blobContainerName'))]",
+        "type": "blobServices/containers",
+        "apiVersion": "2018-02-01",
+        "dependsOn": [
+          "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+        ],
+        "properties": {
+          "publicAccess": "Blob"
         }
-      ]
+      }, {
+        "name": "[concat('default/', variables('httpLogsBlobContainerName'))]",
+        "type": "blobServices/containers",
+        "apiVersion": "2018-02-01",
+        "dependsOn": [
+          "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+        ],
+        "properties": {
+          "publicAccess": "Blob"
+        }
+      }]
     }, {
       "apiVersion": "2017-05-10",
       "name": "[concat('aspDeploy-', parameters('asp_name'))]",
