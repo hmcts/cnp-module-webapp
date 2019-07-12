@@ -14,7 +14,7 @@ locals {
   sp_rg    = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
 
   preview = "${var.env != "preview" ? 0 : 1}"
-  envcore = "${var.deployment_target != "" ? "env" : "core" }"
+  envcore = "${var.deployment_target != "" ? "env" : "core"}"
 }
 
 # Create a resource group
@@ -24,7 +24,7 @@ resource "azurerm_resource_group" "rg" {
 
   tags = "${merge(var.common_tags,
     map("lastUpdated", "${timestamp()}")
-    )}"
+  )}"
 }
 
 resource "azurerm_resource_group" "rg2" {
@@ -34,7 +34,17 @@ resource "azurerm_resource_group" "rg2" {
 
   tags = "${merge(var.common_tags,
     map("lastUpdated", "${timestamp()}")
-    )}"
+  )}"
+}
+
+# Gets the date which is used for the sas token
+
+data "external" "date" {
+  program = ["bash", "${path.module}/date.sh"]
+}
+
+output "external_script_date_result" {
+  value = "${data.external.date.result}"
 }
 
 # The ARM template that creates a web app and app service plan
@@ -53,7 +63,7 @@ resource "azurerm_application_insights" "appinsights" {
 
   tags = "${merge(var.common_tags,
     map("lastUpdated", "${timestamp()}")
-    )}"
+  )}"
 }
 
 locals {
@@ -98,6 +108,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     java_version           = "${var.java_version}"
     java_container_type    = "${var.java_container_type}"
     java_container_version = "${var.java_container_version}"
+    sasExpiryDate          = "${data.external.date.result}"
   }
 }
 
