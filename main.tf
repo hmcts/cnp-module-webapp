@@ -15,8 +15,6 @@ locals {
 
   preview = "${var.env != "preview" ? 0 : 1}"
   envcore = "${var.deployment_target != "" ? "env" : "core"}"
-
-  timestamp = "${timestamp()}"
 }
 
 # Create a resource group
@@ -100,7 +98,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     java_version           = "${var.java_version}"
     java_container_type    = "${var.java_container_type}"
     java_container_version = "${var.java_container_version}"
-    sasExpiryDate          = "${timeadd(local.timestamp, "10h")}"
+    sasExpiryDate          = "${timeadd(timestamp(), "10h")}"
   }
 }
 
