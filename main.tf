@@ -108,7 +108,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     java_version           = "${var.java_version}"
     java_container_type    = "${var.java_container_type}"
     java_container_version = "${var.java_container_version}"
-    sasExpiryDate          = "${data.external.date.result.date}"
+    sasExpiryDate          = "${element(split(",", data.external.date.result["date"]), count.index)}"
   }
 }
 
