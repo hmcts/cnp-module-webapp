@@ -129,6 +129,9 @@
       "metadata": {
         "description": "Number of days for which the diagnostics logs will be retained."
       }
+    },
+    "sasExpiryDate": {
+      "type": "string"
     }
   },
   "variables": {
@@ -144,7 +147,7 @@
       "signedResource": "c",
       "signedPermission": "rwdl",
       "signedstart": "2017-08-20T11:00:00Z",
-      "signedExpiry": "2020-08-20T11:00:00Z"
+      "signedExpiry": "[parameters('sasExpiryDate')]"
     }
   },
   "resources": [{
