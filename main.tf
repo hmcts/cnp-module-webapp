@@ -37,16 +37,6 @@ resource "azurerm_resource_group" "rg2" {
   )}"
 }
 
-# Gets the date which is used for the sas token
-
-data "external" "date" {
-  program = ["bash", "${path.module}/date.sh"]
-}
-
-output "external_script_date_result" {
-  value = "${data.external.date.result}"
-}
-
 # The ARM template that creates a web app and app service plan
 data "template_file" "sitetemplate" {
   template = "${file("${path.module}/templates/asp-app.json")}"
@@ -108,7 +98,7 @@ resource "azurerm_template_deployment" "app_service_site" {
     java_version           = "${var.java_version}"
     java_container_type    = "${var.java_container_type}"
     java_container_version = "${var.java_container_version}"
-    sasExpiryDate          = "${timeadd(timestamp(), "1h")}"
+    sasExpiryDate          = "${timeadd("${timestamp()}", "1h")}"
   }
 }
 
