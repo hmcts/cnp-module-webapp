@@ -131,7 +131,10 @@
       }
     },
     "sasExpiryDate": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "End date of the sasUrl token"
+      }
     }
   },
   "variables": {
