@@ -107,7 +107,7 @@
       "type": "string",
       "defaultValue": "StorageV2",
       "metadata": {
-        "description": "The name of the Storage Account Type."
+        "description": "The name of the Storage Account Kind."
       }
     },
     "diagnosticsLogsLevel": {
