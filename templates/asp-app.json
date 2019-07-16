@@ -189,7 +189,8 @@
           "publicAccess": "Blob"
         }
       }]
-    }, {
+    }, 
+    {
       "apiVersion": "2017-05-10",
       "name": "[concat('aspDeploy-', parameters('asp_name'))]",
       "type": "Microsoft.Resources/deployments",
