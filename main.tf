@@ -126,20 +126,3 @@ resource "azurerm_template_deployment" "app_service_ssl" {
 
   depends_on = ["azurerm_template_deployment.app_service_site"]
 }
-
-resource "null_resource" "consul" {
-  triggers {
-    trigger  = "${azurerm_template_deployment.app_service_site.name}"
-    forceRun = "${timestamp()}"
-  }
-
-  # register 'production' slot dns
-  provisioner "local-exec" {
-    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}${var.deployment_target}' '${local.envcore}-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
-  }
-
-  # register 'staging' slot dns
-  provisioner "local-exec" {
-    command = "bash -e ${path.module}/createDns.sh '${var.product}-${var.env}${var.deployment_target}-${var.staging_slot_name}' '${local.envcore}-infra-${var.env}' '${path.module}' '${var.ilbIp}' '${var.subscription}'"
-  }
-}
