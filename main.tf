@@ -107,7 +107,7 @@ data "template_file" "ssltemplate" {
 }
 
 resource "azurerm_template_deployment" "app_service_ssl" {
-  count = "${var.certificate_name == "" ? 0 : 1 * enable_ase}"
+  count = "${var.certificate_name == "" ? 0 : 1 * var.enable_ase}"
 
   template_body       = "${data.template_file.ssltemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-cert"
