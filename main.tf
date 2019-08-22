@@ -128,13 +128,13 @@ resource "azurerm_template_deployment" "app_service_ssl" {
 }
 
 resource "null_resource" "azcli_exec" {
-  count    = "${var.enable_ase ? 0 : 1}"
+  count = "${var.enable_ase ? 0 : 1}"
 
   triggers {
     force_run = "${timestamp()}"
   }
 
   provisioner "local-exec" {
-    command  = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az webapp delete --name ${var.product}-${var.env} --resource-group ${local.resource_group_name}"
+    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az webapp delete --name ${var.product}-${var.env} --resource-group ${local.resource_group_name}"
   }
 }
