@@ -17,7 +17,6 @@ locals {
   envcore = "${var.deployment_target != "" ? "env" : "core" }"
 }
 
-# Create a resource group
 resource "azurerm_resource_group" "rg" {
   name     = "${local.resource_group_name}"
   location = "${var.location}"
@@ -48,7 +47,7 @@ resource "azurerm_application_insights" "appinsights" {
 
   name                = "${var.product}-appinsights-${var.env}${var.deployment_target}"
   location            = "${var.appinsights_location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  resource_group_name = "${local.resource_group_name}"
   application_type    = "${var.application_type}"
 
   tags = "${merge(var.common_tags,
@@ -74,9 +73,10 @@ locals {
 
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
+  count               = "${var.enable_ase}"
   template_body       = "${data.template_file.sitetemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-webapp"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  resource_group_name = "${local.resource_group_name}"
   deployment_mode     = "Incremental"
 
   parameters = {
@@ -106,11 +106,11 @@ data "template_file" "ssltemplate" {
 }
 
 resource "azurerm_template_deployment" "app_service_ssl" {
-  count = "${var.certificate_name == "" ? 0 : 1}"
+  count = "${var.certificate_name == "" ? 0 : 1 * var.enable_ase}"
 
   template_body       = "${data.template_file.ssltemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-cert"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
+  resource_group_name = "${local.resource_group_name}"
   deployment_mode     = "Incremental"
 
   parameters = {
@@ -125,4 +125,16 @@ resource "azurerm_template_deployment" "app_service_ssl" {
   }
 
   depends_on = ["azurerm_template_deployment.app_service_site"]
+}
+
+resource "null_resource" "azcli_exec" {
+  count = "${var.enable_ase ? 0 : 1}"
+
+  triggers {
+    force_run = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az webapp delete --name ${var.product}-${var.env} --resource-group ${local.resource_group_name}"
+  }
 }

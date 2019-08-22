@@ -163,3 +163,7 @@ variable "certificate_key_vault_id" {
 variable "certificate_name" {
   default = ""
 }
+
+variable "enable_ase" {
+  default = true
+}
