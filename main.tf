@@ -18,7 +18,6 @@ locals {
 }
 
 resource "azurerm_resource_group" "rg" {
-  count    = "${var.enable_ase != true ? 0 : 1}"
   name     = "${local.resource_group_name}"
   location = "${var.location}"
 
