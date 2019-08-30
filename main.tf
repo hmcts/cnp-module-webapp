@@ -24,6 +24,12 @@ resource "azurerm_resource_group" "rg" {
   tags = "${merge(var.common_tags,
     map("lastUpdated", "${timestamp()}")
     )}"
+  
+  # On creation, resource group is not ready without delay.
+  provisioner "local-exec" {
+    command = "sleep 120"
+    on_failure = "continue"
+  }
 }
 
 resource "azurerm_resource_group" "rg2" {
@@ -34,6 +40,12 @@ resource "azurerm_resource_group" "rg2" {
   tags = "${merge(var.common_tags,
     map("lastUpdated", "${timestamp()}")
     )}"
+    
+  # On creation, resource group is not ready without delay.
+  provisioner "local-exec" {
+    command = "sleep 120"
+    on_failure = "continue"
+  }
 }
 
 # The ARM template that creates a web app and app service plan
