@@ -1,6 +1,6 @@
 locals {
   default_resource_group_name = "${var.product}-${var.env}${var.deployment_target}"
-  resource_group_name         = "${var.resource_group_name != "" ? var.resource_group_name : local.default_resource_group_name}"
+  resource_group_name         = "${coalesce(var.resource_group_name, local.default_resource_group_name)}"
 
   production_slot_app_settings = {
     SLOT                         = "PRODUCTION"
@@ -9,7 +9,7 @@ locals {
   }
 
   asp_name = "${var.asp_name != "null" ? var.asp_name : local.default_resource_group_name}"
-  asp_rg   = "${var.asp_rg != "null" ? var.asp_rg : local.default_resource_group_name}"
+  asp_rg   = "${var.asp_rg != "null" ? var.asp_rg : local.resource_group_name}"
   sp_name  = "${var.env != "preview" ? local.asp_name : local.default_resource_group_name}"
   sp_rg    = "${var.env != "preview" ? local.asp_rg : local.default_resource_group_name}"
 
@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "rg" {
   
   # On creation, resource group is not ready without delay.
   provisioner "local-exec" {
-    command = "sleep 120"
+    command = "sleep 5"
     on_failure = "continue"
   }
 }
@@ -43,7 +43,7 @@ resource "azurerm_resource_group" "rg2" {
     
   # On creation, resource group is not ready without delay.
   provisioner "local-exec" {
-    command = "sleep 120"
+    command = "sleep 5"
     on_failure = "continue"
   }
 }
@@ -59,7 +59,7 @@ resource "azurerm_application_insights" "appinsights" {
 
   name                = "${var.product}-appinsights-${var.env}${var.deployment_target}"
   location            = "${var.appinsights_location}"
-  resource_group_name = "${local.resource_group_name}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
   application_type    = "${var.application_type}"
 
   tags = "${merge(var.common_tags,
@@ -88,7 +88,7 @@ resource "azurerm_template_deployment" "app_service_site" {
   count               = "${var.enable_ase}"
   template_body       = "${data.template_file.sitetemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-webapp"
-  resource_group_name = "${local.resource_group_name}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
 
   parameters = {
@@ -122,7 +122,7 @@ resource "azurerm_template_deployment" "app_service_ssl" {
 
   template_body       = "${data.template_file.ssltemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-cert"
-  resource_group_name = "${local.resource_group_name}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
 
   parameters = {

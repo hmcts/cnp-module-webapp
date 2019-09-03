@@ -153,6 +153,9 @@
         "environment": "[parameters('env')]",
         "Team Name": "[parameters('teamName')]"
       },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat('aspDeploy-', parameters('asp_name')))]"
+      ],
       "properties": {
         "name": "[parameters('name')]",
         "serverFarmId": "[variables('serverFarmId')]",

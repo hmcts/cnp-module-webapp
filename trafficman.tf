@@ -5,7 +5,7 @@ data "template_file" "tmtemplate" {
 resource "azurerm_template_deployment" "tmprofile" {
   template_body       = "${data.template_file.tmtemplate.rendered}"
   name                = "${var.product}-${var.env}-tm"
-  resource_group_name = "${local.resource_group_name}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
   deployment_mode     = "Incremental"
   count               = "${var.shared_infra ? 0 : 1}"
 
