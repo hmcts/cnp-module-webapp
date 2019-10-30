@@ -167,3 +167,7 @@ variable "certificate_name" {
 variable "enable_ase" {
   default = true
 }
+
+variable "client_affinity_enabled" {
+  default = false
+}

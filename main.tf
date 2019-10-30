@@ -24,10 +24,10 @@ resource "azurerm_resource_group" "rg" {
   tags = "${merge(var.common_tags,
     map("lastUpdated", "${timestamp()}")
     )}"
-  
+
   # On creation, resource group is not ready without delay.
   provisioner "local-exec" {
-    command = "sleep 5"
+    command    = "sleep 5"
     on_failure = "continue"
   }
 }
@@ -40,10 +40,10 @@ resource "azurerm_resource_group" "rg2" {
   tags = "${merge(var.common_tags,
     map("lastUpdated", "${timestamp()}")
     )}"
-    
+
   # On creation, resource group is not ready without delay.
   provisioner "local-exec" {
-    command = "sleep 5"
+    command    = "sleep 5"
     on_failure = "continue"
   }
 }
@@ -92,24 +92,25 @@ resource "azurerm_template_deployment" "app_service_site" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    name                   = "${var.product}-${var.env}${var.deployment_target}"
-    location               = "${var.location}"
-    env                    = "${var.env}${var.deployment_target}"
-    app_settings           = "${jsonencode(merge(local.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
-    staging_app_settings   = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
-    additional_host_name   = "${var.additional_host_name}"
-    stagingSlotName        = "${var.staging_slot_name}"
-    is_frontend            = "${var.is_frontend}"
-    https_only             = "${var.https_only}"
-    capacity               = "${var.capacity}"
-    instance_size          = "${var.instance_size}"
-    web_sockets_enabled    = "${var.web_sockets_enabled}"
-    asp_name               = "${local.asp_name}"
-    asp_rg                 = "${local.asp_rg}"
-    teamName               = "${lookup(var.common_tags, "Team Name")}"
-    java_version           = "${var.java_version}"
-    java_container_type    = "${var.java_container_type}"
-    java_container_version = "${var.java_container_version}"
+    name                    = "${var.product}-${var.env}${var.deployment_target}"
+    location                = "${var.location}"
+    env                     = "${var.env}${var.deployment_target}"
+    app_settings            = "${jsonencode(merge(local.production_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
+    staging_app_settings    = "${jsonencode(merge(var.staging_slot_app_settings, var.app_settings_defaults, local.app_settings_evaluated, var.app_settings))}"
+    additional_host_name    = "${var.additional_host_name}"
+    stagingSlotName         = "${var.staging_slot_name}"
+    is_frontend             = "${var.is_frontend}"
+    https_only              = "${var.https_only}"
+    capacity                = "${var.capacity}"
+    instance_size           = "${var.instance_size}"
+    web_sockets_enabled     = "${var.web_sockets_enabled}"
+    asp_name                = "${local.asp_name}"
+    asp_rg                  = "${local.asp_rg}"
+    teamName                = "${lookup(var.common_tags, "Team Name")}"
+    java_version            = "${var.java_version}"
+    java_container_type     = "${var.java_container_type}"
+    java_container_version  = "${var.java_container_version}"
+    client_affinity_enabled = "${var.client_affinity_enabled}"
   }
 }
 

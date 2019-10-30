@@ -95,6 +95,13 @@
     },
     "java_container_version": {
       "type": "string"
+    },
+    "client_affinity_enabled": {
+      "type": "string",
+      "defaultValue": "false",
+      "metadata": {
+        "description": "Enable/disable Client Affinity. Also known as ARR Affinity"
+      }
     }
   },
   "variables": {
@@ -171,7 +178,7 @@
           "alwaysOn": true,
           "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
-        "clientAffinityEnabled": false,
+        "clientAffinityEnabled": "[bool(parameters('client_affinity_enabled'))]",
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
@@ -282,7 +289,7 @@
           "alwaysOn": true,
           "webSocketsEnabled": "[bool(parameters('web_sockets_enabled'))]"
         },
-        "clientAffinityEnabled": false,
+        "clientAffinityEnabled": "[bool(parameters('client_affinity_enabled'))]",
         "httpsOnly": "[bool(parameters('https_only'))]"
       },
       "resources": [
