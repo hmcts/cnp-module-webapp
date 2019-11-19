@@ -169,5 +169,5 @@ variable "enable_ase" {
 }
 
 variable "client_affinity_enabled" {
-  default = false
+  default = "false"
 }
