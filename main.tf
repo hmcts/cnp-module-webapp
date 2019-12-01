@@ -130,7 +130,7 @@ resource "azurerm_template_deployment" "app_service_ssl" {
 resource "null_resource" "azcli_exec" {
   count = "${var.enable_ase ? 0 : 1}"
 
-  triggers {
+  triggers = {
     force_run = "${timestamp()}"
   }
 
