@@ -135,6 +135,6 @@ resource "null_resource" "azcli_exec" {
   }
 
   provisioner "local-exec" {
-    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az webapp delete --name ${var.product}-${var.env} --resource-group ${local.resource_group_name}"
+    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az webapp delete --name ${var.product}-${var.env} --resource-group ${local.resource_group_name} || true"
   }
 }
