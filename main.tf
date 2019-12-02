@@ -73,7 +73,7 @@ locals {
 
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
-  count               = "${var.enable_ase}"
+  count               = "${var.enable_ase == true ? 1 : 0}"
   template_body       = "${data.template_file.sitetemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-webapp"
   resource_group_name = "${local.resource_group_name}"
@@ -130,7 +130,7 @@ resource "azurerm_template_deployment" "app_service_ssl" {
 resource "null_resource" "azcli_exec" {
   count = "${var.enable_ase ? 0 : 1}"
 
-  triggers {
+  triggers = {
     force_run = "${timestamp()}"
   }
 
