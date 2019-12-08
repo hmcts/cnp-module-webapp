@@ -31,7 +31,7 @@ variable "app_settings_defaults" {
   type = "map"
 
   default = {
-    WEBSITE_NODE_DEFAULT_VERSION                     = "8.11.1"
+    WEBSITE_NODE_DEFAULT_VERSION                     = "10.15.2"
     NODE_PATH                                        = "D:\\home\\site\\wwwroot"
     WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION = "0"
   }
