@@ -73,7 +73,7 @@ locals {
 
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
-  count               = "${var.enable_ase == true ? 1 : 0}"
+  count               = "${var.enable_ase}"
   template_body       = "${data.template_file.sitetemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-webapp"
   resource_group_name = "${local.resource_group_name}"
