@@ -15,6 +15,9 @@ locals {
 
   preview = "${var.env != "preview" ? 0 : 1}"
   envcore = "${var.deployment_target != "" ? "env" : "core" }"
+
+  ase_enabled = "${var.enable_ase ? 1 : 0}"
+  delete_ase = "${var.enable_ase ? 0 : 1}"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -73,7 +76,7 @@ locals {
 
 # Create Application Service site
 resource "azurerm_template_deployment" "app_service_site" {
-  count               = "${var.enable_ase}"
+  count               = "${local.ase_enabled}"
   template_body       = "${data.template_file.sitetemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-webapp"
   resource_group_name = "${local.resource_group_name}"
@@ -106,7 +109,7 @@ data "template_file" "ssltemplate" {
 }
 
 resource "azurerm_template_deployment" "app_service_ssl" {
-  count = "${var.certificate_name == "" ? 0 : 1 * var.enable_ase}"
+  count = "${var.certificate_name == "" ? 0 : 1 * local.ase_enabled}"
 
   template_body       = "${data.template_file.ssltemplate.rendered}"
   name                = "${var.product}-${var.env}${var.deployment_target}-cert"
@@ -128,7 +131,7 @@ resource "azurerm_template_deployment" "app_service_ssl" {
 }
 
 resource "null_resource" "azcli_exec" {
-  count = "${var.enable_ase ? 0 : 1}"
+  count = "${local.delete_ase}"
 
   triggers = {
     force_run = "${timestamp()}"
