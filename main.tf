@@ -17,6 +17,7 @@ locals {
   envcore = "${var.deployment_target != "" ? "env" : "core" }"
 
   ase_enabled = "${var.enable_ase ? 1 : 0}"
+  delete_ase = "${var.enable_ase ? 0 : 1}"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -130,7 +131,7 @@ resource "azurerm_template_deployment" "app_service_ssl" {
 }
 
 resource "null_resource" "azcli_exec" {
-  count = "${local.ase_enabled}"
+  count = "${local.delete_ase}"
 
   triggers = {
     force_run = "${timestamp()}"
