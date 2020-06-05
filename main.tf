@@ -97,7 +97,6 @@ resource "azurerm_template_deployment" "app_service_site" {
     web_sockets_enabled    = "${var.web_sockets_enabled}"
     asp_name               = "${local.asp_name}"
     asp_rg                 = "${local.asp_rg}"
-    teamName               = "${lookup(var.common_tags, "Team Name")}"
     java_version           = "${var.java_version}"
     java_container_type    = "${var.java_container_type}"
     java_container_version = "${var.java_container_version}"
