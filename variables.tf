@@ -1,15 +1,15 @@
 variable "product" {
-  type = "string"
+  type = string
 }
 
 variable "location" {
-  type    = "string"
+  type    = string
   default = "UK South"
 }
 
 // previously, UK South was unavailable for Application Insights, keep default to prevent unneeded App Insight migrations and data loss
 variable "appinsights_location" {
-  type        = "string"
+  type        = string
   default     = "West Europe"
   description = "Location for Application Insights"
 }
@@ -20,15 +20,15 @@ variable "appinsights_instrumentation_key" {
 }
 
 variable "env" {
-  type = "string"
+  type = string
 }
 
 variable "app_settings" {
-  type = "map"
+  type = map(string)
 }
 
 variable "app_settings_defaults" {
-  type = "map"
+  type = map(string)
 
   default = {
     WEBSITE_NODE_DEFAULT_VERSION                     = "8.11.1"
@@ -38,7 +38,7 @@ variable "app_settings_defaults" {
 }
 
 variable "staging_slot_app_settings" {
-  type = "map"
+  type = map(string)
 
   default = {
     SLOT = "STAGING"
@@ -46,23 +46,23 @@ variable "staging_slot_app_settings" {
 }
 
 variable "website_local_cache_sizeinmb" {
-  type    = "string"
+  type    = string
   default = "300"
 }
 
 variable "staging_slot_name" {
-  type    = "string"
+  type    = string
   default = "staging"
 }
 
 variable "resource_group_name" {
-  type        = "string"
+  type        = string
   default     = ""
   description = "Resource group name for the web application. If empty, the default will be set"
 }
 
 variable "application_type" {
-  type        = "string"
+  type        = string
   default     = "web"
   description = "Type of Application Insights (Web/Other)"
 }
@@ -75,7 +75,7 @@ variable "additional_host_name" {
 variable "web_sockets_enabled" {
   description = "if set to true, tf will make websockets available on the site"
   default     = "false"
-  type        = "string"
+  type        = string
 }
 
 variable "https_only" {
@@ -88,12 +88,12 @@ variable "ilbIp" {
 }
 
 variable "infra_location" {
-  type    = "string"
+  type    = string
   default = "core-infra"
 }
 
 variable "subscription" {
-  type = "string"
+  type = string
 }
 
 variable "capacity" {
@@ -102,7 +102,7 @@ variable "capacity" {
 }
 
 variable "instance_size" {
-  type        = "string"
+  type        = string
   default     = "I2"
   description = "The SKU size for app service plan instances"
 }
@@ -117,7 +117,7 @@ variable "asp_name" {
 }
 
 variable "common_tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "asp_rg" {
@@ -135,8 +135,8 @@ variable "shared_infra" {
   default     = false
 }
 
-variable deployment_target {
-  type        = "string"
+variable "deployment_target" {
+  type        = string
   default     = ""
   description = "Name of the Deployment Target"
 }
