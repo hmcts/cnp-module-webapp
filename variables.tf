@@ -23,13 +23,7 @@ variable env {
   type = string
 }
 
-variable app_settings {
-  type = tomap
-}
-
 variable app_settings_defaults {
-  type = tomap
-
   default = {
     WEBSITE_NODE_DEFAULT_VERSION                     = "8.11.1"
     NODE_PATH                                        = "D:\\home\\site\\wwwroot"
@@ -38,8 +32,6 @@ variable app_settings_defaults {
 }
 
 variable staging_slot_app_settings {
-  type = tomap
-
   default = {
     SLOT = "STAGING"
   }
@@ -114,10 +106,6 @@ variable shutterURL {
 variable asp_name {
   description = "Name of the app service plan to deploy to. If asp does not already exist, the module will create it in the rg specified in asp_rg"
   default     = "null"
-}
-
-variable common_tags {
-  type = tomap
 }
 
 variable asp_rg {
