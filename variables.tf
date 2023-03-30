@@ -24,11 +24,11 @@ variable env {
 }
 
 variable app_settings {
-  type = map(string)
+  type = tomap({})
 }
 
 variable app_settings_defaults {
-  type = map(string)
+  type = tomap({})
 
   default = {
     WEBSITE_NODE_DEFAULT_VERSION                     = "8.11.1"
@@ -38,7 +38,7 @@ variable app_settings_defaults {
 }
 
 variable staging_slot_app_settings {
-  type = map(string)
+  type = tomap({})
 
   default = {
     SLOT = "STAGING"
@@ -117,7 +117,7 @@ variable asp_name {
 }
 
 variable common_tags {
-  type = map(string)
+  type = tomap({})
 }
 
 variable asp_rg {
