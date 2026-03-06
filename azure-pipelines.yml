@@ -47,6 +47,7 @@ stages:
         workspace:
           clean: all
         steps:
+          - template: steps/install-use-tfswitch.yaml@cnp-azuredevops-libraries
           - task: AzureCLI@2
             inputs:
               azureSubscription: "DTS-SHAREDSERVICES-TEST"
