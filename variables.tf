@@ -11,6 +11,11 @@ variable "location" {
   default = "UK South"
 }
 
+variable "resource_group_name" {
+  type        = string
+  description = "Resource group to deploy to."
+}
+
 variable "webapp_name" {
   type        = string
   description = "The name of the web app to create."
@@ -46,9 +51,10 @@ variable "app_settings" {
   description = "App settings to be applied to the web app."
 }
 
-variable "allowed_external_redirect_urls" {
-  type        = list(string)
-  description = "List of allowed external redirect URLs for the web app."
+variable "is_frontend" {
+  type        = bool
+  default     = false
+  description = "Whether this is a frontend web app. Affects auth settings, redirect URLs, and site configuration."
 }
 
 variable "auth_client_id" {
@@ -63,12 +69,38 @@ variable "auth_tenant_endpoint" {
 
 variable "auth_client_secret_setting_name" {
   type        = string
+  default     = "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"
   description = "The name of the app setting that contains the client secret for the Azure AD application to use for authentication."
 }
 
 variable "auth_scopes" {
   type        = string
+  default     = "openid profile email offline_access"
   description = "The scopes to request when authenticating with Azure AD. This should be a space-separated string of scopes."
+}
+
+variable "allowed_external_redirect_urls" {
+  type        = list(string)
+  default     = []
+  description = "List of allowed external redirect URLs for the web app."
+}
+
+variable "custom_domain_url" {
+  type        = string
+  default     = ""
+  description = "A custom domain URL for the web app. Used as an additional allowed redirect URL and CORS origin when is_frontend = false."
+}
+
+variable "health_check_path" {
+  type        = string
+  default     = "/health"
+  description = "The path to use for health checks on the web app. Only used when is_frontend = false."
+}
+
+variable "health_check_eviction_time_in_min" {
+  type        = number
+  default     = 2
+  description = "The time in minutes before an unhealthy instance is evicted. Only used when is_frontend = false."
 }
 
 variable "diagnostics_enabled" {
@@ -79,11 +111,13 @@ variable "diagnostics_enabled" {
 
 variable "eventhub_authorization_rule_id" {
   type        = string
+  default     = null
   description = "The ID of the Event Hub authorization rule to send diagnostics to."
 }
 
 variable "eventhub_name" {
   type        = string
+  default     = null
   description = "The name of the Event Hub to send diagnostics to."
 }
 

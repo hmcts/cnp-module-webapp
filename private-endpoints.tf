@@ -9,7 +9,7 @@ resource "azurerm_private_endpoint" "webapp_private_endpoint" {
   private_service_connection {
     name                           = "${var.webapp_name}-psc"
     is_manual_connection           = false
-    private_connection_resource_id = azurerm_windows_web_app.app_service_site[0].id
+    private_connection_resource_id = azurerm_windows_web_app.windows_web_app[0].id
     subresource_names              = ["sites"]
   }
 
