@@ -190,22 +190,48 @@ run "private_endpoint_not_created_by_default" {
   command = plan
 
   assert {
-    condition     = length(azurerm_private_endpoint.webapp_private_endpoint) == 0
-    error_message = "Expected no private endpoint to be created when private_endpoint_enabled is false (the default)."
+    condition     = length(azurerm_private_endpoint.linux_webapp_private_endpoint) == 0
+    error_message = "Expected no Linux private endpoint to be created when private_endpoint_enabled is false (the default)."
   }
 }
 
-run "private_endpoint_created_when_enabled" {
+run "linux_private_endpoint_created_when_enabled" {
   command = plan
 
   variables {
+    os_type                    = "linux"
     private_endpoint_enabled   = true
     private_endpoint_subnet_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-rg/providers/Microsoft.Network/virtualNetworks/test-vnet/subnets/pe-subnet"
   }
 
   assert {
-    condition     = length(azurerm_private_endpoint.webapp_private_endpoint) == 1
-    error_message = "Expected a private endpoint to be created when private_endpoint_enabled is true."
+    condition     = length(azurerm_private_endpoint.linux_webapp_private_endpoint) == 1
+    error_message = "Expected a Linux private endpoint to be created when os_type is 'linux' and private_endpoint_enabled is true."
+  }
+
+  assert {
+    condition     = length(azurerm_private_endpoint.windows_webapp_private_endpoint) == 0
+    error_message = "Expected no Windows private endpoint when os_type is 'linux'."
+  }
+}
+
+run "windows_private_endpoint_created_when_enabled" {
+  command = plan
+
+  variables {
+    os_type                    = "windows"
+    private_endpoint_enabled   = true
+    private_endpoint_subnet_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-rg/providers/Microsoft.Network/virtualNetworks/test-vnet/subnets/pe-subnet"
+  }
+
+  assert {
+    condition     = length(azurerm_private_endpoint.windows_webapp_private_endpoint) == 1
+    error_message = "Expected a Windows private endpoint to be created when os_type is 'windows' and private_endpoint_enabled is true."
+  }
+
+  assert {
+    condition     = length(azurerm_private_endpoint.linux_webapp_private_endpoint) == 0
+    error_message = "Expected no Linux private endpoint when os_type is 'windows'."
   }
 }
 

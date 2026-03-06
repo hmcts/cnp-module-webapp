@@ -173,27 +173,28 @@ terraform test
 
 ### Test coverage
 
-| Run                                                      | What is verified                                                                 |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `linux_webapp_is_created_for_linux_os_type`              | Only a Linux web app is planned when `os_type = "linux"`                         |
-| `windows_webapp_is_created_for_windows_os_type`          | Only a Windows web app is planned when `os_type = "windows"`                     |
-| `default_webapp_name_follows_naming_convention`          | Empty `webapp_name` produces `<product>-<env>-webapp`                            |
-| `custom_webapp_name_overrides_default`                   | An explicit `webapp_name` is used verbatim                                       |
-| `https_only_is_enforced_on_linux_webapp`                 | `https_only = true` on the Linux web app                                         |
-| `https_only_is_enforced_on_windows_webapp`               | `https_only = true` on the Windows web app                                       |
-| `system_assigned_identity_on_linux_webapp`               | `SystemAssigned` managed identity on the Linux web app                           |
-| `system_assigned_identity_on_windows_webapp`             | `SystemAssigned` managed identity on the Windows web app                         |
-| `diagnostics_not_created_when_disabled_by_default`       | No diagnostic setting created by default                                         |
-| `diagnostics_created_for_linux_when_enabled`             | Diagnostic setting created for Linux when `diagnostics_enabled = true`           |
-| `diagnostics_created_for_windows_when_enabled`           | Diagnostic setting created for Windows when `diagnostics_enabled = true`         |
-| `private_endpoint_not_created_by_default`                | No private endpoint created by default                                           |
-| `private_endpoint_created_when_enabled`                  | Private endpoint planned when `private_endpoint_enabled = true`                  |
-| `backend_uses_return_401_unauthenticated_action`         | `unauthenticated_action = "Return401"` when `is_frontend = false`                |
-| `frontend_uses_redirect_to_login_unauthenticated_action` | `unauthenticated_action = "RedirectToLoginPage"` when `is_frontend = true`       |
-| `backend_has_health_check_configured`                    | `health_check_path` and `health_check_eviction_time_in_min` set for backend apps |
-| `frontend_has_no_health_check`                           | `health_check_path` is `null` for frontend apps                                  |
-| `backend_has_cors_configured`                            | A CORS block is present for backend apps                                         |
-| `frontend_has_no_cors_block`                             | No CORS block is present for frontend apps                                       |
+| Run                                                      | What is verified                                                                                  |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `linux_webapp_is_created_for_linux_os_type`              | Only a Linux web app is planned when `os_type = "linux"`                                          |
+| `windows_webapp_is_created_for_windows_os_type`          | Only a Windows web app is planned when `os_type = "windows"`                                      |
+| `default_webapp_name_follows_naming_convention`          | Empty `webapp_name` produces `<product>-<env>-webapp`                                             |
+| `custom_webapp_name_overrides_default`                   | An explicit `webapp_name` is used verbatim                                                        |
+| `https_only_is_enforced_on_linux_webapp`                 | `https_only = true` on the Linux web app                                                          |
+| `https_only_is_enforced_on_windows_webapp`               | `https_only = true` on the Windows web app                                                        |
+| `system_assigned_identity_on_linux_webapp`               | `SystemAssigned` managed identity on the Linux web app                                            |
+| `system_assigned_identity_on_windows_webapp`             | `SystemAssigned` managed identity on the Windows web app                                          |
+| `diagnostics_not_created_when_disabled_by_default`       | No diagnostic setting created by default                                                          |
+| `diagnostics_created_for_linux_when_enabled`             | Diagnostic setting created for Linux when `diagnostics_enabled = true`                            |
+| `diagnostics_created_for_windows_when_enabled`           | Diagnostic setting created for Windows when `diagnostics_enabled = true`                          |
+| `private_endpoint_not_created_by_default`                | No private endpoint created by default                                                            |
+| `linux_private_endpoint_created_when_enabled`            | Linux private endpoint planned when `os_type = "linux"` and `private_endpoint_enabled = true`     |
+| `windows_private_endpoint_created_when_enabled`          | Windows private endpoint planned when `os_type = "windows"` and `private_endpoint_enabled = true` |
+| `backend_uses_return_401_unauthenticated_action`         | `unauthenticated_action = "Return401"` when `is_frontend = false`                                 |
+| `frontend_uses_redirect_to_login_unauthenticated_action` | `unauthenticated_action = "RedirectToLoginPage"` when `is_frontend = true`                        |
+| `backend_has_health_check_configured`                    | `health_check_path` and `health_check_eviction_time_in_min` set for backend apps                  |
+| `frontend_has_no_health_check`                           | `health_check_path` is `null` for frontend apps                                                   |
+| `backend_has_cors_configured`                            | A CORS block is present for backend apps                                                          |
+| `frontend_has_no_cors_block`                             | No CORS block is present for frontend apps                                                        |
 
 ## Terraform
 
