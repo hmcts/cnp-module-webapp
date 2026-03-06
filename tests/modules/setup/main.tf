@@ -2,7 +2,7 @@ module "common_tags" {
   source = "github.com/hmcts/terraform-module-common-tags?ref=master"
 
   builtFrom   = "hmcts/cnp-module-webapp"
-  environment = "testing"
+  environment = "test"
   product     = "cft-platform"
 }
 
