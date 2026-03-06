@@ -74,7 +74,15 @@ module "backend" {
   auth_client_id       = var.auth_client_id
   auth_tenant_endpoint = "https://login.microsoftonline.com/${var.tenant_id}/v2.0"
 
-  custom_domain_url = "https://my-product-dev.example.com"
+	allowed_external_redirect_urls = [
+    "https://my-product-dev.example.com",
+    "https://my-product-dev.example.com/",
+  ]
+
+  cors_allowed_origins = [
+    "https://my-product-dev.example.com",
+    "https://my-product-dev-webapp.azurewebsites.net",
+  ]
 }
 ```
 
@@ -108,7 +116,7 @@ When no `webapp_name` is supplied the name defaults to `<product>-<env>-webapp`.
 | `auth_client_secret_setting_name`   | `string`       | `"MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"` | Name of the app setting that holds the Azure AD client secret.                                               |
 | `auth_scopes`                       | `string`       | `"openid profile email offline_access"`      | Space-separated OAuth scopes to request.                                                                     |
 | `allowed_external_redirect_urls`    | `list(string)` | `[]`                                         | Allowed external redirect URLs for the Azure AD auth flow. Typically set for frontend apps.                  |
-| `custom_domain_url`                 | `string`       | `""`                                         | Custom domain URL. Used as a CORS origin and redirect URL for backend apps.                                  |
+| `cors_allowed_origins`              | `list(string)` | `[]`                                         | Allowed origins for CORS. Applied to backend apps only.                                                      |
 | `health_check_path`                 | `string`       | `"/health"`                                  | Health check path. Applied to backend apps only.                                                             |
 | `health_check_eviction_time_in_min` | `number`       | `2`                                          | Minutes before an unhealthy instance is evicted. Applied to backend apps only.                               |
 | `diagnostics_enabled`               | `bool`         | `false`                                      | Stream diagnostic logs and metrics to Event Hub.                                                             |
@@ -121,14 +129,14 @@ When no `webapp_name` is supplied the name defaults to `<product>-<env>-webapp`.
 
 The `is_frontend` variable changes several behaviours:
 
-| Behaviour                        | Frontend (`true`)                             | Backend (`false`)                                           |
-| -------------------------------- | --------------------------------------------- | ----------------------------------------------------------- |
-| `unauthenticated_action`         | `RedirectToLoginPage`                         | `Return401`                                                 |
-| `allowed_external_redirect_urls` | Supplied via `allowed_external_redirect_urls` | Derived from hostname and `custom_domain_url`               |
-| HTTP/2                           | Not set                                       | Enabled                                                     |
-| Minimum TLS version              | Not set                                       | `1.2`                                                       |
-| Health check                     | Not configured                                | `health_check_path` / `health_check_eviction_time_in_min`   |
-| CORS                             | Not configured                                | `allowed_origins` set to app hostname + `custom_domain_url` |
+| Behaviour                        | Frontend (`true`)                             | Backend (`false`)                                         |
+| -------------------------------- | --------------------------------------------- | --------------------------------------------------------- |
+| `unauthenticated_action`         | `RedirectToLoginPage`                         | `Return401`                                               |
+| `allowed_external_redirect_urls` | Supplied via `allowed_external_redirect_urls` | Not used                                                  |
+| HTTP/2                           | Not set                                       | Enabled                                                   |
+| Minimum TLS version              | Not set                                       | `1.2`                                                     |
+| Health check                     | Not configured                                | `health_check_path` / `health_check_eviction_time_in_min` |
+| CORS                             | Not configured                                | `allowed_origins` set from `cors_allowed_origins`         |
 
 ## Security defaults
 

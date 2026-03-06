@@ -303,12 +303,17 @@ run "backend_has_cors_configured" {
   command = plan
 
   variables {
-    custom_domain_url = "https://my-custom-domain.example.com"
+    cors_allowed_origins = ["https://my-frontend.example.com", "https://my-custom-domain.example.com"]
   }
 
   assert {
     condition     = length(azurerm_linux_webapp.linux_web_app[0].site_config[0].cors) == 1
     error_message = "Expected a CORS block to be configured for a backend web app."
+  }
+
+  assert {
+    condition     = azurerm_linux_webapp.linux_web_app[0].site_config[0].cors[0].allowed_origins == toset(["https://my-frontend.example.com", "https://my-custom-domain.example.com"])
+    error_message = "Expected CORS allowed_origins to match the supplied cors_allowed_origins."
   }
 }
 

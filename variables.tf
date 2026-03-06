@@ -85,10 +85,10 @@ variable "allowed_external_redirect_urls" {
   description = "List of allowed external redirect URLs for the web app."
 }
 
-variable "custom_domain_url" {
-  type        = string
-  default     = ""
-  description = "A custom domain URL for the web app. Used as an additional allowed redirect URL and CORS origin when is_frontend = false."
+variable "cors_allowed_origins" {
+  type        = list(string)
+  default     = []
+  description = "List of allowed origins for CORS. Only used when is_frontend = false."
 }
 
 variable "health_check_path" {

@@ -24,7 +24,7 @@ resource "azurerm_linux_webapp" "linux_web_app" {
     dynamic "cors" {
       for_each = var.is_frontend ? [] : [1]
       content {
-        allowed_origins     = ["https://${local.frontend_hostname}", var.custom_domain_url]
+        allowed_origins     = var.cors_allowed_origins
         support_credentials = true
       }
     }
@@ -107,7 +107,7 @@ resource "azurerm_windows_webapp" "windows_web_app" {
     dynamic "cors" {
       for_each = var.is_frontend ? [] : [1]
       content {
-        allowed_origins     = ["https://${local.frontend_hostname}", var.custom_domain_url]
+        allowed_origins     = var.cors_allowed_origins
         support_credentials = true
       }
     }
