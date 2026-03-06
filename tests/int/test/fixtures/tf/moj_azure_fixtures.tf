@@ -1,4 +1,6 @@
-provider "azurerm" {}
+provider "azurerm" {
+  features {}
+}
 
 variable "location" {
   default = "UK South"
@@ -16,7 +18,7 @@ variable "env" {
 }
 
 variable "app_settings" {
-  type = "map"
+  type = map(string)
 
   default = {
     TEST_SETTING1 = "Setting1"
@@ -27,11 +29,11 @@ variable "app_settings" {
 module "frontend" {
   source       = "../../../../../"
   product      = "${var.random_name}-frontend"
-  location     = "${var.location}"
-  env          = "${var.env}"
-  app_settings = "${var.app_settings}"
+  location     = var.location
+  env          = var.env
+  app_settings = var.app_settings
 }
 
 output "random_name" {
-  value = "${var.random_name}"
+  value = var.random_name
 }
