@@ -48,6 +48,7 @@ variable "docker_registry_url" {
 
 variable "app_settings" {
   type        = map(string)
+  default     = {}
   description = "App settings to be applied to the web app."
 }
 
