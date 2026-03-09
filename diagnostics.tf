@@ -1,8 +1,8 @@
 resource "azurerm_monitor_diagnostic_setting" "linux_web_app_diagnostics" {
   count = var.os_type == "linux" && var.diagnostics_enabled ? 1 : 0
 
-  name                           = "${azurerm_linux_web_app.linux_web_app.name}-diagnostics"
-  target_resource_id             = azurerm_linux_web_app.linux_web_app.id
+  name                           = "${azurerm_linux_web_app.linux_web_app[0].name}-diagnostics"
+  target_resource_id             = azurerm_linux_web_app.linux_web_app[0].id
   eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
   eventhub_name                  = var.eventhub_name
 
@@ -42,8 +42,8 @@ resource "azurerm_monitor_diagnostic_setting" "linux_web_app_diagnostics" {
 resource "azurerm_monitor_diagnostic_setting" "windows_web_app_diagnostics" {
   count = var.os_type == "windows" && var.diagnostics_enabled ? 1 : 0
 
-  name                           = "${azurerm_windows_web_app.windows_web_app.name}-diagnostics"
-  target_resource_id             = azurerm_windows_web_app.windows_web_app.id
+  name                           = "${azurerm_windows_web_app.windows_web_app[0].name}-diagnostics"
+  target_resource_id             = azurerm_windows_web_app.windows_web_app[0].id
   eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
   eventhub_name                  = var.eventhub_name
 
