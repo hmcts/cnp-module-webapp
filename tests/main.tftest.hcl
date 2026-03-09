@@ -158,8 +158,10 @@ run "diagnostics_created_for_linux_when_enabled" {
   command = plan
 
   variables {
-    os_type             = "linux"
-    diagnostics_enabled = true
+    os_type                        = "linux"
+    diagnostics_enabled            = true
+    eventhub_authorization_rule_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-rg/providers/Microsoft.EventHub/namespaces/test-namespace/authorizationRules/RootManageSharedAccessKey"
+    eventhub_name                  = "test-eventhub"
   }
 
   assert {
@@ -172,8 +174,10 @@ run "diagnostics_created_for_windows_when_enabled" {
   command = plan
 
   variables {
-    os_type             = "windows"
-    diagnostics_enabled = true
+    os_type                        = "windows"
+    diagnostics_enabled            = true
+    eventhub_authorization_rule_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-rg/providers/Microsoft.EventHub/namespaces/test-namespace/authorizationRules/RootManageSharedAccessKey"
+    eventhub_name                  = "test-eventhub"
   }
 
   assert {
