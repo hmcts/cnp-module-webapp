@@ -22,7 +22,7 @@ resource "azurerm_linux_web_app" "linux_web_app" {
     }
 
     dynamic "cors" {
-      for_each = var.is_frontend ? [] : [1]
+      for_each = !var.is_frontend && length(var.cors_allowed_origins) > 0 ? [1] : []
       content {
         allowed_origins     = var.cors_allowed_origins
         support_credentials = true
@@ -105,7 +105,7 @@ resource "azurerm_windows_web_app" "windows_web_app" {
     }
 
     dynamic "cors" {
-      for_each = var.is_frontend ? [] : [1]
+      for_each = !var.is_frontend && length(var.cors_allowed_origins) > 0 ? [1] : []
       content {
         allowed_origins     = var.cors_allowed_origins
         support_credentials = true
