@@ -18,6 +18,7 @@ variable "resource_group_name" {
 
 variable "webapp_name" {
   type        = string
+  default     = ""
   description = "The name of the web app to create."
 }
 
