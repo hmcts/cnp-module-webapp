@@ -35,12 +35,12 @@ run "linux_webapp_is_created_for_linux_os_type" {
   command = plan
 
   assert {
-    condition     = length(azurerm_linux_webapp.linux_web_app) == 1
+    condition     = length(azurerm_linux_web_app.linux_web_app) == 1
     error_message = "Expected exactly one Linux web app to be planned when os_type is 'linux'."
   }
 
   assert {
-    condition     = length(azurerm_windows_webapp.windows_web_app) == 0
+    condition     = length(azurerm_windows_web_app.windows_web_app) == 0
     error_message = "Expected no Windows web app to be planned when os_type is 'linux'."
   }
 }
@@ -53,12 +53,12 @@ run "windows_webapp_is_created_for_windows_os_type" {
   }
 
   assert {
-    condition     = length(azurerm_windows_webapp.windows_web_app) == 1
+    condition     = length(azurerm_windows_web_app.windows_web_app) == 1
     error_message = "Expected exactly one Windows web app to be planned when os_type is 'windows'."
   }
 
   assert {
-    condition     = length(azurerm_linux_webapp.linux_web_app) == 0
+    condition     = length(azurerm_linux_web_app.linux_web_app) == 0
     error_message = "Expected no Linux web app to be planned when os_type is 'windows'."
   }
 }
@@ -75,7 +75,7 @@ run "default_webapp_name_follows_naming_convention" {
   }
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].name == "cnp-module-webapp-tests-test-webapp"
+    condition     = azurerm_linux_web_app.linux_web_app[0].name == "cnp-module-webapp-tests-test-webapp"
     error_message = "Expected the default web app name to follow the pattern '<product>-<env>-webapp'."
   }
 }
@@ -88,7 +88,7 @@ run "custom_webapp_name_overrides_default" {
   }
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].name == "my-custom-webapp"
+    condition     = azurerm_linux_web_app.linux_web_app[0].name == "my-custom-webapp"
     error_message = "Expected the web app name to equal the explicitly supplied webapp_name."
   }
 }
@@ -101,7 +101,7 @@ run "https_only_is_enforced_on_linux_webapp" {
   command = plan
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].https_only == true
+    condition     = azurerm_linux_web_app.linux_web_app[0].https_only == true
     error_message = "Expected https_only to be true on the Linux web app."
   }
 }
@@ -114,7 +114,7 @@ run "https_only_is_enforced_on_windows_webapp" {
   }
 
   assert {
-    condition     = azurerm_windows_webapp.windows_web_app[0].https_only == true
+    condition     = azurerm_windows_web_app.windows_web_app[0].https_only == true
     error_message = "Expected https_only to be true on the Windows web app."
   }
 }
@@ -123,7 +123,7 @@ run "system_assigned_identity_on_linux_webapp" {
   command = plan
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].identity[0].type == "SystemAssigned"
+    condition     = azurerm_linux_web_app.linux_web_app[0].identity[0].type == "SystemAssigned"
     error_message = "Expected the Linux web app to have a SystemAssigned managed identity."
   }
 }
@@ -136,7 +136,7 @@ run "system_assigned_identity_on_windows_webapp" {
   }
 
   assert {
-    condition     = azurerm_windows_webapp.windows_web_app[0].identity[0].type == "SystemAssigned"
+    condition     = azurerm_windows_web_app.windows_web_app[0].identity[0].type == "SystemAssigned"
     error_message = "Expected the Windows web app to have a SystemAssigned managed identity."
   }
 }
@@ -245,7 +245,7 @@ run "backend_uses_return_401_unauthenticated_action" {
   # is_frontend defaults to false
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].auth_settings_v2[0].unauthenticated_action == "Return401"
+    condition     = azurerm_linux_web_app.linux_web_app[0].auth_settings_v2[0].unauthenticated_action == "Return401"
     error_message = "Expected unauthenticated_action to be 'Return401' for a backend (non-frontend) web app."
   }
 }
@@ -258,7 +258,7 @@ run "frontend_uses_redirect_to_login_unauthenticated_action" {
   }
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].auth_settings_v2[0].unauthenticated_action == "RedirectToLoginPage"
+    condition     = azurerm_linux_web_app.linux_web_app[0].auth_settings_v2[0].unauthenticated_action == "RedirectToLoginPage"
     error_message = "Expected unauthenticated_action to be 'RedirectToLoginPage' for a frontend web app."
   }
 }
@@ -276,12 +276,12 @@ run "backend_has_health_check_configured" {
   }
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].site_config[0].health_check_path == "/health"
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].health_check_path == "/health"
     error_message = "Expected health_check_path to be '/health' for a backend web app."
   }
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].site_config[0].health_check_eviction_time_in_min == 2
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].health_check_eviction_time_in_min == 2
     error_message = "Expected health_check_eviction_time_in_min to be 2 for a backend web app."
   }
 }
@@ -294,7 +294,7 @@ run "frontend_has_no_health_check" {
   }
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].site_config[0].health_check_path == null
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].health_check_path == null
     error_message = "Expected health_check_path to be null for a frontend web app."
   }
 }
@@ -307,12 +307,12 @@ run "backend_has_cors_configured" {
   }
 
   assert {
-    condition     = length(azurerm_linux_webapp.linux_web_app[0].site_config[0].cors) == 1
+    condition     = length(azurerm_linux_web_app.linux_web_app[0].site_config[0].cors) == 1
     error_message = "Expected a CORS block to be configured for a backend web app."
   }
 
   assert {
-    condition     = azurerm_linux_webapp.linux_web_app[0].site_config[0].cors[0].allowed_origins == toset(["https://my-frontend.example.com", "https://my-custom-domain.example.com"])
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].cors[0].allowed_origins == toset(["https://my-frontend.example.com", "https://my-custom-domain.example.com"])
     error_message = "Expected CORS allowed_origins to match the supplied cors_allowed_origins."
   }
 }
@@ -325,7 +325,7 @@ run "frontend_has_no_cors_block" {
   }
 
   assert {
-    condition     = length(azurerm_linux_webapp.linux_web_app[0].site_config[0].cors) == 0
+    condition     = length(azurerm_linux_web_app.linux_web_app[0].site_config[0].cors) == 0
     error_message = "Expected no CORS block for a frontend web app."
   }
 }

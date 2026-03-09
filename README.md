@@ -6,8 +6,8 @@ A Terraform module that creates an Azure Linux or Windows Web App with opinionat
 
 | Resource                             | Description                                    |
 | ------------------------------------ | ---------------------------------------------- |
-| `azurerm_linux_webapp`               | Created when `os_type = "linux"`               |
-| `azurerm_windows_webapp`             | Created when `os_type = "windows"`             |
+| `azurerm_linux_web_app`              | Created when `os_type = "linux"`               |
+| `azurerm_windows_web_app`            | Created when `os_type = "windows"`             |
 | `azurerm_monitor_diagnostic_setting` | Created when `diagnostics_enabled = true`      |
 | `azurerm_private_endpoint`           | Created when `private_endpoint_enabled = true` |
 

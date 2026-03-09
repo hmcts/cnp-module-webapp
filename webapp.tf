@@ -1,4 +1,4 @@
-resource "azurerm_linux_webapp" "linux_web_app" {
+resource "azurerm_linux_web_app" "linux_web_app" {
   count = var.os_type == "linux" ? 1 : 0
 
   name                      = local.effective_webapp_name
@@ -81,7 +81,7 @@ resource "azurerm_linux_webapp" "linux_web_app" {
   }
 }
 
-resource "azurerm_windows_webapp" "windows_web_app" {
+resource "azurerm_windows_web_app" "windows_web_app" {
   count = var.os_type == "windows" ? 1 : 0
 
   name                      = local.effective_webapp_name
