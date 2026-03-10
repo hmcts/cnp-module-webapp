@@ -89,7 +89,7 @@ variable "auth_client_secret_setting_name" {
 
 variable "auth_scopes" {
   type        = string
-  default     = "openid profile email offline_access"
+  default     = "openid profile email"
   description = "The scopes to request when authenticating with Azure AD. This should be a space-separated string of scopes."
 }
 
