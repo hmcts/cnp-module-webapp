@@ -13,12 +13,8 @@ A Terraform module that creates an Azure Linux or Windows Web App with opinionat
 
 ## Usage
 
-### Frontend web app
-
-A frontend app redirects unauthenticated users to the Azure AD login page. Set `unauthenticated_action = "RedirectToLoginPage"` and supply the redirect URLs your app needs. You may also want to set `http2_enabled`, `minimum_tls_version`, and `health_check_path` to `null` if you don't need them.
-
 ```terraform
-module "frontend" {
+module "my_webapp" {
   source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
 
   product             = "my-product"
@@ -29,43 +25,7 @@ module "frontend" {
 
   virtual_network_subnet_id = azurerm_subnet.webapp.id
 
-  docker_image_name   = "myregistry.azurecr.io/my-frontend:latest"
-  docker_registry_url = "https://myregistry.azurecr.io"
-
-  app_settings = {
-    MY_SETTING = "my-value"
-  }
-
-  unauthenticated_action            = "RedirectToLoginPage"
-  http2_enabled                     = false
-
-  auth_client_id       = var.auth_client_id
-  auth_tenant_endpoint = "https://login.microsoftonline.com/${var.tenant_id}/v2.0"
-
-  allowed_external_redirect_urls = [
-    "https://my-product-dev.example.com",
-    "https://my-product-dev.example.com/",
-  ]
-}
-```
-
-### Backend web app
-
-A backend app returns `401 Unauthorized` for unauthenticated requests (the default). By default, HTTP/2, TLS 1.2 enforcement, a health check endpoint, and CORS (when origins are provided) are all configured.
-
-```terraform
-module "backend" {
-  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
-
-  product             = "my-product"
-  env                 = "dev"
-  resource_group_name = azurerm_resource_group.rg.name
-  os_type             = "linux"
-  service_plan_id     = azurerm_service_plan.plan.id
-
-  virtual_network_subnet_id = azurerm_subnet.webapp.id
-
-  docker_image_name   = "myregistry.azurecr.io/my-api:latest"
+  docker_image_name   = "myregistry.azurecr.io/my-app:latest"
   docker_registry_url = "https://myregistry.azurecr.io"
 
   app_settings = {
@@ -74,20 +34,20 @@ module "backend" {
 
   unauthenticated_action            = "Return401"
   http2_enabled                     = true
+  minimum_tls_version               = "1.2"
   health_check_path                 = "/health"
   health_check_eviction_time_in_min = 2
 
   auth_client_id       = var.auth_client_id
   auth_tenant_endpoint = "https://login.microsoftonline.com/${var.tenant_id}/v2.0"
 
-	allowed_external_redirect_urls = [
+  allowed_external_redirect_urls = [
     "https://my-product-dev.example.com",
     "https://my-product-dev.example.com/",
   ]
 
   cors_allowed_origins = [
-    "https://my-product-dev.example.com",
-    "https://my-product-dev-webapp.azurewebsites.net",
+    "https://my-other-app.example.com",
   ]
 }
 ```
@@ -98,19 +58,18 @@ When no `webapp_name` is supplied the name defaults to `<product>-<env>-webapp`.
 
 ### Required
 
-| Name                        | Type          | Description                                                                                           |
-| --------------------------- | ------------- | ----------------------------------------------------------------------------------------------------- |
-| `product`                   | `string`      | Name of the product or service. Used to derive the default web app name.                              |
-| `env`                       | `string`      | Environment name (e.g. `dev`, `staging`, `prod`). Used to derive the default web app name.            |
-| `resource_group_name`       | `string`      | Name of the resource group to deploy into.                                                            |
-| `os_type`                   | `string`      | Type of web app to create. Must be `linux` or `windows`.                                              |
-| `service_plan_id`           | `string`      | Resource ID of the App Service Plan to host the web app on.                                           |
-| `virtual_network_subnet_id` | `string`      | Resource ID of the subnet for VNet integration.                                                       |
-| `docker_image_name`         | `string`      | Docker image to deploy, in `repository/image:tag` format.                                             |
-| `docker_registry_url`       | `string`      | URL of the Docker registry (e.g. `https://myregistry.azurecr.io`).                                    |
-| `app_settings`              | `map(string)` | Application settings passed to the web app at runtime.                                                |
-| `auth_client_id`            | `string`      | Client ID of the Azure AD app registration used for authentication.                                   |
-| `auth_tenant_endpoint`      | `string`      | Tenant endpoint for Azure AD authentication (e.g. `https://login.microsoftonline.com/<tenant>/v2.0`). |
+| Name                        | Type     | Description                                                                                           |
+| --------------------------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `product`                   | `string` | Name of the product or service. Used to derive the default web app name.                              |
+| `env`                       | `string` | Environment name (e.g. `dev`, `staging`, `prod`). Used to derive the default web app name.            |
+| `resource_group_name`       | `string` | Name of the resource group to deploy into.                                                            |
+| `os_type`                   | `string` | Type of web app to create. Must be `linux` or `windows`.                                              |
+| `service_plan_id`           | `string` | Resource ID of the App Service Plan to host the web app on.                                           |
+| `virtual_network_subnet_id` | `string` | Resource ID of the subnet for VNet integration.                                                       |
+| `docker_image_name`         | `string` | Docker image to deploy, in `repository/image:tag` format.                                             |
+| `docker_registry_url`       | `string` | URL of the Docker registry (e.g. `https://myregistry.azurecr.io`).                                    |
+| `auth_client_id`            | `string` | Client ID of the Azure AD app registration used for authentication.                                   |
+| `auth_tenant_endpoint`      | `string` | Tenant endpoint for Azure AD authentication (e.g. `https://login.microsoftonline.com/<tenant>/v2.0`). |
 
 ### Optional
 
@@ -118,6 +77,7 @@ When no `webapp_name` is supplied the name defaults to `<product>-<env>-webapp`.
 | ----------------------------------- | -------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `webapp_name`                       | `string`       | `""`                                         | Override the web app name. Defaults to `<product>-<env>-webapp`.                                             |
 | `location`                          | `string`       | `"UK South"`                                 | Azure region to deploy resources into.                                                                       |
+| `app_settings`                      | `map(string)`  | `{}`                                         | Application settings passed to the web app at runtime.                                                       |
 | `http2_enabled`                     | `bool`         | `true`                                       | Whether HTTP/2 is enabled. Set to `null` to use the provider default.                                        |
 | `minimum_tls_version`               | `string`       | `"1.2"`                                      | Minimum TLS version. Set to `null` to use the provider default.                                              |
 | `unauthenticated_action`            | `string`       | `"Return401"`                                | Action for unauthenticated requests. `RedirectToLoginPage`, `Return401`, or `Return403`.                     |
@@ -132,19 +92,6 @@ When no `webapp_name` is supplied the name defaults to `<product>-<env>-webapp`.
 | `eventhub_name`                     | `string`       | `null`                                       | Name of the Event Hub to stream diagnostics to. Required when `diagnostics_enabled = true`.                  |
 | `private_endpoint_enabled`          | `bool`         | `false`                                      | Create a private endpoint for the web app.                                                                   |
 | `private_endpoint_subnet_id`        | `string`       | `null`                                       | Resource ID of the subnet to place the private endpoint in. Required when `private_endpoint_enabled = true`. |
-
-## Configuration defaults
-
-The defaults are tuned for backend/API apps. For a frontend app, override the relevant variables:
-
-| Setting                  | Default (backend-style) | Typical frontend override |
-| ------------------------ | ----------------------- | ------------------------- |
-| `unauthenticated_action` | `Return401`             | `RedirectToLoginPage`     |
-| `http2_enabled`          | `true`                  | `null` (provider default) |
-| `minimum_tls_version`    | `"1.2"`                 | `null` (provider default) |
-| `cors_allowed_origins`   | `[]` (no CORS block)    | `[]` (no CORS block)      |
-
-Health checks (`health_check_path`, `health_check_eviction_time_in_min`) default to `null` (disabled) for all app types.
 
 ## Security defaults
 
