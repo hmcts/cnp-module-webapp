@@ -1,159 +1,169 @@
 # cnp-module-webapp
-A module that lets you create a Web App and its associated App Service Plan, and depending on the environment you are targeting, the module will automatically deploy to the correct Application Service Environment.
-Refer to the following links for a detailed explanation of an App Service Plan, Web App and Application Service Environment in Azure.
 
-[App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/azure-web-sites-web-hosting-plans-in-depth-overview) <br />
-[Web Apps](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-overview) <br />
-[Application Service Environment](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-app-service-environment-intro) <br />
+A Terraform module that creates an Azure Linux or Windows Web App with opinionated security defaults, Azure AD authentication, optional diagnostics streaming to Event Hub, and an optional private endpoint.
 
-As part of the web app creation, an SSL cert for it is created and whitelisted at the application gateway provided in the appGateway var provided in the declaration of the module
+## Resources created
 
-## Variables
-This module lets you host Java 8, Spring Boot, and NodeJs applications.
-
-Name | Type |  Required | Default | description
---- | --- | --- | --- | ---
-`source` | String | Yes | | this is the location source for the moj-module-webapp, the example implies a github repo containing the moj-module-webapp source
-`product` | String | Yes | | this is the name of the product or project i.e. probate, divorce etc.
-`location` | String | No | UK South | this is the azure region for this service
-`appinsights_location` | String | No | West Europe | the Azure region for App Insights instance, previously limited to 'West Europe' but now avaiable in 'UK South'.  Current default is kept simply to prevent data loss.  New instances should set 'UK South'.
-`env` | String | Yes | | this is used to differentiate the environments e.g dev, prod, test etc
-`app_settings` | String | Yes | | this is the key valued pairs of application settings used by the application at runtime
-`is_frontend` | Boolean | No | False | Indicates that this app could be routable from the public internet
-`additional_host_name` | String | No | | A custom domain name for your web application
-`https_only` | String | No | `"false"` | Configures a web site to accept only https requests. Issues redirect for http requests. NB this is a string value that accepts values "true" or "false" - the string type is required to work around issues with Terraform and ARM template handling of boolean value.
-`common_tags` | Map | Yes | | tags that need to be applied to every resource group, passed through by the jenkins-library
-`asp_rg` | String | Yes | | Name of resource group where app service plan resides
-`asp_name` | String | Yes | | this is the name of the shared service plan to be deployed to. Name should follow ${product}-${env} format
-`capacity` | Integer | No | 2 | Target number of instances of the application to run. Note that there may be more or fewer instances actually running. This should not be used to guarantee singleton (capacity=1) instances 
-`instance_size` | String | No | `I2` | The SKU size for app service plan instances. Valid values are `I1` (small), `I2` (medium) and `I3` (large). Larger instances cost more - specs for Isolated Service Plan instances can be found here https://azure.microsoft.com/en-gb/pricing/details/app-service/windows/. 
-`shared_infra` | String | No | false | If set to true, it will not create the TM profile
-`deployment_target` | String | No | | Name of the Deployment Target. If deployment_target is empty (legacy mode) the  `env/core-infra-{env}` will be: `core-infra-{env}` otherwise will be: `env-infra-{env}`
-`certificate_key_vault_id` | String | No | | The id of the key vault to retrieve the ssl certificate for
-`certificate_name` | String | No | | The name of the certificate in key vault to use
+| Resource                             | Description                                    |
+| ------------------------------------ | ---------------------------------------------- |
+| `azurerm_linux_web_app`              | Created when `os_type = "linux"`               |
+| `azurerm_windows_web_app`            | Created when `os_type = "windows"`             |
+| `azurerm_monitor_diagnostic_setting` | Created when `diagnostics_enabled = true`      |
+| `azurerm_private_endpoint`           | Created when `private_endpoint_enabled = true` |
 
 ## Usage
-Following is an example of provisioning a NodeJs, SpringBoot, and Java enabled web app, the following code fragment shows how you could use the cnp-module-webapp to provision the infrastructure for a typical frontend.  To provision a backend Java, or SpringBoot infrastructure the code is exactly the same except 'is_frontend' must be set to false. 'capacity' is optional value as by default is set to '2'
 
 ```terraform
-module "frontend" {
-	source               = "git@github.com:contino/cnp-module-webapp?ref=master"
-	product              = "${var.product}-frontend"
-	location             = "${var.location}"
-	appinsights_location = "${var.location}"
-	env                  = "${var.env}"
-	capacity             = "${var.capacity}"
-	is_frontend          = true
-	asp_name             = "${var.product}-${var.env}"
-	asp_rg               = "${var.product}-shared-infrastructure-${var.env}"
-	subscription         = "${var.subscription}"
-	common_tags          = "${var.common_tags}"
-	app_settings         = {
-		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
-	}
+module "my_webapp" {
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
+
+  product             = "my-product"
+  env                 = "dev"
+  resource_group_name = azurerm_resource_group.rg.name
+  os_type             = "linux"
+  service_plan_id     = azurerm_service_plan.plan.id
+
+  virtual_network_subnet_id = azurerm_subnet.webapp.id
+
+  docker_image_name   = "myregistry.azurecr.io/my-app:latest"
+  docker_registry_url = "https://myregistry.azurecr.io"
+
+  app_settings = {
+    MY_SETTING = "my-value"
+  }
+
+  unauthenticated_action            = "Return401"
+  http2_enabled                     = true
+  minimum_tls_version               = "1.2"
+  health_check_path                 = "/health"
+  health_check_eviction_time_in_min = 2
+
+  auth_client_id       = var.auth_client_id
+  auth_tenant_endpoint = "https://login.microsoftonline.com/${var.tenant_id}/v2.0"
+
+  allowed_external_redirect_urls = [
+    "https://my-product-dev.example.com",
+    "https://my-product-dev.example.com/",
+  ]
+
+  cors_allowed_origins = [
+    "https://my-other-app.example.com",
+  ]
 }
 ```
 
-```terraform
-module "backend" {
-	source                 = "git@github.com:contino/cnp-module-webapp?ref=master"
-	product                = "${var.product}-api"
-	location               = "${var.location}"
-	appinsights_location   = "${var.location}"
-	env                    = "${var.env}"
-	capacity               = "${var.capacity}"
-	asp_name               = "${var.product}-${var.env}"
-	asp_rg                 = "${var.product}-shared-infrastructure-${var.env}"
-	subscription           = "${var.subscription}"
-	common_tags            = "${var.common_tags}"
-	java_version           = "11"
-	java_container_type    = "TOMCAT"
-	java_container_version = "9.0"
-	app_settings           = {
-		WEBSITE_NODE_DEFAULT_VERSION = "8.8.0"
-	}
-}
-```
+When no `webapp_name` is supplied the name defaults to `<product>-<env>-webapp`.
 
-In the example above, you can set the variables using terraform variables, so you can set these values in a .tfvars file,
-or pass them in from a Jenkins file.
+## Variables
 
-Creating a web app to host your application will create a Resource Group containing a Web App and Deployment Slot.
+### Required
 
-Each of the aforementioned resources will be named the same, using the convention product-env, so if I provide the values for product as "probate", and env
-as "dev" then the resulting resource group and web app will be called probate-dev.
+| Name                        | Type     | Description                                                                                           |
+| --------------------------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `product`                   | `string` | Name of the product or service. Used to derive the default web app name.                              |
+| `env`                       | `string` | Environment name (e.g. `dev`, `staging`, `prod`). Used to derive the default web app name.            |
+| `resource_group_name`       | `string` | Name of the resource group to deploy into.                                                            |
+| `os_type`                   | `string` | Type of web app to create. Must be `linux` or `windows`.                                              |
+| `service_plan_id`           | `string` | Resource ID of the App Service Plan to host the web app on.                                           |
+| `virtual_network_subnet_id` | `string` | Resource ID of the subnet for VNet integration.                                                       |
+| `docker_image_name`         | `string` | Docker image to deploy, in `repository/image:tag` format.                                             |
+| `docker_registry_url`       | `string` | URL of the Docker registry (e.g. `https://myregistry.azurecr.io`).                                    |
+| `auth_client_id`            | `string` | Client ID of the Azure AD app registration used for authentication.                                   |
+| `auth_tenant_endpoint`      | `string` | Tenant endpoint for Azure AD authentication (e.g. `https://login.microsoftonline.com/<tenant>/v2.0`). |
 
-If is_frontend is set to true, an application gw and traffic manager profile is created. To leverage these, and functionailty such as the shutter page, you will need to set the following dns records for your app and set the additional_hostname param:
+### Optional
 
-- cname pointing fqdn of your app to hmcts-<app_name>-<env>.trafficmanager.net
-- A record pointing tm<additional_hostname> to the IP of the application gw
+| Name                                | Type           | Default                                      | Description                                                                                                  |
+| ----------------------------------- | -------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `webapp_name`                       | `string`       | `""`                                         | Override the web app name. Defaults to `<product>-<env>-webapp`.                                             |
+| `location`                          | `string`       | `"UK South"`                                 | Azure region to deploy resources into.                                                                       |
+| `app_settings`                      | `map(string)`  | `{}`                                         | Application settings passed to the web app at runtime.                                                       |
+| `http2_enabled`                     | `bool`         | `true`                                       | Whether HTTP/2 is enabled. Set to `null` to use the provider default.                                        |
+| `minimum_tls_version`               | `string`       | `"1.2"`                                      | Minimum TLS version. Set to `null` to use the provider default.                                              |
+| `unauthenticated_action`            | `string`       | `"Return401"`                                | Action for unauthenticated requests. `RedirectToLoginPage`, `Return401`, or `Return403`.                     |
+| `auth_client_secret_setting_name`   | `string`       | `"MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"` | Name of the app setting that holds the Azure AD client secret.                                               |
+| `auth_scopes`                       | `string`       | `"openid profile email offline_access"`      | Space-separated OAuth scopes to request.                                                                     |
+| `allowed_external_redirect_urls`    | `list(string)` | `[]`                                         | Allowed external redirect URLs for the Azure AD auth flow.                                                   |
+| `cors_allowed_origins`              | `list(string)` | `[]`                                         | Allowed origins for CORS.                                                                                    |
+| `health_check_path`                 | `string`       | `null`                                       | Health check path. Health checks are disabled by default.                                                    |
+| `health_check_eviction_time_in_min` | `number`       | `null`                                       | Minutes before an unhealthy instance is evicted. Disabled by default.                                        |
+| `diagnostics_enabled`               | `bool`         | `false`                                      | Stream diagnostic logs and metrics to Event Hub.                                                             |
+| `eventhub_authorization_rule_id`    | `string`       | `null`                                       | Resource ID of the Event Hub authorisation rule. Required when `diagnostics_enabled = true`.                 |
+| `eventhub_name`                     | `string`       | `null`                                       | Name of the Event Hub to stream diagnostics to. Required when `diagnostics_enabled = true`.                  |
+| `private_endpoint_enabled`          | `bool`         | `false`                                      | Create a private endpoint for the web app.                                                                   |
+| `private_endpoint_subnet_id`        | `string`       | `null`                                       | Resource ID of the subnet to place the private endpoint in. Required when `private_endpoint_enabled = true`. |
 
-### SSL
+## Security defaults
 
-If you wish to have a custom SSL certificate on your app you will need some additional configuration:
+Every web app created by this module enforces the following regardless of input variables:
 
-```terraform
-data "azurerm_key_vault" "cert_vault" {
-  name = "infra-vault-${var.subscription}"
-  resource_group_name = "${var.env == "prod" ? "core-infra-prod" : "cnp-core-infra"}"
-}
+- **HTTPS only** — `https_only = true`
+- **Authentication required** — Azure AD v2 auth is always enabled; unauthenticated requests are handled according to `unauthenticated_action`
+- **System-assigned managed identity** — enabled on every web app
+- **Detailed logging** — application and HTTP logs written to the file system with a 90-day / 100 MB retention policy
 
-variable "certificate_name" {
-  default = "STAR-sandbox-platform-hmcts-net"
-}
+## Diagnostics
 
-module "backend" {
-	# ... copy other values from above
-	certificate_name 		 = "${var.certificate_name}"
-	certificate_key_vault_id = "${data.azurerm_key_vault.cert_vault.id}"
-}
+When `diagnostics_enabled = true` the following log categories and the `AllMetrics` metric category are streamed to the specified Event Hub:
 
-```
-
-### Prerequisites
-Before deploying you webapp, ensure you have created a shared infrastructure repo with an app service plan as demonstrated  in https://github.com/hmcts/cnp-rhubarb-shared-infrastructure
+- `AppServiceConsoleLogs`
+- `AppServiceAppLogs`
+- `AppServiceHTTPLogs`
+- `AppServiceAuditLogs`
+- `AppServiceIPSecAuditLogs`
+- `AppServicePlatformLogs`
+- `AppServiceAuthenticationLogs`
 
 ## Testing
-There's a library of unit tests and integration tests in this repository.  In the root of this repository is a tests folder.
-Inside that are two folders named int and unit.  Folder int contains the integration tests and fixtures, the obviously named folder called unit contains
-the unit tests.  These tests are here to give quality assurance and should be added to and modified if changes are made to moj-module-webapp.  Every commit to the moj-module-webapp will result in all the unit and integration tests being executed against it, if all of this succeeds it's verisoned and released in github.  This so exisiting code that uses older versions of the moj-module-webapp will not break, and new infrastructure code can reference later releases.
 
-##Testing Dependencies:
-TODO. write about sandbox and other dependencies for tests to work
+Tests are written using the native [Terraform test framework](https://developer.hashicorp.com/terraform/language/tests) and live in the `tests/` directory.
 
-Consider the following code fragment:-
-
-```terraform
-source   = "git::https://yourgithubrepo/cnp-module-webapp?ref=0.0.67"
+```
+tests/
+  main.tftest.hcl          # all test runs
+  modules/
+    setup/
+      main.tf              # creates shared prerequisite resources (resource group, common tags)
 ```
 
-the 'ref=0.0.67' in the example code fragment suggests that it is using version 0.0.67 of the moj-module-webapp.
+Run the tests with:
 
-## Unit Testing
-The unit tests are written in Python, they contain many examples of how to test different aspects of the moj-module-webapp terraform code.
-
-The following line of code from the tests.py file in the unit folder enforces the naming convention for the web app, as explained earlier the convention is
-product-env, the following code fragment enforces this in a unit test:-
-
-```python
-self.v.resources('azurerm_template_deployment').property('name').should_equal('${var.product}-${var.env}')
+```bash
+terraform test
 ```
 
-You can find the complete set of tests in the file tests.py
+> Tests use `command = plan` and do not create real Azure resources (except the shared resource group created by the `setup` module run).
 
-## Integration Testing
-The int folder contains a test folder in which there are seperate folders for fixtures code, and integration tests. the file moj_azure_fixtures.tf contains
-the terraform code that spins up the dependencies that the webapp would need in order to function in production.  The suite of integration tests run against this ephemeral infrastructure to validate the web app, once all the tests are succesfully executed the infrastructure is destroyed.  The resources created use random names so that the integration tests don't conflict with each other, if more that one person is working on the repository.  If any tests fail, the infrastructure is not automatically destroyed, this is so you can investigate the fixtures and the webapp through the Azure
-Portal, to help debug the unit test.
+### Test coverage
 
-All of this automation is driven by Chef Kitchen, the configuration of all this is in the file called .kitchen.yml at the root of the int folder.  The actual
-integration tests are in the default/controls sub folder in the integration folder.  All the code used to drive the integration tests are written in Ruby.  The folder default/libraries contain the ruby libraries that gather information required for the tests to execute.
+| Run                                                | What is verified                                                                                  |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `linux_webapp_is_created_for_linux_os_type`        | Only a Linux web app is planned when `os_type = "linux"`                                          |
+| `windows_webapp_is_created_for_windows_os_type`    | Only a Windows web app is planned when `os_type = "windows"`                                      |
+| `default_webapp_name_follows_naming_convention`    | Empty `webapp_name` produces `<product>-<env>-webapp`                                             |
+| `custom_webapp_name_overrides_default`             | An explicit `webapp_name` is used verbatim                                                        |
+| `https_only_is_enforced_on_linux_webapp`           | `https_only = true` on the Linux web app                                                          |
+| `https_only_is_enforced_on_windows_webapp`         | `https_only = true` on the Windows web app                                                        |
+| `system_assigned_identity_on_linux_webapp`         | `SystemAssigned` managed identity on the Linux web app                                            |
+| `system_assigned_identity_on_windows_webapp`       | `SystemAssigned` managed identity on the Windows web app                                          |
+| `diagnostics_not_created_when_disabled_by_default` | No diagnostic setting created by default                                                          |
+| `diagnostics_created_for_linux_when_enabled`       | Diagnostic setting created for Linux when `diagnostics_enabled = true`                            |
+| `diagnostics_created_for_windows_when_enabled`     | Diagnostic setting created for Windows when `diagnostics_enabled = true`                          |
+| `private_endpoint_not_created_by_default`          | No private endpoint created by default                                                            |
+| `linux_private_endpoint_created_when_enabled`      | Linux private endpoint planned when `os_type = "linux"` and `private_endpoint_enabled = true`     |
+| `windows_private_endpoint_created_when_enabled`    | Windows private endpoint planned when `os_type = "windows"` and `private_endpoint_enabled = true` |
+| `default_uses_return_401_unauthenticated_action`   | `unauthenticated_action` defaults to `"Return401"`                                                |
+| `redirect_to_login_unauthenticated_action`         | `unauthenticated_action = "RedirectToLoginPage"` when explicitly set                              |
+| `health_check_configured_when_path_supplied`       | `health_check_path` and `health_check_eviction_time_in_min` applied when explicitly supplied      |
+| `health_check_is_null_by_default`                  | `health_check_path` is `null` by default                                                          |
+| `default_has_cors_configured`                      | A CORS block is present when `cors_allowed_origins` is provided                                   |
+| `no_cors_block_when_origins_empty`                 | No CORS block when `cors_allowed_origins` is empty                                                |
 
 ## Terraform
-All infrastructure provisioning is done using Terraform native azurerm provider where possible.  You can find the documentation for this at the following link:-
 
-[Terraform azurerm](https://www.terraform.io/docs/providers/azurerm/index.html) <br />
+Requires Terraform `>= 1.5`. Provider requirements:
 
-At the time of writing the web app does not have native azurerm provider support in terraform at version 0.0.9, so an ARM template has been used for creation of the Web App and App Service Plan. The template can be found in the templates folder at the repository root.
-
-The ARM template is wrapped in azurerm_template_deployment provider in terraform, this is the provider used to run any custom ARM templates using Terraform.
+| Provider            | Version   |
+| ------------------- | --------- |
+| `hashicorp/azurerm` | `~> 4.62` |
+| `hashicorp/null`    | `~> 3.2`  |

@@ -1,169 +1,148 @@
 variable "product" {
-  type = "string"
-}
-
-variable "location" {
-  type    = "string"
-  default = "UK South"
-}
-
-// previously, UK South was unavailable for Application Insights, keep default to prevent unneeded App Insight migrations and data loss
-variable "appinsights_location" {
-  type        = "string"
-  default     = "West Europe"
-  description = "Location for Application Insights"
-}
-
-variable "appinsights_instrumentation_key" {
-  description = "Instrumentation key of the App Insights instance this webapp should use. Module will create own App Insights resource if this is not provided"
-  default     = ""
+  type = string
 }
 
 variable "env" {
-  type = "string"
+  type = string
 }
 
-variable "app_settings" {
-  type = "map"
-}
-
-variable "app_settings_defaults" {
-  type = "map"
-
-  default = {
-    WEBSITE_NODE_DEFAULT_VERSION                     = "8.11.1"
-    NODE_PATH                                        = "D:\\home\\site\\wwwroot"
-    WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION = "0"
-  }
-}
-
-variable "staging_slot_app_settings" {
-  type = "map"
-
-  default = {
-    SLOT = "STAGING"
-  }
-}
-
-variable "website_local_cache_sizeinmb" {
-  type    = "string"
-  default = "300"
-}
-
-variable "staging_slot_name" {
-  type    = "string"
-  default = "staging"
+variable "location" {
+  type    = string
+  default = "UK South"
 }
 
 variable "resource_group_name" {
-  type        = "string"
+  type        = string
+  description = "Resource group to deploy to."
+}
+
+variable "webapp_name" {
+  type        = string
   default     = ""
-  description = "Resource group name for the web application. If empty, the default will be set"
+  description = "The name of the web app to create."
 }
 
-variable "application_type" {
-  type        = "string"
-  default     = "web"
-  description = "Type of Application Insights (Web/Other)"
+variable "os_type" {
+  type        = string
+  description = "The type of web app to create. (linux|windows)"
 }
 
-variable "additional_host_name" {
-  default     = "null"
-  description = "An additional hostname the app should be available on, e.g. an external hostname"
+variable "service_plan_id" {
+  type        = string
+  description = "The ID of the app service plan that this web app will be created in."
 }
 
-variable "web_sockets_enabled" {
-  description = "if set to true, tf will make websockets available on the site"
-  default     = "false"
-  type        = "string"
+variable "virtual_network_subnet_id" {
+  type        = string
+  description = "The ID of the virtual network subnet that this web app will be integrated with."
 }
 
-variable "https_only" {
-  description = "Configures a web site to accept only https requests. Issues redirect for http requests"
-  default     = "false"
+variable "docker_image_name" {
+  type        = string
+  description = "The name of the docker image to use for a web app. This should be in the format 'repository/image:tag'"
 }
 
-variable "ilbIp" {
-  default = "0.0.0.0"
+variable "docker_registry_url" {
+  type        = string
+  description = "The URL of the docker registry to use for a web app."
 }
 
-variable "infra_location" {
-  type    = "string"
-  default = "core-infra"
+variable "app_settings" {
+  type        = map(string)
+  default     = {}
+  description = "App settings to be applied to the web app."
 }
 
-variable "subscription" {
-  type = "string"
+variable "http2_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether to enable HTTP/2 on the web app."
 }
 
-variable "capacity" {
-  default     = "2"
-  description = "Maximum number of instances."
+variable "minimum_tls_version" {
+  type        = string
+  default     = "1.2"
+  description = "The minimum TLS version for the web app."
 }
 
-variable "instance_size" {
-  type        = "string"
-  default     = "I2"
-  description = "The SKU size for app service plan instances"
+variable "unauthenticated_action" {
+  type        = string
+  default     = "Return401"
+  description = "The action to take when an unauthenticated request is received. Valid values are 'RedirectToLoginPage', 'Return401', 'Return403'."
 }
 
-variable "shutterURL" {
-  default = "mojmaintenance.azurewebsites.net"
+variable "auth_client_id" {
+  type        = string
+  description = "The client ID of the Azure AD application to use for authentication."
 }
 
-variable "asp_name" {
-  description = "Name of the app service plan to deploy to. If asp does not already exist, the module will create it in the rg specified in asp_rg"
-  default     = "null"
+variable "auth_tenant_endpoint" {
+  type        = string
+  description = "The tenant endpoint of the Azure AD application to use for authentication."
 }
 
-variable "common_tags" {
-  type = "map"
+variable "auth_client_secret_setting_name" {
+  type        = string
+  default     = "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"
+  description = "The name of the app setting that contains the client secret for the Azure AD application to use for authentication."
 }
 
-variable "asp_rg" {
-  description = "Name of the resource group where the asp specified in asp_name resides"
-  default     = "null"
+variable "auth_scopes" {
+  type        = string
+  default     = "openid profile email offline_access"
+  description = "The scopes to request when authenticating with Azure AD. This should be a space-separated string of scopes."
 }
 
-variable "is_frontend" {
-  description = "if set to true, tf will create a WAF enabled application gateway"
-  default     = "0"
+variable "allowed_external_redirect_urls" {
+  type        = list(string)
+  default     = []
+  description = "List of allowed external redirect URLs for the web app."
 }
 
-variable "shared_infra" {
-  description = "if set to true, tf will not create the TM profile"
+variable "cors_allowed_origins" {
+  type        = list(string)
+  default     = []
+  description = "List of allowed origins for CORS."
+}
+
+variable "health_check_path" {
+  type        = string
+  default     = null
+  description = "The path to use for health checks on the web app."
+}
+
+variable "health_check_eviction_time_in_min" {
+  type        = number
+  default     = null
+  description = "The time in minutes before an unhealthy instance is evicted."
+}
+
+variable "diagnostics_enabled" {
+  type        = bool
   default     = false
+  description = "Whether to enable diagnostics for the web app."
 }
 
-variable deployment_target {
-  type        = "string"
-  default     = ""
-  description = "Name of the Deployment Target"
+variable "eventhub_authorization_rule_id" {
+  type        = string
+  default     = null
+  description = "The ID of the Event Hub authorization rule to send diagnostics to."
 }
 
-variable "java_version" {
-  default     = "1.8"
-  description = "The Azul OpenJDK version to run on, currently 1.8 or 11"
+variable "eventhub_name" {
+  type        = string
+  default     = null
+  description = "The name of the Event Hub to send diagnostics to."
 }
 
-variable "java_container_type" {
-  default     = "TOMCAT"
-  description = "TOMCAT or JETTY"
+variable "private_endpoint_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to create a private endpoint for the web app."
 }
 
-variable "java_container_version" {
-  default     = "9.0"
-  description = "See the portal for the available versions, 8.0 or 9.0 mean latest in their respective series (autoupdate)"
-}
-
-variable "certificate_key_vault_id" {
-  default = ""
-}
-
-variable "certificate_name" {
-  default = ""
-}
-
-variable "enable_ase" {
-  default = true
+variable "private_endpoint_subnet_id" {
+  type        = string
+  default     = null
+  description = "The ID of the subnet to create the private endpoint in."
 }
