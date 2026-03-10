@@ -53,10 +53,22 @@ variable "app_settings" {
   description = "App settings to be applied to the web app."
 }
 
-variable "is_frontend" {
+variable "http2_enabled" {
   type        = bool
-  default     = false
-  description = "Whether this is a frontend web app. Affects auth settings, redirect URLs, and site configuration."
+  default     = true
+  description = "Whether to enable HTTP/2 on the web app."
+}
+
+variable "minimum_tls_version" {
+  type        = string
+  default     = "1.2"
+  description = "The minimum TLS version for the web app."
+}
+
+variable "unauthenticated_action" {
+  type        = string
+  default     = "Return401"
+  description = "The action to take when an unauthenticated request is received. Valid values are 'RedirectToLoginPage', 'Return401', 'Return403'."
 }
 
 variable "auth_client_id" {
@@ -90,19 +102,19 @@ variable "allowed_external_redirect_urls" {
 variable "cors_allowed_origins" {
   type        = list(string)
   default     = []
-  description = "List of allowed origins for CORS. Only used when is_frontend = false."
+  description = "List of allowed origins for CORS."
 }
 
 variable "health_check_path" {
   type        = string
-  default     = "/health"
-  description = "The path to use for health checks on the web app. Only used when is_frontend = false."
+  default     = null
+  description = "The path to use for health checks on the web app."
 }
 
 variable "health_check_eviction_time_in_min" {
   type        = number
-  default     = 2
-  description = "The time in minutes before an unhealthy instance is evicted. Only used when is_frontend = false."
+  default     = null
+  description = "The time in minutes before an unhealthy instance is evicted."
 }
 
 variable "diagnostics_enabled" {

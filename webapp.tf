@@ -11,10 +11,10 @@ resource "azurerm_linux_web_app" "linux_web_app" {
   app_settings = var.app_settings
 
   site_config {
-    http2_enabled                     = var.is_frontend ? null : true
-    minimum_tls_version               = var.is_frontend ? null : "1.2"
-    health_check_path                 = var.is_frontend ? null : var.health_check_path
-    health_check_eviction_time_in_min = var.is_frontend ? null : var.health_check_eviction_time_in_min
+    http2_enabled                     = var.http2_enabled
+    minimum_tls_version               = var.minimum_tls_version
+    health_check_path                 = var.health_check_path
+    health_check_eviction_time_in_min = var.health_check_eviction_time_in_min
 
     application_stack {
       docker_image_name   = var.docker_image_name
@@ -22,7 +22,7 @@ resource "azurerm_linux_web_app" "linux_web_app" {
     }
 
     dynamic "cors" {
-      for_each = !var.is_frontend && length(var.cors_allowed_origins) > 0 ? [1] : []
+      for_each = length(var.cors_allowed_origins) > 0 ? [1] : []
       content {
         allowed_origins     = var.cors_allowed_origins
         support_credentials = true
@@ -33,7 +33,7 @@ resource "azurerm_linux_web_app" "linux_web_app" {
   auth_settings_v2 {
     auth_enabled           = true
     require_authentication = true
-    unauthenticated_action = var.is_frontend ? "RedirectToLoginPage" : "Return401"
+    unauthenticated_action = var.unauthenticated_action
     default_provider       = "azureactivedirectory"
 
     active_directory_v2 {
@@ -94,10 +94,10 @@ resource "azurerm_windows_web_app" "windows_web_app" {
   app_settings = var.app_settings
 
   site_config {
-    http2_enabled                     = var.is_frontend ? null : true
-    minimum_tls_version               = var.is_frontend ? null : "1.2"
-    health_check_path                 = var.is_frontend ? null : var.health_check_path
-    health_check_eviction_time_in_min = var.is_frontend ? null : var.health_check_eviction_time_in_min
+    http2_enabled                     = var.http2_enabled
+    minimum_tls_version               = var.minimum_tls_version
+    health_check_path                 = var.health_check_path
+    health_check_eviction_time_in_min = var.health_check_eviction_time_in_min
 
     application_stack {
       docker_image_name   = var.docker_image_name
@@ -105,7 +105,7 @@ resource "azurerm_windows_web_app" "windows_web_app" {
     }
 
     dynamic "cors" {
-      for_each = !var.is_frontend && length(var.cors_allowed_origins) > 0 ? [1] : []
+      for_each = length(var.cors_allowed_origins) > 0 ? [1] : []
       content {
         allowed_origins     = var.cors_allowed_origins
         support_credentials = true
@@ -116,7 +116,7 @@ resource "azurerm_windows_web_app" "windows_web_app" {
   auth_settings_v2 {
     auth_enabled           = true
     require_authentication = true
-    unauthenticated_action = var.is_frontend ? "RedirectToLoginPage" : "Return401"
+    unauthenticated_action = var.unauthenticated_action
     default_provider       = "azureactivedirectory"
 
     active_directory_v2 {

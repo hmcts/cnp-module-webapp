@@ -240,13 +240,13 @@ run "windows_private_endpoint_created_when_enabled" {
 }
 
 # ----------------------------------------------------------------------------
-# is_frontend auth behaviour
+# unauthenticated_action behaviour
 # ----------------------------------------------------------------------------
 
-run "backend_uses_return_401_unauthenticated_action" {
+run "default_uses_return_401_unauthenticated_action" {
   command = plan
 
-  # is_frontend defaults to false
+  # unauthenticated_action defaults to "Return401"
 
   assert {
     condition     = azurerm_linux_web_app.linux_web_app[0].auth_settings_v2[0].unauthenticated_action == "Return401"
@@ -254,24 +254,24 @@ run "backend_uses_return_401_unauthenticated_action" {
   }
 }
 
-run "frontend_uses_redirect_to_login_unauthenticated_action" {
+run "redirect_to_login_unauthenticated_action" {
   command = plan
 
   variables {
-    is_frontend = true
+    unauthenticated_action = "RedirectToLoginPage"
   }
 
   assert {
     condition     = azurerm_linux_web_app.linux_web_app[0].auth_settings_v2[0].unauthenticated_action == "RedirectToLoginPage"
-    error_message = "Expected unauthenticated_action to be 'RedirectToLoginPage' for a frontend web app."
+    error_message = "Expected unauthenticated_action to be 'RedirectToLoginPage' when explicitly set."
   }
 }
 
 # ----------------------------------------------------------------------------
-# is_frontend site_config behaviour
+# site_config behaviour
 # ----------------------------------------------------------------------------
 
-run "backend_has_health_check_configured" {
+run "health_check_configured_when_path_supplied" {
   command = plan
 
   variables {
@@ -281,29 +281,25 @@ run "backend_has_health_check_configured" {
 
   assert {
     condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].health_check_path == "/health"
-    error_message = "Expected health_check_path to be '/health' for a backend web app."
+    error_message = "Expected health_check_path to match the supplied value."
   }
 
   assert {
     condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].health_check_eviction_time_in_min == 2
-    error_message = "Expected health_check_eviction_time_in_min to be 2 for a backend web app."
+    error_message = "Expected health_check_eviction_time_in_min to match the supplied value."
   }
 }
 
-run "frontend_has_no_health_check" {
+run "health_check_is_null_by_default" {
   command = plan
-
-  variables {
-    is_frontend = true
-  }
 
   assert {
     condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].health_check_path == null
-    error_message = "Expected health_check_path to be null for a frontend web app."
+    error_message = "Expected health_check_path to be null by default."
   }
 }
 
-run "backend_has_cors_configured" {
+run "default_has_cors_configured" {
   command = plan
 
   variables {
@@ -321,15 +317,11 @@ run "backend_has_cors_configured" {
   }
 }
 
-run "frontend_has_no_cors_block" {
+run "no_cors_block_when_origins_empty" {
   command = plan
-
-  variables {
-    is_frontend = true
-  }
 
   assert {
     condition     = length(azurerm_linux_web_app.linux_web_app[0].site_config[0].cors) == 0
-    error_message = "Expected no CORS block for a frontend web app."
+    error_message = "Expected no CORS block when cors_allowed_origins is empty."
   }
 }
