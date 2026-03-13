@@ -1,7 +1,4 @@
-provider "azurerm" {
-  features {}
-  subscription_id = "3eec5bde-7feb-4566-bfb6-805df6e10b90"
-}
+mock_provider "azurerm" {}
 
 # Shared defaults for all runs. Dummy ARM resource IDs are acceptable here
 # because every test run uses command = plan and does not apply real resources.
@@ -16,15 +13,8 @@ variables {
   docker_image_name               = "nginx:latest"
   docker_registry_url             = "https://registry.hub.docker.com"
   app_settings                    = {}
-  auth_client_id       = "00000000-0000-0000-0000-000000000000"
-  auth_tenant_endpoint = "https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/v2.0"
-}
-
-# Creates the shared resource group used by all apply-stage setup.
-run "setup" {
-  module {
-    source = "./tests/modules/setup"
-  }
+  auth_client_id                  = "00000000-0000-0000-0000-000000000000"
+  auth_tenant_endpoint            = "https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/v2.0"
 }
 
 # ----------------------------------------------------------------------------
@@ -323,5 +313,31 @@ run "no_cors_block_when_origins_empty" {
   assert {
     condition     = length(azurerm_linux_web_app.linux_web_app[0].site_config[0].cors) == 0
     error_message = "Expected no CORS block when cors_allowed_origins is empty."
+  }
+}
+
+# ----------------------------------------------------------------------------
+# Container registry managed identity
+# ----------------------------------------------------------------------------
+
+run "container_registry_uses_managed_identity_on_linux_webapp" {
+  command = plan
+
+  assert {
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].container_registry_use_managed_identity == true
+    error_message = "Expected container_registry_use_managed_identity to be true on the Linux web app."
+  }
+}
+
+run "container_registry_uses_managed_identity_on_windows_webapp" {
+  command = plan
+
+  variables {
+    os_type = "windows"
+  }
+
+  assert {
+    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].container_registry_use_managed_identity == true
+    error_message = "Expected container_registry_use_managed_identity to be true on the Windows web app."
   }
 }

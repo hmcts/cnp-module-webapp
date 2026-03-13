@@ -16,6 +16,8 @@ resource "azurerm_linux_web_app" "linux_web_app" {
     health_check_path                 = var.health_check_path
     health_check_eviction_time_in_min = var.health_check_eviction_time_in_min
 
+    container_registry_use_managed_identity = true
+
     application_stack {
       docker_image_name   = var.docker_image_name
       docker_registry_url = var.docker_registry_url
@@ -98,6 +100,8 @@ resource "azurerm_windows_web_app" "windows_web_app" {
     minimum_tls_version               = var.minimum_tls_version
     health_check_path                 = var.health_check_path
     health_check_eviction_time_in_min = var.health_check_eviction_time_in_min
+
+    container_registry_use_managed_identity = true
 
     application_stack {
       docker_image_name   = var.docker_image_name
