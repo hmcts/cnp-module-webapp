@@ -59,6 +59,17 @@ variable "http2_enabled" {
   description = "Whether to enable HTTP/2 on the web app."
 }
 
+variable "ftps_state" {
+  type        = string
+  default     = "Disabled"
+  description = "FTP publishing state. Accepts only Disabled or FtpsOnly. Omitted and null values disable FTP publishing."
+
+  validation {
+    condition     = var.ftps_state == null ? true : contains(["Disabled", "FtpsOnly"], var.ftps_state)
+    error_message = "ftps_state must be exactly Disabled or FtpsOnly."
+  }
+}
+
 variable "minimum_tls_version" {
   type        = string
   default     = "1.2"

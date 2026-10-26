@@ -3,18 +3,18 @@ mock_provider "azurerm" {}
 # Shared defaults for all runs. Dummy ARM resource IDs are acceptable here
 # because every test run uses command = plan and does not apply real resources.
 variables {
-  env                             = "test"
-  product                         = "cnp-module-webapp-tests"
-  resource_group_name             = "cnp-module-webapp-tests-rg"
-  webapp_name                     = ""
-  os_type                         = "linux"
-  service_plan_id                 = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-rg/providers/Microsoft.Web/serverFarms/test-plan"
-  virtual_network_subnet_id       = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-rg/providers/Microsoft.Network/virtualNetworks/test-vnet/subnets/webapp-subnet"
-  docker_image_name               = "nginx:latest"
-  docker_registry_url             = "https://registry.hub.docker.com"
-  app_settings                    = {}
-  auth_client_id                  = "00000000-0000-0000-0000-000000000000"
-  auth_tenant_endpoint            = "https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/v2.0"
+  env                       = "test"
+  product                   = "cnp-module-webapp-tests"
+  resource_group_name       = "cnp-module-webapp-tests-rg"
+  webapp_name               = ""
+  os_type                   = "linux"
+  service_plan_id           = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-rg/providers/Microsoft.Web/serverFarms/test-plan"
+  virtual_network_subnet_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-rg/providers/Microsoft.Network/virtualNetworks/test-vnet/subnets/webapp-subnet"
+  docker_image_name         = "nginx:latest"
+  docker_registry_url       = "https://registry.hub.docker.com"
+  app_settings              = {}
+  auth_client_id            = "00000000-0000-0000-0000-000000000000"
+  auth_tenant_endpoint      = "https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/v2.0"
 }
 
 # ----------------------------------------------------------------------------
@@ -340,4 +340,157 @@ run "container_registry_uses_managed_identity_on_windows_webapp" {
     condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].container_registry_use_managed_identity == true
     error_message = "Expected container_registry_use_managed_identity to be true on the Windows web app."
   }
+}
+
+run "linux_omitted_disables_ftp" {
+  command = plan
+  assert {
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].ftps_state == "Disabled"
+    error_message = "Omitted ftps_state must disable FTP on Linux."
+  }
+}
+
+run "windows_omitted_disables_ftp" {
+  command = plan
+  variables {
+    os_type = "windows"
+  }
+  assert {
+    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].ftps_state == "Disabled"
+    error_message = "Omitted ftps_state must disable FTP on Windows."
+  }
+}
+
+run "linux_explicit_disabled" {
+  command = plan
+  variables {
+    ftps_state = "Disabled"
+  }
+  assert {
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].ftps_state == "Disabled"
+    error_message = "Disabled must reach the Linux resource."
+  }
+}
+
+run "windows_explicit_disabled" {
+  command = plan
+  variables {
+    os_type    = "windows"
+    ftps_state = "Disabled"
+  }
+  assert {
+    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].ftps_state == "Disabled"
+    error_message = "Disabled must reach the Windows resource."
+  }
+}
+
+run "linux_ftps_only" {
+  command = plan
+  variables {
+    ftps_state = "FtpsOnly"
+  }
+  assert {
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].ftps_state == "FtpsOnly"
+    error_message = "FtpsOnly must reach the Linux resource."
+  }
+}
+
+run "windows_ftps_only" {
+  command = plan
+  variables {
+    os_type    = "windows"
+    ftps_state = "FtpsOnly"
+  }
+  assert {
+    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].ftps_state == "FtpsOnly"
+    error_message = "FtpsOnly must reach the Windows resource."
+  }
+}
+
+run "linux_null_disables_ftp" {
+  command = plan
+  variables {
+    ftps_state = null
+  }
+  assert {
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].ftps_state == "Disabled"
+    error_message = "Null must disable FTP on Linux."
+  }
+}
+
+run "windows_null_disables_ftp" {
+  command = plan
+  variables {
+    os_type    = "windows"
+    ftps_state = null
+  }
+  assert {
+    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].ftps_state == "Disabled"
+    error_message = "Null must disable FTP on Windows."
+  }
+}
+
+run "reject_all_allowed" {
+  command = plan
+  variables {
+    ftps_state = "AllAllowed"
+  }
+  expect_failures = [var.ftps_state]
+}
+
+run "windows_reject_all_allowed" {
+  command = plan
+  variables {
+    os_type    = "windows"
+    ftps_state = "AllAllowed"
+  }
+  expect_failures = [var.ftps_state]
+}
+
+run "reject_empty_ftp" {
+  command = plan
+  variables {
+    ftps_state = ""
+  }
+  expect_failures = [var.ftps_state]
+}
+
+run "reject_whitespace_ftp" {
+  command = plan
+  variables {
+    ftps_state = " "
+  }
+  expect_failures = [var.ftps_state]
+}
+
+run "reject_wrong_case_disabled" {
+  command = plan
+  variables {
+    ftps_state = "disabled"
+  }
+  expect_failures = [var.ftps_state]
+}
+
+run "reject_wrong_case_ftps_only" {
+  command = plan
+  variables {
+    ftps_state = "ftpsonly"
+  }
+  expect_failures = [var.ftps_state]
+}
+
+run "reject_padded_ftp" {
+  command = plan
+  variables {
+    ftps_state = " FtpsOnly "
+  }
+  expect_failures = [var.ftps_state]
+}
+
+run "reject_unsupported_ftp" {
+  command = plan
+  variables {
+    ftps_state = "Enabled"
+  }
+  expect_failures = [var.ftps_state]
 }
