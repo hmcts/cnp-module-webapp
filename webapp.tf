@@ -11,7 +11,7 @@ resource "azurerm_linux_web_app" "linux_web_app" {
   app_settings = var.app_settings
 
   site_config {
-    ftps_state                        = var.ftps_state == null ? "Disabled" : var.ftps_state
+    ftps_state                        = var.ftps_state
     http2_enabled                     = var.http2_enabled
     minimum_tls_version               = var.minimum_tls_version
     health_check_path                 = var.health_check_path
@@ -97,7 +97,7 @@ resource "azurerm_windows_web_app" "windows_web_app" {
   app_settings = var.app_settings
 
   site_config {
-    ftps_state                        = var.ftps_state == null ? "Disabled" : var.ftps_state
+    ftps_state                        = var.ftps_state
     http2_enabled                     = var.http2_enabled
     minimum_tls_version               = var.minimum_tls_version
     health_check_path                 = var.health_check_path

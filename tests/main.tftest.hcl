@@ -342,22 +342,22 @@ run "container_registry_uses_managed_identity_on_windows_webapp" {
   }
 }
 
-run "linux_omitted_disables_ftp" {
+run "linux_omitted_uses_ftps_only" {
   command = plan
   assert {
-    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].ftps_state == "Disabled"
-    error_message = "Omitted ftps_state must disable FTP on Linux."
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].ftps_state == "FtpsOnly"
+    error_message = "Omitted ftps_state must use FtpsOnly on Linux."
   }
 }
 
-run "windows_omitted_disables_ftp" {
+run "windows_omitted_uses_ftps_only" {
   command = plan
   variables {
     os_type = "windows"
   }
   assert {
-    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].ftps_state == "Disabled"
-    error_message = "Omitted ftps_state must disable FTP on Windows."
+    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].ftps_state == "FtpsOnly"
+    error_message = "Omitted ftps_state must use FtpsOnly on Windows."
   }
 }
 
@@ -407,26 +407,26 @@ run "windows_ftps_only" {
   }
 }
 
-run "linux_null_disables_ftp" {
+run "linux_null_uses_ftps_only" {
   command = plan
   variables {
     ftps_state = null
   }
   assert {
-    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].ftps_state == "Disabled"
-    error_message = "Null must disable FTP on Linux."
+    condition     = azurerm_linux_web_app.linux_web_app[0].site_config[0].ftps_state == "FtpsOnly"
+    error_message = "Null must use FtpsOnly on Linux."
   }
 }
 
-run "windows_null_disables_ftp" {
+run "windows_null_uses_ftps_only" {
   command = plan
   variables {
     os_type    = "windows"
     ftps_state = null
   }
   assert {
-    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].ftps_state == "Disabled"
-    error_message = "Null must disable FTP on Windows."
+    condition     = azurerm_windows_web_app.windows_web_app[0].site_config[0].ftps_state == "FtpsOnly"
+    error_message = "Null must use FtpsOnly on Windows."
   }
 }
 

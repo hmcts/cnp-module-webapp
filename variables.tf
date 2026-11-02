@@ -61,11 +61,12 @@ variable "http2_enabled" {
 
 variable "ftps_state" {
   type        = string
-  default     = "Disabled"
-  description = "FTP publishing state. Accepts only Disabled or FtpsOnly. Omitted and null values disable FTP publishing."
+  default     = "FtpsOnly"
+  nullable    = false
+  description = "FTP publishing state. Accepts only Disabled or FtpsOnly. Omitted and null values use FtpsOnly."
 
   validation {
-    condition     = var.ftps_state == null ? true : contains(["Disabled", "FtpsOnly"], var.ftps_state)
+    condition     = contains(["Disabled", "FtpsOnly"], var.ftps_state)
     error_message = "ftps_state must be exactly Disabled or FtpsOnly."
   }
 }
