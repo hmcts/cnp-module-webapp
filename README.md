@@ -78,6 +78,7 @@ When no `webapp_name` is supplied the name defaults to `<product>-<env>-webapp`.
 | `webapp_name`                       | `string`       | `""`                                         | Override the web app name. Defaults to `<product>-<env>-webapp`.                                             |
 | `location`                          | `string`       | `"UK South"`                                 | Azure region to deploy resources into.                                                                       |
 | `app_settings`                      | `map(string)`  | `{}`                                         | Application settings passed to the web app at runtime.                                                       |
+| `ftps_state` | `string` | `"FtpsOnly"` | Exact `Disabled` or `FtpsOnly`. Omitted and null values resolve to `FtpsOnly`. |
 | `http2_enabled`                     | `bool`         | `true`                                       | Whether HTTP/2 is enabled. Set to `null` to use the provider default.                                        |
 | `minimum_tls_version`               | `string`       | `"1.2"`                                      | Minimum TLS version. Set to `null` to use the provider default.                                              |
 | `unauthenticated_action`            | `string`       | `"Return401"`                                | Action for unauthenticated requests. `RedirectToLoginPage`, `Return401`, or `Return403`.                     |
@@ -101,6 +102,21 @@ Every web app created by this module enforces the following regardless of input 
 - **Authentication required** — Azure AD v2 auth is always enabled; unauthenticated requests are handled according to `unauthenticated_action`
 - **System-assigned managed identity** — enabled on every web app
 - **Detailed logging** — application and HTTP logs written to the file system with a 90-day / 100 MB retention policy
+
+## FTP Publishing
+
+Both OS resources explicitly set `site_config.ftps_state`. Omitted and null inputs
+use `FtpsOnly`, preserving encrypted FTP publishing without permitting plain FTP.
+Set `ftps_state = "Disabled"` to turn off FTP and FTPS publishing. The input uses
+`nullable = false`, so an explicit null resolves to the variable default before
+validation. `AllAllowed`, empty strings, whitespace, wrong case,
+padded values and unsupported states are rejected during input validation.
+
+Confirm normal, manual, emergency and third-party publishing requirements before
+adoption. Container deployment does not establish that no secondary FTPS
+publisher exists. The change does not modify publishing authentication, HTTP
+access, managed identities or networking. Source and mocked tests do not establish
+deployed Azure compliance.
 
 ## Diagnostics
 
@@ -129,10 +145,18 @@ tests/
 Run the tests with:
 
 ```bash
-terraform test
+terraform init -backend=false -input=false
+terraform validate
+terraform test -filter=tests/main.tftest.hcl
 ```
 
-> Tests use `command = plan` and do not create real Azure resources (except the shared resource group created by the `setup` module run).
+The filtered suite uses mocked providers and `command = plan` for every run.
+It does not execute the resource-creating setup module, require Azure credentials,
+use remote state or create real Azure resources. Initialization downloads providers.
+
+Verified with Terraform 1.16.1 and AzureRM 4.81.0: 38 runs passed, including 16 FTP
+checks for both OS paths and rejected inputs. Other version combinations have not
+been certified by this run. Existing production version constraints are unchanged.
 
 ### Test coverage
 
@@ -158,12 +182,30 @@ terraform test
 | `health_check_is_null_by_default`                  | `health_check_path` is `null` by default                                                          |
 | `default_has_cors_configured`                      | A CORS block is present when `cors_allowed_origins` is provided                                   |
 | `no_cors_block_when_origins_empty`                 | No CORS block when `cors_allowed_origins` is empty                                                |
+| `container_registry_uses_managed_identity_on_linux_webapp` | Managed identity is used for the Linux container registry |
+| `container_registry_uses_managed_identity_on_windows_webapp` | Managed identity is used for the Windows container registry |
+| `linux_omitted_uses_ftps_only` | Omitted input selects FtpsOnly on Linux |
+| `windows_omitted_uses_ftps_only` | Omitted input selects FtpsOnly on Windows |
+| `linux_explicit_disabled` | Explicit Disabled reaches Linux |
+| `windows_explicit_disabled` | Explicit Disabled reaches Windows |
+| `linux_ftps_only` | Explicit FtpsOnly reaches Linux |
+| `windows_ftps_only` | Explicit FtpsOnly reaches Windows |
+| `linux_null_uses_ftps_only` | Null selects FtpsOnly on Linux |
+| `windows_null_uses_ftps_only` | Null selects FtpsOnly on Windows |
+| `reject_all_allowed` | AllAllowed is rejected on Linux |
+| `windows_reject_all_allowed` | AllAllowed is rejected on Windows |
+| `reject_empty_ftp` | Empty input is rejected |
+| `reject_whitespace_ftp` | Whitespace input is rejected |
+| `reject_wrong_case_disabled` | Lowercase Disabled is rejected |
+| `reject_wrong_case_ftps_only` | Lowercase FtpsOnly is rejected |
+| `reject_padded_ftp` | Padded input is rejected |
+| `reject_unsupported_ftp` | Unsupported states are rejected |
 
 ## Terraform
 
-Requires Terraform `>= 1.5`. Provider requirements:
+Requires Terraform `>= 1.7`. Provider requirements:
 
 | Provider            | Version   |
 | ------------------- | --------- |
-| `hashicorp/azurerm` | `~> 4.62` |
+| `hashicorp/azurerm` | `~> 4.0`  |
 | `hashicorp/null`    | `~> 3.2`  |
